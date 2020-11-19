@@ -1,0 +1,59 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+        "type",
+        "payload"
+    ],
+    "properties": {
+        "type": {
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "integer"
+                }
+            ]
+        },
+        "payload": {
+            "required": [
+                "topicId",
+                "messageId",
+                "user"
+            ],
+            "properties": {
+                "topicId": {
+                    "type": "string"
+                },
+                "messageId": {
+                    "type": "string"
+                },
+                "user": {
+                    "required": [
+                        "peerId",
+                        "username",
+                        "avatar"
+                    ],
+                    "properties": {
+                        "peerId": {
+                            "type": "string"
+                        },
+                        "username": {
+                            "type": "string"
+                        },
+                        "avatar": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": true,
+                    "type": "object"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object"
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/ActionDeleteMessage.json#"
+}

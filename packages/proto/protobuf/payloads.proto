@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package cuser.payloads;
+
+import "graphs.proto";
+
+message PayloadUser {
+  string peerId = 1;
+  string username = 2;
+  string avatar = 3;
+}
+
+message PayloadContent {
+  string data = 2;
+}
+
+message PayloadPublishMessage {
+  string topicId = 1;
+  PayloadContent content = 2;
+  PayloadUser user = 3;
+}
+
+message PayloadUpdateMessage {
+  string topicId = 1;
+  string messageId = 2;
+  PayloadContent content = 3;
+  PayloadUser user = 4;
+}
+
+message PayloadDeleteMessage {
+  string topicId = 1;
+  string messageId = 2;
+  PayloadUser user = 3;
+}
+
+message PayloadQueryMessages {
+  string topicId = 1;
+  oneof limit_oneof {
+    int32 first = 2;
+    int32 last = 3;
+  }
+  oneof offset_oneof {
+    int32 after = 4;
+    int32 offset = 5;
+  }
+}
+
+message PayloadQueryMessagesResult {
+  repeated graphs.GraphMessage messages = 1;
+}

@@ -1,0 +1,31 @@
+{
+  "name": "@cuser/core",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava -v"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ipld/block": "^6.0.4",
+    "ajv": "^6.12.6",
+    "ajv-errors": "^1.0.1",
+    "ajv-merge-patch": "^4.1.0",
+    "debug": "^4.3.1",
+    "deep-equal": "^2.0.4",
+    "deepmerge": "^4.2.2",
+    "ipfs-core": "^0.2.1",
+    "ipld-raw": "^6.0.0",
+    "is-plain-object": "^5.0.0",
+    "mutant-json": "0.2.0",
+    "@cuser/proto": "0.0.1",
+    "redux": "^4.0.5",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "ava": "^3.13.0",
+    "nyc": "^15.1.0"
+  }
+}

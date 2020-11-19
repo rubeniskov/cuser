@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const writeFile = promisify(fs.writeFile);
+const jsonpatch = require('json-patch');
+const glob = promisify(require('glob'));
+
+const main = (filepatch, cwd = process.cwd()) => {
+  const patches = require(path.resolve(process.cwd(), filepatch));
+  return Promise.all(Object.entries(patches).map(async ([namepath, ops]) => {
+    const files = await glob(namepath, { cwd, absolute: true });
+    await Promise.all(files.map((filename) => {
+      console.log(filename);
+      const schema = require(filename);
+      return writeFile(filename, JSON.stringify(jsonpatch.apply(schema, ops), null, 2));
+    }));
+  }));
+}
+
+main(process.argv[2], process.argv[3]).catch((ex) => {
+  console.log(ex);
+  process.exit(1);
+});

@@ -1,0 +1,36 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+        "type",
+        "peerId",
+        "username",
+        "avatar"
+    ],
+    "properties": {
+        "type": {
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "integer"
+                }
+            ]
+        },
+        "peerId": {
+            "type": "string",
+            "description": "Unique identification using CID"
+        },
+        "username": {
+            "type": "string",
+            "description": "Username string"
+        },
+        "avatar": {
+            "type": "string",
+            "description": "Image of the user ref with CID"
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/GraphUser.json#"
+}

@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package cuser.graphs;
+
+enum GraphType {
+  GRAPH_ROOT = 0;
+  GRAPH_TOPIC = 1;
+  GRAPH_USER = 2;
+  GRAPH_CONTENT = 3;
+  GRAPH_MESSAGE = 4;
+}
+
+message GraphUser {
+  GraphType type = 1;
+  // Unique identification using CID
+  string peerId = 2;
+  // Username string
+  string username = 3;
+  // Image of the user ref with CID
+  string avatar = 4;
+}
+
+message GraphContent {
+  GraphType type = 1;
+  // Parent content using CID
+  string parent = 2;
+  // Revision 
+  int32 revision = 3;
+  // The data of the content
+  bytes data = 4;
+  // Creation date
+  int32 cdate = 5;
+}
+
+message GraphMessage {
+  GraphType type = 1;
+  // uuid 
+  string id = 2;
+  // Parent message CID
+  string parent = 3;
+  // Content represented by CID
+  GraphContent content = 4;
+  // User represented by CID
+  GraphUser user = 5;
+  // Creation date
+  int32 cdate = 6;
+  // Modify date
+  int32 mdate = 7;
+}
+
+message GraphTopic {
+  GraphType type = 1;
+  GraphMessage message = 2;
+  int32 count = 3;
+}
+
+message GraphRoot {
+  GraphType type = 1;
+  map<string, GraphTopic> topics = 2;
+}

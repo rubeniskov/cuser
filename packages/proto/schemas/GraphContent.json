@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "required": [
+    "type",
+    "parent",
+    "revision",
+    "data",
+    "cdate"
+  ],
+  "properties": {
+    "type": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer"
+        }
+      ]
+    },
+    "parent": {
+      "description": "Parent content using CID",
+      "anyOf": [
+        {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        {
+          "$ref": "#"
+        }
+      ]
+    },
+    "revision": {
+      "type": "integer",
+      "description": "Revision"
+    },
+    "data": {
+      "type": "string",
+      "description": "The data of the content"
+    },
+    "cdate": {
+      "type": "integer",
+      "description": "Creation date"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/GraphContent.json#"
+}

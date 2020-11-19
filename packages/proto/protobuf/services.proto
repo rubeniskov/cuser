@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package cuser.services;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "graphql/options.proto";
+
+import "payloads.proto";
+
+message MessageResponse {
+  string messageId = 1;
+}
+
+
+// Read service
+service ServiceReader {
+    rpc GetMessages(payloads.PayloadQueryMessages) returns (payloads.PayloadQueryMessagesResult) {
+        option (google.api.http) = {
+          get: "/v1/messages"
+        };
+        option (graphql.method) = {
+          field: "getMessages"
+          operation: "query"
+        };
+    }
+}
+
+// Publisher service
+service ServicePublisher {  
+  // Publish a message
+  rpc PublishMessage(payloads.PayloadPublishMessage) returns (MessageResponse) {
+    // Client example:
+    // curl -d '{"shelf_theme":"Music", "shelf_size": 20}' http://DOMAIN_NAME/v1/shelves/123
+    option (google.api.http) = {
+      post: "/v1/messages"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "publishMessage"
+      operation: "mutation"
+    };
+  }
+  // Updates a message
+  rpc UpdateMessage(payloads.PayloadUpdateMessage) returns (MessageResponse) {
+    option (google.api.http) = {
+      patch: "/v1/messages"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "updateMessage"
+      operation: "mutation"
+    };
+  }
+  // Delete message
+  rpc DeleteMessage(payloads.PayloadDeleteMessage) returns (MessageResponse) {
+    option (google.api.http) = {
+      delete: "/v1/messages"
+      body: "*"
+    };
+    option (graphql.method) = {
+      field: "deleteMessage"
+      operation: "mutation"
+    };
+  }
+}

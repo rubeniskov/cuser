@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package cuser.actions;
+
+import "payloads.proto";
+
+
+enum ActionType {
+  ACTION_PUBLISH_MESSAGE = 0;
+  ACTION_UPDATE_MESSAGE = 1;
+  ACTION_DELETE_MESSAGE = 2;
+}
+
+message ActionPublishMessage {
+  ActionType type = 1;
+  payloads.PayloadPublishMessage payload = 2;
+}
+
+message ActionUpdateMessage {
+  ActionType type = 1;
+  payloads.PayloadUpdateMessage payload = 2;
+}
+
+message ActionDeleteMessage {
+  ActionType type = 1;
+  payloads.PayloadDeleteMessage payload = 2;
+}

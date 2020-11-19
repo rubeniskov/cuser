@@ -1,0 +1,21 @@
+{
+  "name": "cuser",
+  "version": "0.0.1",
+  "description": "Distributed user conversation system",
+  "private": true,
+  "main": "index.js",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ipfs": "^0.52.1",
+    "ipfs-api": "^26.1.2"
+  }
+}

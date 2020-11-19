@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const glob = promisify(require('glob'));
+const writeFile = promisify(fs.writeFile);
+
+const repo = 'https://github.com/rubeniskov/cuser/packages/proto/schemas';
+
+const main = async (pattern) => {
+  const files = await glob(pattern);
+  files.forEach(async (file) => {
+    const content = require(path.resolve(process.cwd(), file));
+    await writeFile(file, JSON.stringify({
+      ...content,
+      $id: `${repo}/${path.basename(file)}#`,
+      $schema: 'http://json-schema.org/draft-07/schema#',
+    }, null, 4));
+  })
+}
+const pattern = process.argv.slice(2);
+main(Array.isArray(pattern) ? `{${pattern.join(',')}}` : pattern);

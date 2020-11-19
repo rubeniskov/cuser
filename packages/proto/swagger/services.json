@@ -1,0 +1,325 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "services.proto",
+    "version": "version not set"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/messages": {
+      "get": {
+        "operationId": "GetMessages",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/payloadsPayloadQueryMessagesResult"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "topicId",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "first",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "last",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "after",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "ServiceReader"
+        ]
+      },
+      "delete": {
+        "summary": "Delete message",
+        "operationId": "DeleteMessage",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/servicesMessageResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payloadsPayloadDeleteMessage"
+            }
+          }
+        ],
+        "tags": [
+          "ServicePublisher"
+        ]
+      },
+      "post": {
+        "operationId": "PublishMessage",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/servicesMessageResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payloadsPayloadPublishMessage"
+            }
+          }
+        ],
+        "tags": [
+          "ServicePublisher"
+        ]
+      },
+      "patch": {
+        "summary": "Updates a message",
+        "operationId": "UpdateMessage",
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/servicesMessageResponse"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/payloadsPayloadUpdateMessage"
+            }
+          }
+        ],
+        "tags": [
+          "ServicePublisher"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "graphsGraphContent": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/graphsGraphType"
+        },
+        "parent": {
+          "type": "string",
+          "title": "Parent content using CID"
+        },
+        "revision": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Revision"
+        },
+        "data": {
+          "type": "string",
+          "format": "byte",
+          "title": "The data of the content"
+        },
+        "cdate": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Creation date"
+        }
+      }
+    },
+    "graphsGraphMessage": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/graphsGraphType"
+        },
+        "id": {
+          "type": "string",
+          "title": "uuid"
+        },
+        "parent": {
+          "type": "string",
+          "title": "Parent message CID"
+        },
+        "content": {
+          "$ref": "#/definitions/graphsGraphContent",
+          "title": "Content represented by CID"
+        },
+        "user": {
+          "$ref": "#/definitions/graphsGraphUser",
+          "title": "User represented by CID"
+        },
+        "cdate": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Creation date"
+        },
+        "mdate": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Modify date"
+        }
+      }
+    },
+    "graphsGraphType": {
+      "type": "string",
+      "enum": [
+        "GRAPH_ROOT",
+        "GRAPH_TOPIC",
+        "GRAPH_USER",
+        "GRAPH_CONTENT",
+        "GRAPH_MESSAGE"
+      ],
+      "default": "GRAPH_ROOT"
+    },
+    "graphsGraphUser": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/graphsGraphType"
+        },
+        "peerId": {
+          "type": "string",
+          "title": "Unique identification using CID"
+        },
+        "username": {
+          "type": "string",
+          "title": "Username string"
+        },
+        "avatar": {
+          "type": "string",
+          "title": "Image of the user ref with CID"
+        }
+      }
+    },
+    "payloadsPayloadContent": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "string"
+        }
+      }
+    },
+    "payloadsPayloadDeleteMessage": {
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/payloadsPayloadUser"
+        }
+      }
+    },
+    "payloadsPayloadPublishMessage": {
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "#/definitions/payloadsPayloadContent"
+        },
+        "user": {
+          "$ref": "#/definitions/payloadsPayloadUser"
+        }
+      }
+    },
+    "payloadsPayloadQueryMessagesResult": {
+      "type": "object",
+      "properties": {
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/graphsGraphMessage"
+          }
+        }
+      }
+    },
+    "payloadsPayloadUpdateMessage": {
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "messageId": {
+          "type": "string"
+        },
+        "content": {
+          "$ref": "#/definitions/payloadsPayloadContent"
+        },
+        "user": {
+          "$ref": "#/definitions/payloadsPayloadUser"
+        }
+      }
+    },
+    "payloadsPayloadUser": {
+      "type": "object",
+      "properties": {
+        "peerId": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        }
+      }
+    },
+    "servicesMessageResponse": {
+      "type": "object",
+      "properties": {
+        "messageId": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

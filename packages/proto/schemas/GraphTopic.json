@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "required": [
+    "type",
+    "message",
+    "count"
+  ],
+  "properties": {
+    "type": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer"
+        }
+      ]
+    },
+    "count": {
+      "type": "integer"
+    },
+    "message": {
+      "$ref": "#/definitions/message"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/GraphTopic.json#",
+  "definitions": {
+    "message": {
+      "required": [
+        "type",
+        "id",
+        "parent",
+        "content",
+        "user",
+        "cdate",
+        "mdate"
+      ],
+      "properties": {
+        "type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "id": {
+          "type": "string",
+          "description": "uuid"
+        },
+        "parent": {
+          "description": "Parent message CID",
+          "anyOf": [
+            {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            {
+              "$ref": "#/definitions/message"
+            }
+          ]
+        },
+        "user": {
+          "required": [
+            "type",
+            "peerId",
+            "username",
+            "avatar"
+          ],
+          "properties": {
+            "type": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "peerId": {
+              "type": "string",
+              "description": "Unique identification using CID"
+            },
+            "username": {
+              "type": "string",
+              "description": "Username string"
+            },
+            "avatar": {
+              "type": "string",
+              "description": "Image of the user ref with CID"
+            }
+          },
+          "additionalProperties": true,
+          "type": "object",
+          "description": "User represented by CID"
+        },
+        "cdate": {
+          "type": "integer",
+          "description": "Creation date"
+        },
+        "mdate": {
+          "type": "integer",
+          "description": "Modify date"
+        },
+        "content": {
+          "$ref": "#/definitions/content"
+        }
+      },
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "content": {
+      "required": [
+        "type",
+        "parent",
+        "revision",
+        "data",
+        "cdate"
+      ],
+      "properties": {
+        "type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "parent": {
+          "description": "Parent content using CID",
+          "anyOf": [
+            {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            {
+              "$ref": "#/definitions/content"
+            }
+          ]
+        },
+        "revision": {
+          "type": "integer",
+          "description": "Revision"
+        },
+        "data": {
+          "type": "string",
+          "description": "The data of the content"
+        },
+        "cdate": {
+          "type": "integer",
+          "description": "Creation date"
+        }
+      },
+      "additionalProperties": true,
+      "type": "object",
+      "description": "Content represented by CID"
+    }
+  }
+}
