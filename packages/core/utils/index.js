@@ -7,19 +7,25 @@ const deepEqual = require('deep-equal');
 
 const actionTypesArray = Object.values(actions);
 const createReducer = (mutations) => {
-  return (state, action) => {
+  return (state, action, opts) => {
+    let reducer;
+
     if (!/@@redux/.test(action.type) && !actionTypesArray.includes(action.type)) {
       throw Error(`Missing mutation "${action && action.type}" available types "${actionTypesArray}"`)
     }
 
     if (action && action.type && mutations[action.type]) {
-      return mutations[action.type](state, action);
+      reducer = mutations[action.type];
     }
 
-    if (mutations[actions.TYPE_ACTION_DEFAULT]){
-      return mutations[actions.TYPE_ACTION_DEFAULT](state, action);
+    if (mutations[actions.TYPE_ACTION_DEFAULT]) {
+      reducer = mutations[actions.TYPE_ACTION_DEFAULT];
     };
 
+    if (reducer) {
+      return reducer(state, action, opts);
+    }
+    console.log('???', state);
     return state;
   }
 }

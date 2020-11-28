@@ -9,7 +9,6 @@ const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE,
-  TYPE_ACTION_DEFAULT
 } = require('../types/actions');
 
 const rootReducer = () => {
@@ -23,5 +22,4 @@ module.exports = createReducer({
   [TYPE_ACTION_PUBLISH_MESSAGE]: wrapReducerAction(publishMessageActionSchema, rootReducer),
   [TYPE_ACTION_UPDATE_MESSAGE]: wrapReducerAction(updateMessageActionSchema, rootReducer),
   [TYPE_ACTION_DELETE_MESSAGE]: wrapReducerAction(deleteMessageActionSchema, rootReducer),
-  // [TYPE_ACTION_DEFAULT]: rootReducer,
 });

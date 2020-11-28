@@ -2,6 +2,7 @@ const Router = require('router');
 const bodyParser = require('body-parser');
 const { version } = require('./package.json');
 
+// const catchError = (req, res) =>
 module.exports = (cuser = require('@cuser/core')(), {
   swagger = true,
 } = {}) => {
@@ -21,6 +22,11 @@ module.exports = (cuser = require('@cuser/core')(), {
       const { resource } = req.params;
       cuser.update(req.body).then((data) => {
         res.json(data);
+      }, (err) => {
+        res.json({
+          message: err.message,
+          errors: err.errors,
+        });
       });
     })
     .delete('/v1/message', (req, res) => {

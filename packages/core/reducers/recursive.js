@@ -1,23 +1,43 @@
 const mutateJson = require('mutant-json');
+const isPromise = require('is-promise');
 
-const recursiveReducer = (reducer, opts) => (state, action) => {
-  if (typeof state !== 'object') {
-    throw new Error(`There's no state available`);
-  }
-
-  let value = reducer(state, action);
-  if (value !== undefined) {
-    return value
-  }
-  return mutateJson(state, (mutant, current) => {
-    value = reducer(current, action);
-    if (value !== undefined) {
-      mutant({ value });
+const recursiveReducer = (reducer, opts) => {
+  console.log('?????')
+  return (state, action, { resolve } = {}) => {
+    if (typeof state !== 'object') {
+      return state;
     }
-  }, {
-    test: '@parent', once: true,
-    ...opts,
-  });
+
+    let value = reducer(state, action);
+    if (value !== undefined) {
+      return value
+    }
+
+    return mutateJson(state, (mutate, value) => {
+
+      if (resolve) {
+        value = resolve(value, action);
+      }
+
+      if (isPromise(value)) {
+        return mutate(value.then((value) => {
+          if (value !== undefined) {
+            return { value };
+          }
+        }));
+      }
+
+      value = reducer(value, action);
+
+      if (value !== undefined) {
+        mutate({ value });
+      }
+
+    }, {
+        test: '@parent', once: true,
+        ...opts,
+    });
+  }
 }
 
 module.exports = recursiveReducer;

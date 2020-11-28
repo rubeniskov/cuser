@@ -7,13 +7,10 @@ const configureStore = require('./store');
 const createNode = require("./createNode");
 const rootReducer = require('./reducers');
 const tap = require('mutant-json/tap');
-const mergeReducers = require('./store/mergeReducers');
 const mutateJson = require('mutant-json');
 const isPromise = require('./utils/is-promise');
-const traverseJson = require('traverse-json');
 const aliases = require('./reducers/resolvers');
 const wrapDag = require('./dag');
-const CID = require('cids');
 
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
@@ -22,16 +19,21 @@ const {
 } = require('./types/actions');
 
 const {
+  TYPE_ACTION_RESOLVED,
   TYPE_ACTION_REHYDRATE,
-  TYPE_ACTION_PROMISE_RESOLVED
+  TYPE_ACTION_SEAL
 } = require('./types/actions');
+const { stats } = require("ipfs-core/src/components");
 
-// const reductors = {
-//   'user': (state, action) =>
-// }
-// console.log(resolvers);
-
-
+const dispatchAction = (store, action) => {
+  return new Promise((resolve) => {
+    const unsubscribe = store.subscribe(() => {
+      resolve(store.getState());
+      unsubscribe()
+    });
+    store.dispatch(action);
+  });
+}
 
 const createAction = (type, payload) => ({ type, payload });
 class Core {
@@ -40,94 +42,80 @@ class Core {
 
     const isDagLink = (link) => typeof link === 'string' && link.length === 110;
 
-    const seal = () => {
-
-    }
-
-    // const rehydrate = (state, action) => {
-    //   if (action.type === TYPE_ACTION_REHYDRATE) {
-    //     return action.payload;
-    //   } else {
-    //     this.dag.then(({ get }) => get(state)).then((node) => {
-    //       this.store.dispatch({
-    //         type: TYPE_ACTION_REHYDRATE,
-    //         payload: node.value,
-    //       });
-    //     });
-    //   }
-
-    //   return state;
-    // }
-
-    const rehydrate = (state, action) => {
-      if (isDagLink(state)) {
-        return this.dag.then(({ get }) => get(state)).then((node) => node.value);
+    const rehydrateReducer = (state, { type }) => {
+      if (type === TYPE_ACTION_REHYDRATE && isDagLink(state)) {
+        return Promise.resolve(this.dag).then(({ get }) => get(state)).then((node) => node.value);
       }
-
       return state;
     }
 
-    const resolvers = {
-      '@user': rehydrate,
-      '@message': rehydrate,
-      '@content': rehydrate,
+    const sealReducer = (state, { type }) => {
+      if (type === TYPE_ACTION_SEAL) {
+        return Promise.resolve(this.dag).then(({ put }) => put(state)).then((cid) => cid.toString());
+      }
+      return state;
     }
 
-    // console.log(resolvers);
+    const wrapReducer = (reducer) => (state, action, opts) => {
+      return sealReducer(reducer(rehydrateReducer(state, action), action, opts), action)
+    }
+
+    const preloadedState = 'bafyriqbetz7d7gbhtzgywnfp4o5xwbihydfudtrw25su6fweoilcf3y4cppspsiocuanzvgdsng7a7yc6j2lohfodxtattlmzne3ybskx3rt4'
     this.store = configureStore(rootReducer, {
+      // preloadedState,
       aliases: {
         ...aliases,
-        // '@topic': mergeReducers(aliases['@topic'], rehydrate),
-        // '@user': mergeReducers(rehydrate, aliases['@user']),
-        // '@message': mergeReducers(rehydrate, aliases['@message']),
-        // '@content': mergeReducers(rehydrate, aliases['@content']),
+        '@topic': wrapReducer(aliases['@topic']),
+        '@message': wrapReducer(aliases['@message']),
+        '@user': wrapReducer(aliases['@user']),
+        '@content': wrapReducer(aliases['@content']),
       },
-      preloadedState: 'bafyriqes4l3dqklvva5wikvcvi4gacrkq563hvgilppfeenlypnd5pznmglst2cmpmkbmdfek4lzxtywfad3osvffzubrnueiqp3kqzp74zxm',
+      mapping: {
+        '/topics/*': '@topic',
+        '/topics/*/message': '@message',
+        '/topics/*/message/user': '@user',
+        '/topics/*/message/content': '@content',
+        '/topics/*/message/parent': (state) => (state && this.dag.then(({ put }) => put(state).then((cid) => cid.toString()))),
+      },
+      resolve: (state) => {
+        if (isDagLink(state)) {
+          return this.dag.then(({ get }) => get(state));
+        }
+        return state
+      },
       enhancer: createStore => (
         reducer,
         initialState,
-        enhancer
+        enhancer,
       ) => {
         let store;
         const ipldReducer = (state, action) => {
 
-          if (action.type === TYPE_ACTION_PROMISE_RESOLVED) {
+          if (action.type === TYPE_ACTION_RESOLVED) {
             state = action.payload;
           }
 
-          if (isDagLink(state)) {
-            state = rehydrate(state, action)
+          state = mutateJson(state || {}, (mutate, value) => {
+            mutate({ value });
+          }, ([,value]) => value && value.then);
+
+          if (isDagLink(state) && action.type !== TYPE_ACTION_SEAL) {
+            process.nextTick(() => store.dispatch({ type: TYPE_ACTION_REHYDRATE }));
           }
 
+          state = wrapReducer(reducer)(state, action);
+
           if (isPromise(state)) {
-            return state.then((payload) => {
-              store.dispatch({ type: TYPE_ACTION_PROMISE_RESOLVED, payload });
+            state.then((payload) => {
+              process.nextTick(() => store.dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
             });
-          }
-          console.log(state);
-          state = mutateJson(state, (mutate, value) => {
-            mutate({ value: rehydrate(value, action) });
-          }, { test: ([,value]) => isDagLink(value) });
-          console.log(state);
-          if (isPromise(state)) {
-            process.nextTick(() => store.dispatch({ type: TYPE_ACTION_REHYDRATE }));
             return state;
           }
 
-          // state = mutateJson(state, (mutate, value) => {
-          //   mutate({ value: rehydrate(value, action) });
-          // }, { test: ([,value]) => isDagLink(value) });
+          console.log('YEAH', action.type);
 
-          // console.log('a ver...', state);
-
-          // const next = traverseJson(state, { test: ([, v]) => isDagLink(v)});
-          // const [] next();
-          // console.log(ientries);
-
-          return reducer(state, action);
+          return state;
         }
-
-        // ipldReducer = () => rehydrate(reducer())
 
         store = createStore(ipldReducer, initialState, enhancer);
 
@@ -135,11 +123,6 @@ class Core {
       }
     }
     );
-
-    this.store.subscribe(async () => {
-      const state = await this.store.getState();
-      console.log(JSON.stringify(state, null, 2));
-    });
 
     // this.dag.then(({ put }) => put({
     //   "type": 0,
@@ -154,7 +137,10 @@ class Core {
    * @param {PayloadPublishMessage} payload
    */
   async publish(payload) {
-    this.store.dispatch(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload));
+    return dispatchAction(this.store, createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
+    // .then(() => {
+    //   return dispatchAction(this.store, createAction(TYPE_ACTION_SEAL));
+    // })
   }
 
   /**
@@ -162,7 +148,7 @@ class Core {
    * @param {PayloadUpdateMessage} payload
    */
   async update(payload) {
-    this.store.dispatch(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload));
+    return dispatchAction(this.store, createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
     // return Promise.resolve(this.store.getState());
   }
 
@@ -171,7 +157,7 @@ class Core {
    * @param {PayloadDeleteMessage} payload
    */
   async delete(payload) {
-    this.store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, payload));
+    return dispatchAction(this.store, createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
   }
 
   /**
@@ -180,8 +166,8 @@ class Core {
    */
   async query(payload) {
     const dag = await this.dag;
-    const root = await dag.root().then((id) => dag.get(id));
-    console.log(root.value);
+    // const root = await dag.root().then((id) => console.log('yeah', id));
+    // console.log(root);
     // console.log(payload, this.store.getState());
     // return tap(this.store.getState(), `/topics/${payload.topicId}/message`);
   }
@@ -193,6 +179,26 @@ const core = (opts) => {
 
 module.exports = core;
 
+
+ // const rehydrate = (state, action) => {
+    //   if (action.type === TYPE_ACTION_REHYDRATE) {
+    //     return action.payload;
+    //   } else {
+    //     this.dag.then(({ get }) => get(state)).then((node) => {
+    //       this.store.dispatch({
+    //         type: TYPE_ACTION_REHYDRATE,
+    //         payload: node.value,
+    //       });
+    //     });
+    //   }
+
+    //   return state;
+    // }
+    // const resolvers = {
+    //   '@user': rehydrate,
+    //   '@message': rehydrate,
+    //   '@content': rehydrate,
+    // }
 
 // const all = require("it-all");
 // const { tap } = require('./utils');
