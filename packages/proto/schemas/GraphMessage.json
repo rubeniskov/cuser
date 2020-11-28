@@ -38,6 +38,39 @@
         }
       ]
     },
+    "cdate": {
+      "type": "integer",
+      "description": "Creation date"
+    },
+    "mdate": {
+      "type": "integer",
+      "description": "Modify date"
+    },
+    "user": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/user"
+        }
+      ]
+    },
+    "content": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/content"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/GraphMessage.json#",
+  "definitions": {
     "user": {
       "required": [
         "type",
@@ -73,22 +106,6 @@
       "type": "object",
       "description": "User represented by CID"
     },
-    "cdate": {
-      "type": "integer",
-      "description": "Creation date"
-    },
-    "mdate": {
-      "type": "integer",
-      "description": "Modify date"
-    },
-    "content": {
-      "$ref": "#/definitions/content"
-    }
-  },
-  "additionalProperties": false,
-  "type": "object",
-  "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/GraphMessage.json#",
-  "definitions": {
     "content": {
       "required": [
         "type",

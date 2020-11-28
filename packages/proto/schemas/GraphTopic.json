@@ -20,7 +20,14 @@
       "type": "integer"
     },
     "message": {
-      "$ref": "#/definitions/message"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/definitions/message"
+        }
+      ]
     }
   },
   "additionalProperties": false,
@@ -66,41 +73,6 @@
             }
           ]
         },
-        "user": {
-          "required": [
-            "type",
-            "peerId",
-            "username",
-            "avatar"
-          ],
-          "properties": {
-            "type": {
-              "oneOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "integer"
-                }
-              ]
-            },
-            "peerId": {
-              "type": "string",
-              "description": "Unique identification using CID"
-            },
-            "username": {
-              "type": "string",
-              "description": "Username string"
-            },
-            "avatar": {
-              "type": "string",
-              "description": "Image of the user ref with CID"
-            }
-          },
-          "additionalProperties": true,
-          "type": "object",
-          "description": "User represented by CID"
-        },
         "cdate": {
           "type": "integer",
           "description": "Creation date"
@@ -109,12 +81,64 @@
           "type": "integer",
           "description": "Modify date"
         },
+        "user": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/user"
+            }
+          ]
+        },
         "content": {
-          "$ref": "#/definitions/content"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/definitions/content"
+            }
+          ]
         }
       },
       "additionalProperties": true,
       "type": "object"
+    },
+    "user": {
+      "required": [
+        "type",
+        "peerId",
+        "username",
+        "avatar"
+      ],
+      "properties": {
+        "type": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "peerId": {
+          "type": "string",
+          "description": "Unique identification using CID"
+        },
+        "username": {
+          "type": "string",
+          "description": "Username string"
+        },
+        "avatar": {
+          "type": "string",
+          "description": "Image of the user ref with CID"
+        }
+      },
+      "additionalProperties": true,
+      "type": "object",
+      "description": "User represented by CID"
     },
     "content": {
       "required": [

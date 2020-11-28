@@ -3,13 +3,8 @@
 /** @typedef {import("@cuser/proto/payloads").PayloadDeleteMessage} PayloadDeleteMessage */
 /** @typedef {import("@cuser/proto/payloads").PayloadQueryMessages} PayloadQueryMessages */
 
-const configureStore = require('./store');
+const createStore = require('./store');
 const createNode = require("./createNode");
-const rootReducer = require('./reducers');
-const tap = require('mutant-json/tap');
-const mutateJson = require('mutant-json');
-const isPromise = require('./utils/is-promise');
-const aliases = require('./reducers/resolvers');
 const wrapDag = require('./dag');
 
 const {
@@ -18,18 +13,13 @@ const {
   TYPE_ACTION_DELETE_MESSAGE,
 } = require('./types/actions');
 
-const {
-  TYPE_ACTION_RESOLVED,
-  TYPE_ACTION_REHYDRATE,
-  TYPE_ACTION_SEAL
-} = require('./types/actions');
 const { stats } = require("ipfs-core/src/components");
 
 const dispatchAction = (store, action) => {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const unsubscribe = store.subscribe(() => {
       resolve(store.getState());
-      unsubscribe()
+      unsubscribe();
     });
     store.dispatch(action);
   });
@@ -42,94 +32,14 @@ class Core {
 
     const isDagLink = (link) => typeof link === 'string' && link.length === 110;
 
-    const rehydrateReducer = (state, { type }) => {
-      if (type === TYPE_ACTION_REHYDRATE && isDagLink(state)) {
-        return Promise.resolve(this.dag).then(({ get }) => get(state)).then((node) => node.value);
-      }
-      return state;
-    }
+    const preloadedState = 'bafyriqafdufkvc2jrteqtrcmgwe7okmoezqgh464diw5yluuumlmit5exy2hkanmzwaegwh3bdgdujfbkt7x6jyyjy36fevilyndxvjpl36xw'
 
-    const sealReducer = (state, { type }) => {
-      if (type === TYPE_ACTION_SEAL) {
-        return Promise.resolve(this.dag).then(({ put }) => put(state)).then((cid) => cid.toString());
-      }
-      return state;
-    }
-
-    const wrapReducer = (reducer) => (state, action, opts) => {
-      return sealReducer(reducer(rehydrateReducer(state, action), action, opts), action)
-    }
-
-    const preloadedState = 'bafyriqbetz7d7gbhtzgywnfp4o5xwbihydfudtrw25su6fweoilcf3y4cppspsiocuanzvgdsng7a7yc6j2lohfodxtattlmzne3ybskx3rt4'
-    this.store = configureStore(rootReducer, {
-      // preloadedState,
-      aliases: {
-        ...aliases,
-        '@topic': wrapReducer(aliases['@topic']),
-        '@message': wrapReducer(aliases['@message']),
-        '@user': wrapReducer(aliases['@user']),
-        '@content': wrapReducer(aliases['@content']),
-      },
-      mapping: {
-        '/topics/*': '@topic',
-        '/topics/*/message': '@message',
-        '/topics/*/message/user': '@user',
-        '/topics/*/message/content': '@content',
-        '/topics/*/message/parent': (state) => (state && this.dag.then(({ put }) => put(state).then((cid) => cid.toString()))),
-      },
-      resolve: (state) => {
-        if (isDagLink(state)) {
-          return this.dag.then(({ get }) => get(state));
-        }
-        return state
-      },
-      enhancer: createStore => (
-        reducer,
-        initialState,
-        enhancer,
-      ) => {
-        let store;
-        const ipldReducer = (state, action) => {
-
-          if (action.type === TYPE_ACTION_RESOLVED) {
-            state = action.payload;
-          }
-
-          state = mutateJson(state || {}, (mutate, value) => {
-            mutate({ value });
-          }, ([,value]) => value && value.then);
-
-          if (isDagLink(state) && action.type !== TYPE_ACTION_SEAL) {
-            process.nextTick(() => store.dispatch({ type: TYPE_ACTION_REHYDRATE }));
-          }
-
-          state = wrapReducer(reducer)(state, action);
-
-          if (isPromise(state)) {
-            state.then((payload) => {
-              process.nextTick(() => store.dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
-            });
-            return state;
-          }
-
-          console.log('YEAH', action.type);
-
-          return state;
-        }
-
-        store = createStore(ipldReducer, initialState, enhancer);
-
-        return store;
-      }
-    }
-    );
-
-    // this.dag.then(({ put }) => put({
-    //   "type": 0,
-    //   "topics": {
-    //     "asdasdasdasd": 'bafyriqfmex2kguldaewssn5gtry3yzboch4tah4yj52hi2mczuyc7ngfvfbmtoltsizst3jonl7tqn3bmhrp7eagw2ziet5c5azrxchxzbg2g'
-    //   }
-    // })).then(console.log)
+    this.store = createStore({
+      preloadedState,
+      isDeserializable: isDagLink,
+      serialize: (value) => this.dag.then(({ put }) => put(value)).then((cid) => cid.toString()),
+      deserialize: (value) => this.dag.then(({ get }) => get(value)).then((node) => node.value)
+    });
   }
 
   /**
@@ -137,10 +47,7 @@ class Core {
    * @param {PayloadPublishMessage} payload
    */
   async publish(payload) {
-    return dispatchAction(this.store, createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
-    // .then(() => {
-    //   return dispatchAction(this.store, createAction(TYPE_ACTION_SEAL));
-    // })
+    return dispatchAction(this.store, createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload));
   }
 
   /**
@@ -148,7 +55,7 @@ class Core {
    * @param {PayloadUpdateMessage} payload
    */
   async update(payload) {
-    return dispatchAction(this.store, createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
+    return dispatchAction(this.store, createAction(TYPE_ACTION_UPDATE_MESSAGE, payload));
     // return Promise.resolve(this.store.getState());
   }
 
@@ -166,10 +73,6 @@ class Core {
    */
   async query(payload) {
     const dag = await this.dag;
-    // const root = await dag.root().then((id) => console.log('yeah', id));
-    // console.log(root);
-    // console.log(payload, this.store.getState());
-    // return tap(this.store.getState(), `/topics/${payload.topicId}/message`);
   }
 }
 

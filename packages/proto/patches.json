@@ -6,21 +6,35 @@
   "GraphMessage.json": [
     { "op": "remove", "path": "/properties/parent/type" },
     { "op": "add", "path": "/properties/parent/anyOf", "value": [{ "type": ["string", "null"] }, { "$ref": "#" }] },
+    
     { "op": "add", "path": "/definitions", "value": {} },
+
+    { "op": "move", "path": "/definitions/user", "from": "/properties/user" },
+    { "op": "add", "path": "/properties/user", "value": { "anyOf": [{ "type": "string" }, { "$ref": "#/definitions/user" }] } },
+
     { "op": "move", "path": "/definitions/content", "from": "/properties/content" },
-    { "op": "add", "path": "/properties/content", "value": { "$ref": "#/definitions/content" } },
+    { "op": "add", "path": "/properties/content", "value": { "anyOf": [{ "type": "string" }, { "$ref": "#/definitions/content" }] } },
+
     { "op": "remove", "path": "/definitions/content/properties/parent/type" },
     { "op": "add", "path": "/definitions/content/properties/parent/anyOf", "value": [{ "type": ["string", "null"] }, { "$ref": "#/definitions/content" }] }
   ],
   "GraphTopic.json": [
     { "op": "add", "path": "/definitions", "value": {} },
+
     { "op": "move", "path": "/definitions/message", "from": "/properties/message" },
-    { "op": "add", "path": "/properties/message", "value": { "$ref": "#/definitions/message" } },
-    { "op": "move", "path": "/definitions/content", "from": "/definitions/message/properties/content" },
-    { "op": "add", "path": "/definitions/message/properties/content", "value": { "$ref": "#/definitions/content" } },
+    { "op": "add", "path": "/properties/message", "value": { "anyOf": [{ "type": "string" }, { "$ref": "#/definitions/message" }] } },
+
     { "op": "remove", "path": "/definitions/message/properties/parent/type" },
     { "op": "add", "path": "/definitions/message/properties/parent/anyOf", "value": [{ "type": ["string", "null"] }, { "$ref": "#/definitions/message" }] },
+    
+    { "op": "move", "path": "/definitions/user", "from": "/definitions/message/properties/user" },
+    { "op": "add", "path": "/definitions/message/properties/user", "value": { "anyOf": [{ "type": "string" }, { "$ref": "#/definitions/user" }] } },
+
+    { "op": "move", "path": "/definitions/content", "from": "/definitions/message/properties/content" },
+    { "op": "add", "path": "/definitions/message/properties/content", "value": { "anyOf": [{ "type": "string" }, { "$ref": "#/definitions/content" }] } },
+    
     { "op": "remove", "path": "/definitions/content/properties/parent/type" },
     { "op": "add", "path": "/definitions/content/properties/parent/anyOf", "value": [{ "type": ["string", "null"] }, { "$ref": "#/definitions/content" }] }
+
   ]
 }

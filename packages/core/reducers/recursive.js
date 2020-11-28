@@ -2,7 +2,6 @@ const mutateJson = require('mutant-json');
 const isPromise = require('is-promise');
 
 const recursiveReducer = (reducer, opts) => {
-  console.log('?????')
   return (state, action, { resolve } = {}) => {
     if (typeof state !== 'object') {
       return state;
