@@ -1,6 +1,6 @@
 const mutateJson = require('mutant-json');
 const isPromise = require('is-promise');
-
+const debug = require('debug')('cuser:serializer');
 const {
   TYPE_ACTION_RESOLVED,
   TYPE_ACTION_REHYDRATE,
@@ -22,7 +22,7 @@ const phases = {
 const createSerializeEnhancer = ({
   mapping,
   aliases,
-  isDeserializable
+  processMap = p => p
 }) => createStore => (
   reducer,
   initialState,
@@ -34,6 +34,27 @@ const createSerializeEnhancer = ({
     resolve: () => {}, reject: () => {}
   }
   const pending = [];
+
+  const mappingEntries = Object.entries(mapping);
+  // Sort first the shallowest paths
+  const shallowMapping = mappingEntries
+    .sort(([a], [b]) => a.match(/\//g).length - b.match(/\//g).length)
+  // Sort first the deepest paths
+  const deeperMapping = [...shallowMapping].reverse();
+
+  const applySerializeReducers = (mapping, state, action) => mapping.reduce((prev, [ pattern, alias ]) => {
+    return mutateJson(prev, (mutate, prevState, path, result) => {
+      const reducer = aliases[alias];
+      if (!reducer) {
+        throw new Error(`Missing reducer for "${alias}"`);
+      }
+      const newState = reducer(prevState, action);
+      mutate(Promise.resolve(newState).then(value => {
+        debug("reducer %s %s %s %s", action.type, path, JSON.stringify(prevState, null, 2), JSON.stringify(result, null, 2));
+        return ({ value })
+      }));
+    }, { nested: true, test: processMap(pattern, action) });
+  }, state);
 
   const ipldReducer = (state, action) => {
     if (/@@redux\/INIT/.test(action.type)) {
@@ -50,42 +71,24 @@ const createSerializeEnhancer = ({
           process.nextTick(() => {
             store.dispatch(pending.shift());
           });
-        }
-
-        if (phase === phases.SEALING) {
+        } else if (phase === phases.SEALING) {
           deferred.resolve(state);
+          debug('resolved state: %s', action.payload);
         }
         return action.payload;
       case TYPE_ACTION_SEAL:
         phase = phases.SEALING;
-        state = Object.entries(mapping)
-        // Sort first the deepest paths
-        .sort(([a], [b]) => b.match(/\//g).length - a.match(/\//g).length)
-        .reduce((prev, [ pattern, alias ]) => {
-          return mutateJson(prev, (mutate, value) => {
-            const reducer = aliases[alias];
-            if (!reducer) {
-              throw new Error(`Missing reducer for "${alias}"`);
-            }
-            mutate(Promise.resolve(reducer(value, { type: TYPE_ACTION_SEAL })).then(value => ({ value })));
-          }, { nested: true, test: pattern });
-        }, state)
-        .then((state) => reducer(state, action));
+        state = applySerializeReducers(deeperMapping, state, action)
+          .then((serialized) => {
+            return reducer(serialized, action).then((newState) => {
+              debug("reducer %s %s prev: %o new: %o", TYPE_ACTION_SEAL, '/', serialized, newState);
+              return newState
+            });
+          });
         break;
       case TYPE_ACTION_REHYDRATE:
         phase = phases.REHYDRATING;
-        state = Object.entries(mapping)
-        // Sort first the shallowest paths
-        .sort(([a], [b]) => a.match(/\//g).length - b.match(/\//g).length)
-        .reduce((prev, [ pattern, alias ]) => {
-          return mutateJson(prev, (mutate, value) => {
-            const reducer = aliases[alias];
-            if (!reducer) {
-              throw new Error(`Missing reducer for "${alias}"`);
-            }
-            mutate(Promise.resolve(reducer(value, { type: TYPE_ACTION_REHYDRATE })).then(value => ({ value })));
-          }, { nested: true, test: pattern });
-        }, reducer(state, action));
+        state = applySerializeReducers(shallowMapping, reducer(state, action), action);
         break;
       default:
         phase = phases.IDLE;
@@ -98,32 +101,24 @@ const createSerializeEnhancer = ({
 
     if (isPromise(state)) {
       state.then((payload) => {
-        process.nextTick(() => {
-          store.dispatch({ type: TYPE_ACTION_RESOLVED, payload });
-        });
-      });
-      return state;
-    }
-
-    // Dispatch rehydarte when DagLink detected
-    if (isDeserializable && isDeserializable(state) && !ipdlActions.includes(action.type)) {
-      process.nextTick(() => {
-        pending.push(action, { type: TYPE_ACTION_SEAL });
-        store.dispatch({ type: TYPE_ACTION_REHYDRATE });
-      });
-      return state;
-    }
-
-    state = Promise.resolve(reducer(state, action));
-
-    if (isPromise(state)) {
-      state.then((payload) => {
         store.dispatch({ type: TYPE_ACTION_RESOLVED, payload });
       });
       return state;
     }
 
-    return state;
+    // Dispatch rehydarte when action detected
+    if (!pending.length && !ipdlActions.includes(action.type)) {
+      process.nextTick(() => {
+        debug('dispatching serializer for action %o', action);
+        pending.push(action, { type: TYPE_ACTION_SEAL, payload: action.payload });
+        store.dispatch({ type: TYPE_ACTION_REHYDRATE, payload: action.payload });
+      });
+      return state;
+    }
+
+    return Promise.resolve(reducer(state, action)).then((payload) => {
+      store.dispatch({ type: TYPE_ACTION_RESOLVED, payload });
+    });
   }
 
   store = createStore(ipldReducer, initialState, enhancer);

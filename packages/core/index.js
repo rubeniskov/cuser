@@ -23,13 +23,14 @@ class Core {
   constructor(options) {
     this.dag = wrapDag(createNode(options));
 
-    const isDagLink = (link) => typeof link === 'string' && link.length === 110;
+    const isDagLink = (state) => typeof state === 'string' && state.length === 110;
 
     this.store = createStore({
       preloadedState: this.dag.then(({ root }) => root()).then((cid) => cid.replace(/^\/ipfs\//, '')),
       isDeserializable: isDagLink,
+      isSerializable: (state) => typeof state === 'object',
       serialize: (value) => this.dag.then(({ put }) => put(value)).then((cid) => cid.toString()),
-      deserialize: (value) => this.dag.then(({ get }) => get(value)).then((node) => node.value)
+      deserialize: (value) => this.dag.then(({ get }) => get(value)).then(({ value }) => value)
     });
   }
 

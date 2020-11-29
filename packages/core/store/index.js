@@ -15,8 +15,8 @@ const rehydrateReducer = (state, { type }, { deserialize, isDeserializable }) =>
   return state;
 }
 
-const sealReducer = (state, { type }, { serialize, isDeserializable }) => {
-  if (serialize && type === TYPE_ACTION_SEAL && !isDeserializable(state)) {
+const sealReducer = (state, { type }, { serialize, isSerializable }) => {
+  if (serialize && type === TYPE_ACTION_SEAL && isSerializable(state)) {
     return Promise.resolve(serialize).then(serialize => serialize(state));
   }
   return state;
@@ -30,6 +30,8 @@ const wrapReducer = (reducer, wrapOpts) => (state, action, reducerOpts) => {
 module.exports = (opts) => {
   const copts = {
     isDeserializable: () => { throw new Error('isDeserializable not yet implemented') },
+    isSerializable: () => { throw new Error('isSerializable not yet implemented') },
+    processMap: (pointer, { payload: { topicId } }) => pointer.replace('/topics/*', `/topics/${topicId}`),
     mapping: {
       '/topics/*': '@topic',
       '/topics/*/message': '@message',

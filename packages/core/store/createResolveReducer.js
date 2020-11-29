@@ -24,7 +24,7 @@ const createResolveReducer = (rootReducer, {
         reducer = aliases[reducer];
       }
 
-      if (typeof reducer === 'function') {
+      if (typeof reducer === 'function' && typeof state === 'object') {
         mutate({
           value: reducer(tap(state, path), action, restOptions)
         });

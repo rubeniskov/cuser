@@ -25,7 +25,6 @@ const createReducer = (mutations) => {
     if (reducer) {
       return reducer(state, action, opts);
     }
-
     return state;
   }
 }
