@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cuser/server-middleware-apollo": "^0.0.1",
+    "@cuser/server-middleware-graphql": "^0.0.1",
     "@cuser/server-middleware-auth": "^0.0.1",
     "@cuser/server-middleware-rest": "^0.0.1",
     "express": "^4.17.1"

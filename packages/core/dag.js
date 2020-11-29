@@ -34,10 +34,8 @@ const wrapDag = async (api, options) => {
    * @param {AbortOptions} options
    * @returns {Promise<PublishResult>}
    */
-  const publish = async (buf, options) => {
-    const cid = await node.dag.put(buf, { format, hashAlg, ...options });
-    const resolved = await node.name.publish(cid, { allowOffline, timeout, ...options });
-    return resolved;
+  const publish = async (cid) => {
+    return node.name.publish(cid, { allowOffline, timeout, ...options });
   }
 
   /**

@@ -11,6 +11,11 @@ module.exports = (cuser = require('@cuser/core')(), {
     .get('/v1/message', (req, res) => {
       cuser.query(req.query).then((data) => {
         res.json(data);
+      }, (err) => {
+        res.json({
+          message: err.message,
+          errors: err.errors,
+        });
       });
     })
     .post('/v1/message', (req, res) => {

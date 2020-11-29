@@ -38,10 +38,10 @@ module.exports = (opts) => {
     },
     aliases: {
       ...reducerAliases,
-      '@topic': wrapReducer(reducerAliases['@topic']),
-      '@message': wrapReducer(reducerAliases['@message']),
-      '@user': wrapReducer(reducerAliases['@user']),
-      '@content': wrapReducer(reducerAliases['@content']),
+      '@topic': wrapReducer(reducerAliases['@topic'], opts),
+      '@message': wrapReducer(reducerAliases['@message'], opts),
+      '@user': wrapReducer(reducerAliases['@user'], opts),
+      '@content': wrapReducer(reducerAliases['@content'], opts),
     },
     ...opts
   }

@@ -4,6 +4,7 @@
 /** @typedef {import("@cuser/proto/payloads").PayloadQueryMessages} PayloadQueryMessages */
 
 const createStore = require('./store');
+const traverseJson = require('traverse-json');
 const createNode = require("./createNode");
 const wrapDag = require('./dag');
 
@@ -13,17 +14,9 @@ const {
   TYPE_ACTION_DELETE_MESSAGE,
 } = require('./types/actions');
 
-const { stats } = require("ipfs-core/src/components");
+// const { stats } = require("ipfs-core/src/components");
 
-const dispatchAction = (store, action) => {
-  return new Promise((resolve, reject) => {
-    const unsubscribe = store.subscribe(() => {
-      resolve(store.getState());
-      unsubscribe();
-    });
-    store.dispatch(action);
-  });
-}
+const dispatchAction = (store, action) => store.exec(action)
 
 const createAction = (type, payload) => ({ type, payload });
 class Core {
@@ -32,10 +25,8 @@ class Core {
 
     const isDagLink = (link) => typeof link === 'string' && link.length === 110;
 
-    const preloadedState = 'bafyriqafdufkvc2jrteqtrcmgwe7okmoezqgh464diw5yluuumlmit5exy2hkanmzwaegwh3bdgdujfbkt7x6jyyjy36fevilyndxvjpl36xw'
-
     this.store = createStore({
-      preloadedState,
+      preloadedState: this.dag.then(({ root }) => root()).then((cid) => cid.replace(/^\/ipfs\//, '')),
       isDeserializable: isDagLink,
       serialize: (value) => this.dag.then(({ put }) => put(value)).then((cid) => cid.toString()),
       deserialize: (value) => this.dag.then(({ get }) => get(value)).then((node) => node.value)
@@ -47,16 +38,21 @@ class Core {
    * @param {PayloadPublishMessage} payload
    */
   async publish(payload) {
-    return dispatchAction(this.store, createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload));
+    return this.store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
+      .then((cid) => {
+        return this.dag.then(({ publish }) => publish(cid));
+      });
   }
 
   /**
-   *
+   * Update message and gets computed cid
    * @param {PayloadUpdateMessage} payload
    */
   async update(payload) {
-    return dispatchAction(this.store, createAction(TYPE_ACTION_UPDATE_MESSAGE, payload));
-    // return Promise.resolve(this.store.getState());
+    return dispatchAction(this.store, createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
+      .then((cid) => {
+        return this.dag.then(({ publish }) => publish(cid));
+      });
   }
 
   /**
@@ -65,6 +61,9 @@ class Core {
    */
   async delete(payload) {
     return dispatchAction(this.store, createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
+      .then((cid) => {
+        return this.dag.then(({ publish }) => publish(cid));
+      });
   }
 
   /**
@@ -72,7 +71,29 @@ class Core {
    * @param {PayloadQueryMessages} payload
    */
   async query(payload) {
-    const dag = await this.dag;
+    return this.dag.then(({ root }) => root()).then((cid) => cid.replace(/^\/ipfs\//, '')).then((cid) => {
+      return this.dag.then(({ get }) => get(cid).then(({ value }) => value));
+    })
+    .then((root) => {
+      return root;
+      const after = payload.after;
+      const topic = root.topics[payload.topicId];
+      if (!topic) throw new Error('Topic not found');
+      const message = topic.message
+      if (!message) return [];
+      const ientries = traverseJson.createIterator(message, '@parent');
+      let found = false;
+      let results = [];
+      for (let [_, message] of ientries) {
+        if (message === null) break;
+        if (!after || after === message.id) found = true
+        if (found) {
+          const { parent, ...computed } = message;
+          results.push(computed);
+        }
+      }
+      return results;
+    });
   }
 }
 

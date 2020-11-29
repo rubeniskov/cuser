@@ -26,5 +26,5 @@ type CuserServices_ServicePublisher_Mutation {
 }
 
 type CuserServices_MessageResponse {
-  messageid: String!
+  messageId: String!
 }

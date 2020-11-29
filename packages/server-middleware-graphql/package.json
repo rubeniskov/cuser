@@ -1,5 +1,5 @@
 {
-  "name": "@cuser/server-middleware-apollo",
+  "name": "@cuser/server-middleware-graphql",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express-graphql": "^0.12.0",
+    "graphql": "^15.4.0",
     "router": "^1.3.5"
   }
 }

@@ -20,18 +20,22 @@ all: $(TARGETS)
 $(SWAGGER_OUTPUT)/%.json: $(SERVICES)
 	mkdir -p $(SWAGGER_OUTPUT)
 	$(PROTOC) $(PROTOOPTS) -I$(PROTOCBUF) $(PROTOC_INCLUDES) \
-    --swagger_opt allow_delete_body \
-    --swagger_out=$(SWAGGER_OUTPUT) $<
+		--swagger_opt allow_delete_body \
+		--swagger_out=$(SWAGGER_OUTPUT) $<
 	for file in $(SWAGGER_OUTPUT)/*.swagger.json; do \
 		mv "$$file" "$(SWAGGER_OUTPUT)/$$(basename "$$file" .swagger.json).json"; \
 	done
 	
-$(GRAPHQL_OUTPUT)/%.graphql: $(SERVICES)
+$(GRAPHQL_OUTPUT)/%.graphql:
 	mkdir -p $(GRAPHQL_OUTPUT)
-	$(PROTOC) $(PROTOOPTS) -I$(PROTOCBUF) $(PROTOC_INCLUDES) --graphql_out=$(GRAPHQL_OUTPUT) $<
+	$(PROTOC) $(PROTOOPTS) -I$(PROTOCBUF) $(PROTOC_INCLUDES) \
+		--graphql_opt input_mode=service \
+    --graphql_opt field_name=preserve \
+		--graphql_out=$(GRAPHQL_OUTPUT) $(SERVICES) $(PROTOTYPES) $(PROTOCBUF)/payloads.proto
 	for file in $(GRAPHQL_OUTPUT)/*.graphql; do \
 		mv "$$file" "$(GRAPHQL_OUTPUT)/$$(basename "$$file" _pb.graphql).graphql"; \
 	done
+	cat $(GRAPHQL_OUTPUT)/*.graphql > $(GRAPHQL_OUTPUT)/main.graphql
 
 $(JSONSCHEMAS_OUTPUT)/%.json:
 	mkdir -p $(JSONSCHEMAS_OUTPUT)
