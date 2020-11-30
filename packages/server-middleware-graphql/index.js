@@ -5,6 +5,7 @@ const { buildSchema } = require('graphql');
 const graphqlSchemaFilename = path.resolve(require.resolve('@cuser/proto/package.json'), '../graphql/main.graphql');
 
 const graphqlSchemaContent = require('fs').readFileSync(graphqlSchemaFilename, { encoding: 'utf8' })
+// graphqlHTTP does nos support Custom prefixed Query or Mutations
   .replace(/type\s+.*_(Query|Mutation)/g, (_,type) => {
     return `type ${type}`
   });

@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+        "peerId",
+        "username",
+        "avatar"
+    ],
+    "properties": {
+        "peerId": {
+            "type": "string"
+        },
+        "username": {
+            "type": "string"
+        },
+        "avatar": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/PayloadUser.json#"
+}

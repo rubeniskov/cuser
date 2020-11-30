@@ -1,0 +1,48 @@
+{
+  "name": "@cuser/demo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "openssl req -new -x509 -nodes -subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost' -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365",
+    "start:server": "DEBUG=cuser:* cuser start --cors",
+    "start:client": "webpack serve --open localhost",
+    "start": "concurrently 'npm:start:server' 'npm:start:client'"
+  },
+  "author": "",
+  "license": "ISC",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  },
+  "dependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-react": "^7.12.7",
+    "@cuser/cli": "^0.0.1",
+    "@cuser/client": "^0.0.1",
+    "@cuser/react": "^0.0.1",
+    "babel-loader": "^8.2.2",
+    "babelify": "^10.0.0",
+    "budo": "^11.6.4",
+    "concurrently": "^5.3.0",
+    "css-loader": "^5.0.1",
+    "html-webpack-plugin": "^4.5.0",
+    "react": "17.0.1",
+    "react-dat-gui": "^4.0.3",
+    "react-dom": "17.0.1",
+    "style-loader": "^2.0.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
+  }
+}

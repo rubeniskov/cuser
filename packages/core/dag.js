@@ -62,7 +62,7 @@ const wrapDag = async (api, options) => {
    */
   const root = async () => {
     const [resolved] = await all(node.name.resolve(id))
-    return resolved;
+    return resolved.replace(/^\/ipfs\//, '');
   }
 
   /**

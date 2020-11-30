@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+        "topicId",
+        "first",
+        "last",
+        "after",
+        "offset"
+    ],
+    "properties": {
+        "topicId": {
+            "type": "string"
+        },
+        "first": {
+            "type": "integer"
+        },
+        "last": {
+            "type": "integer"
+        },
+        "after": {
+            "type": "integer"
+        },
+        "offset": {
+            "type": "integer"
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/PayloadQueryMessages.json#"
+}

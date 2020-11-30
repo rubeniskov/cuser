@@ -43,7 +43,7 @@ $(JSONSCHEMAS_OUTPUT)/%.json:
 		--jsonschema_opt disallow_additional_properties \
 		--jsonschema_opt all_fields_required \
 		--jsonschema_out=$(JSONSCHEMAS_OUTPUT) \
-		$(PROTOTYPES)
+		$(PROTOTYPES) $(PROTOCBUF)/payloads.proto
 	for file in $(JSONSCHEMAS_OUTPUT)/*.jsonschema; do \
 		mv "$$file" "$(JSONSCHEMAS_OUTPUT)/$$(basename "$$file" .jsonschema).json"; \
 	done

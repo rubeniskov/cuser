@@ -1,0 +1,14 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+        "data"
+    ],
+    "properties": {
+        "data": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/PayloadContent.json#"
+}

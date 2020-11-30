@@ -21,12 +21,13 @@ const dispatchAction = (store, action) => store.exec(action)
 const createAction = (type, payload) => ({ type, payload });
 class Core {
   constructor(options) {
-    this.dag = wrapDag(createNode(options));
+    this.node = createNode(options);
+    this.dag = wrapDag(this.node);
 
     const isDagLink = (state) => typeof state === 'string' && state.length === 110;
 
     this.store = createStore({
-      preloadedState: this.dag.then(({ root }) => root()).then((cid) => cid.replace(/^\/ipfs\//, '')),
+      preloadedState: this.dag.then(({ root }) => root()),
       isDeserializable: isDagLink,
       isSerializable: (state) => typeof state === 'object',
       serialize: (value) => this.dag.then(({ put }) => put(value)).then((cid) => cid.toString()),

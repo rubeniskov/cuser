@@ -1,0 +1,52 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+        "topicId",
+        "messageId",
+        "content",
+        "user"
+    ],
+    "properties": {
+        "topicId": {
+            "type": "string"
+        },
+        "messageId": {
+            "type": "string"
+        },
+        "content": {
+            "required": [
+                "data"
+            ],
+            "properties": {
+                "data": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object"
+        },
+        "user": {
+            "required": [
+                "peerId",
+                "username",
+                "avatar"
+            ],
+            "properties": {
+                "peerId": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": true,
+            "type": "object"
+        }
+    },
+    "additionalProperties": false,
+    "type": "object",
+    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/PayloadUpdateMessage.json#"
+}
