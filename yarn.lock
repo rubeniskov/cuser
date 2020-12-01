@@ -12001,14 +12001,6 @@ package-json@^6.3.0:
     registry-url "^5.0.0"
     semver "^6.2.0"
 
-package-table@^0.5.5:
-  version "0.5.5"
-  resolved "https://registry.yarnpkg.com/package-table/-/package-table-0.5.5.tgz#05ad23f1b1ec2009a9e624bfb54d22554898382e"
-  integrity sha512-cm6tb+xioJH+4ctzfG1bxxISzXV66aJGGFCQn+L8wnVlUH7QBorX9Hppm87GMYpuRqq3Na0MrOP7xB7eJr4gvw==
-  dependencies:
-    request "^2.88.0"
-    yargs "^13.2.2"
-
 pad-left@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/pad-left/-/pad-left-2.1.0.tgz#16e6a3b2d44a8e138cb0838cc7cb403a4fc9e994"
@@ -16103,7 +16095,7 @@ yargs-parser@^20.2.2, yargs-parser@^20.2.3:
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-20.2.4.tgz#b42890f14566796f85ae8e3a25290d205f154a54"
   integrity sha512-WOkpgNhPTlE73h4VFAFsOnomJVaovO8VqLDzy5saChRBFQFBoMYirowyW+Q9HB4HFF4Z7VZTiG3iSzJJA29yRA==
 
-yargs@^13.2.2, yargs@^13.3.0, yargs@^13.3.2:
+yargs@^13.3.0, yargs@^13.3.2:
   version "13.3.2"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-13.3.2.tgz#ad7ffefec1aa59565ac915f82dccb38a9c31a2dd"
   integrity sha512-AX3Zw5iPruN5ie6xGRIDgqkT+ZhnRlZMLMHAs8tg7nRruy2Nb+i5o9bwghAogtM08q1dpr2LVoS8KSTMYpWXUw==

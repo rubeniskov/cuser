@@ -13,7 +13,7 @@ const downloads = (pkg) => {
   return `[![npm-downloads](https://img.shields.io/npm/dw/${pkg})](https://www.npmjs.com/package/${pkg})`
 }
 const version = (pkg, gh) => {
-  return `[![npm](https://img.shields.io/npm/v/${pkg}.svg)](//github.com/${gh}/releases)`
+  return `[![npm](https://img.shields.io/npm/v/${pkg}.svg)](https://www.npmjs.com/package/${pkg})`
 }
 
 const coverage = (pkg) => {

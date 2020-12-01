@@ -1,20 +1,22 @@
 {
   "columns": [
     "name",
+    "description",
     "version",
     "coverage",
     "downloads"
   ],
   "rows": [
     "Cuser",
-    ["@cuser/core", "packages/core"],
-    ["@cuser/client", "packages/client"],
-    ["@cuser/cli", "packages/cli"],
-    ["@cuser/server", "packages/server"],
-    ["@cuser/validator", "packages/validator"],
-    ["@cuser/store", "packages/store"],
-    ["@cuser/auth", "packages/auth"],
-    ["@cuser/utils", "packages/utils"],
+    ["@cuser/core", "packages/core", "core"],
+    ["@cuser/client", "packages/client", "client logic for reading and publishing"],
+    ["@cuser/cli", "packages/cli", "command line interface"],
+    ["@cuser/server", "packages/server", "http server with express"],
+    ["@cuser/validator", "packages/validator", "json schema validator"],
+    ["@cuser/store", "packages/store", "store tree changes managment"],
+    ["@cuser/auth", "packages/auth", "auth core utility"],
+    ["@cuser/utils", "packages/utils", "common utils used by cuser"],
+    ["@cuser/proto", "packages/proto", "typing, schemas and services based in protocol bufers"],
 
     "Express middlewares",
     ["@cuser/express-middleware-auth", "packages/express-middleware-auth"],
@@ -22,6 +24,6 @@
     ["@cuser/express-middleware-grapqhl", "packages/express-middleware-grapqhl"],
 
     "Intergrations",
-    ["@cuser/react", "packages/react"]
+    ["@cuser/react", "packages/react", "react ui components for visualize cuser"]
   ]
 }
