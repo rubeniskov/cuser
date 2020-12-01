@@ -1,5 +1,5 @@
 {
-  "name": "@cuser/server-middleware-auth",
+  "name": "@cuser/express-middleware-auth",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
