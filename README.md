@@ -7,6 +7,11 @@
 
 <h3 align="center">No database, distributed message service, which provides a simple system to handle the resources through IPFS.</h3>
 
+## Status
+![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)
+![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)
+[![npm-downloads](https://img.shields.io/npm/dw/cuser)](https://www.npmjs.com/package/cuser)
+
 ## Motivation
 
 Many times I've try to create a webpage where the users can publish their opinions, but it becomes a hard task when you have to prepare an entire ecosystem to store such data. If the information is public, why not distribute such content all over the internet?.
