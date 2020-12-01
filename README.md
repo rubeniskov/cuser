@@ -7,11 +7,6 @@
 
 <h3 align="center">No database, distributed message service, which provides a simple system to handle the resources through IPFS.</h3>
 
-## Status
-![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)
-![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)
-[![npm-downloads](https://img.shields.io/npm/dw/cuser)](https://www.npmjs.com/package/cuser)
-
 ## Motivation
 
 Many times I've try to create a webpage where the users can publish their opinions, but it becomes a hard task when you have to prepare an entire ecosystem to store such data. If the information is public, why not distribute such content all over the internet?.
@@ -39,55 +34,8 @@ Even though IPFS is a permanet store due p2p distribution, if a user wants to re
 ## Security 
 
 A user can only edits/remove his owns comments, this is a feature which the `@cuser/server` takes on. Checking the user token which is provided by the server itself adding this security layer for prevent users to change other users comments.
-
-## Ip detection
-
-
-// coors enabled
-// app token 
-// user token
-
-api rest
-POST /api/v1/publish/
-
-graphql
-
-
 ## Diagram 
 <img src="./docs/diagram.svg">
-
-
-
-
-## RSA pair kesy generator
-
-
-
-https://travistidwell.com/jsencrypt/demo/
-
-https://jwt.io/
-
-CLIENT_ID token generated from private key 
-
-USER_TOKEN token generated from public key
- user information
- - avatar
- - network: google, facebook, github, linkedin
-
-
-
-SPA 
-
-https://www.oauth.com/oauth2-servers/single-page-apps/
-
-https://example-app.com/cb?code=Yzk5ZDczMzRlNDEwY&state=TY2OTZhZGFk
-
-<a href="https://authorization-server.com/authorize?response_type=code
-     &client_id=mRkZGFjM&state=TY2OTZhZGFk">Connect Your Account</a>
-
-
-
-
 
 ## Packages
 List of packages currently in existence for cuser
