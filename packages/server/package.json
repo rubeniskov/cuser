@@ -9,13 +9,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cuser/express-middleware-auth": "^0.0.1",
-    "@cuser/express-middleware-graphql": "^0.0.1",
-    "@cuser/express-middleware-rest": "^0.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "@cuser/express-middleware-auth": "^0.0.1",
+    "@cuser/express-middleware-graphql": "^0.0.1",
+    "@cuser/express-middleware-rest": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@cuser/express-middleware-auth": "^0.0.1",
+    "@cuser/express-middleware-graphql": "^0.0.1",
+    "@cuser/express-middleware-rest": "^0.0.1"
   }
 }

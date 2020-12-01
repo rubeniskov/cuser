@@ -4453,7 +4453,7 @@ command-line-usage@^6.1.0:
     table-layout "^1.0.1"
     typical "^5.2.0"
 
-commander@^2.15.0, commander@^2.20.0:
+commander@^2.15.0, commander@^2.17.1, commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -6094,6 +6094,11 @@ extsprintf@^1.2.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/extsprintf/-/extsprintf-1.4.0.tgz#e2689f8f356fad62cca65a3a91c5df5f9551692f"
   integrity sha1-4mifjzVvrWLMplo6kcXfX5VRaS8=
+
+faker@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/faker/-/faker-5.1.0.tgz#e10fa1dec4502551aee0eb771617a7e7b94692e8"
+  integrity sha512-RrWKFSSA/aNLP0g3o2WW1Zez7/MnMr7xkiZmoCfAGZmdkDQZ6l2KtuXHN5XjdvpRjDl8+3vf+Rrtl06Z352+Mw==
 
 fast-deep-equal@^2.0.1:
   version "2.0.1"
@@ -10215,6 +10220,13 @@ loose-envify@^1.1.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
+lorem-ipsum@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/lorem-ipsum/-/lorem-ipsum-2.0.3.tgz#9f1fa634780c9f58a349d4e091c3ba74f733164e"
+  integrity sha512-CX2r84DMWjW/DWiuzicTI9aRaJPAw2cvAGMJYZh/nx12OkTGqloj8y8FU0S8ZkKwOdqhfxEA6Ly8CW2P6Yxjwg==
+  dependencies:
+    commander "^2.17.1"
+
 loud-rejection@^1.0.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/loud-rejection/-/loud-rejection-1.6.0.tgz#5b46f80147edee578870f086d04821cf998e551f"
@@ -11034,6 +11046,15 @@ mutant-json@0.5.1:
     is-promise "^4.0.0"
     jsonpatch "^3.0.1"
     traverse-json "^0.5.0"
+
+mutant-json@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/mutant-json/-/mutant-json-0.5.2.tgz#40d45f7030d87aec4e470ee0cadedf7c2256e8c2"
+  integrity sha512-6u3OTXUtoh/VEr0RvM3Kjd0TETjQasYN39Y9SrPcHXLXrafoGLHF98SFx9z8miOLt6cd8D+ucSz0IRgE2nTC0Q==
+  dependencies:
+    is-promise "^4.0.0"
+    jsonpatch "^3.0.1"
+    traverse-json "^0.5.1"
 
 mute-stream@0.0.7:
   version "0.0.7"
@@ -14968,6 +14989,14 @@ traverse-json@^0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/traverse-json/-/traverse-json-0.5.0.tgz#74eed82b74d6a52596864e966d974c2bb92b8b5a"
   integrity sha512-4LQOtaPtnTI48KBVU39PpyIdF+lyA6JjA0Litebko0n0DWt6JPqL59OnONx3Oyw1OdfTtaizoxf+8RjdqP8rPQ==
+  dependencies:
+    is-plain-object "^5.0.0"
+    minimatch "^3.0.4"
+
+traverse-json@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/traverse-json/-/traverse-json-0.5.1.tgz#5004aaa6802bcb4bc4097d273b6216c2f95d204e"
+  integrity sha512-Ao5JpbG9hi4ltKKriiW3GRblT3gt7shmII4dP0O95EQsr8UwXPEXpbQ2wh3+ITrHT1rA5hugkSr/YTIu9Q3P4Q==
   dependencies:
     is-plain-object "^5.0.0"
     minimatch "^3.0.4"

@@ -1,5 +1,5 @@
-const { v4 } = require('uuid');
+const uuid = require('@cuser/utils/uuid');
 
-const uuidReducer = () => v4();
+const uuidReducer = () => uuid();
 
 module.exports = uuidReducer

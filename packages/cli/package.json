@@ -8,9 +8,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0"
   },
-  "dependencies": {
-    "@cuser/server": "^0.0.1"
-  },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@cuser/server": "^0.0.1",
+    "@cuser/express-middleware-auth": "^0.0.1",
+    "@cuser/express-middleware-graphql": "^0.0.1",
+    "@cuser/express-middleware-rest": "^0.0.1"
+  }
 }

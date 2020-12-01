@@ -20,29 +20,21 @@ const createReducer = require('../utils/createReducer');
  * @param {ActionPublishMessageContent|ActionUpdateMessageContent} action
  */
 const contentReducer = createReducer({
-  [TYPE_ACTION_PUBLISH_MESSAGE]: (_, {
-    payload: {
-      content: { data }
-    }
-  }) => ({
+  [TYPE_ACTION_PUBLISH_MESSAGE]: () => ({
     type: GraphType.GRAPH_CONTENT,
     parent: null,
     revision: '@revision',
     cdate: '@timestamp',
-    data
+    data: '@data',
   }),
-  [TYPE_ACTION_UPDATE_MESSAGE]: (state, {
-    payload: {
-      content: { data }
-    }
-  }) => {
+  [TYPE_ACTION_UPDATE_MESSAGE]: (state) => {
     assert(state, TYPE_ERROR_MISSING_PREVIOUS_STATE);
     return {
       ...state,
       parent: state,
       revision: '@revision',
       cdate: '@timestamp',
-      data
+      data: '@data',
     }
   }
 });

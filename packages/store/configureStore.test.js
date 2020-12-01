@@ -1,5 +1,7 @@
 const test = require('ava');
+const { format } = require('util');
 const { createIterator } = require('traverse-json');
+
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
@@ -11,10 +13,13 @@ const {
   TYPE_ERROR_MISSING_RESOURCE_ID,
 } = require('./types/errors');
 
-const { format } = require('util');
+const createAction = require('./utils/createAction');
+const createUsers = require('./testing/createUsers');
 const configureStore = require('./configureStore');
 const rootReducer = require('./reducers');
 const aliases = require('./reducers/aliases');
+
+const createStore = () => configureStore(rootReducer, { aliases });
 
 const getMessages = (store, topicId) => {
   const message = store.getState().topics[topicId].message
@@ -22,24 +27,29 @@ const getMessages = (store, topicId) => {
 };
 const getMessageIds = (store) => Array.from(createIterator(store.getState(), '**/message/**/id')).map(([,v]) => v);
 const randomHash = (l = 32) => new Array(l).fill().map(() => String.fromCharCode(65 + ~~(Math.random() * 10))).join('');
-const createAvatar = (name) => `http://example.com/avatar/${name}`
-const createUser = (name) => ({
-  username: name,
-  peerId: randomHash(),
-  avatar: createAvatar(name)
-});
 
 const dispatchActions = (store, actions) => (Array.isArray(actions) ? actions : [actions]).forEach((action) => {
   store.dispatch(action);
 })
 
-const createAction = (type, payload) => ({ type, payload });
+let users;
 
+test.before((t) => {
+  users = createUsers(5);
+  t.log('user created', users);
+});
+
+test.beforeEach((t) => {
+  t.context.store = createStore();
+  t.context.topicId = randomHash();
+});
+
+test.afterEach((t) => {
+  t.log(JSON.stringify(t.context.store.getState(), null, 2));
+});
 
 test('should publish messages', (t) => {
-  const store = configureStore(rootReducer, { aliases });
-  const users = ['foo', 'bar'].map(createUser);
-  const topicId = randomHash();
+  const { store, topicId } = t.context;
   const publishActions = [
     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
       user: users[0],
@@ -79,9 +89,7 @@ test('should publish messages', (t) => {
 });
 
 test('should throws error when publish messages', (t) => {
-  const store = configureStore(rootReducer, { aliases });
-  const users = ['foo', 'bar'].map(createUser);
-  const topicId = randomHash();
+  const { store, topicId } = t.context;
 
   t.throws(() => {
     dispatchActions(store, [createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
@@ -96,9 +104,7 @@ test('should throws error when publish messages', (t) => {
 });
 
 test('should update messages', (t) => {
-  const store = configureStore(rootReducer, { aliases });
-  const users = ['foo', 'bar'].map(createUser);
-  const topicId = randomHash();
+  const { store, topicId } = t.context;
   const publishActions = [
     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
       user: users[0],
@@ -154,9 +160,7 @@ test('should update messages', (t) => {
 });
 
 test('should throws error when update messages', (t) => {
-  const store = configureStore(rootReducer, { aliases });
-  const users = ['foo', 'bar'].map(createUser);
-  const topicId = randomHash();
+  const { store, topicId } = t.context;
   const publishActions = [
     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
       user: users[0],
@@ -230,9 +234,7 @@ test('should throws error when update messages', (t) => {
 });
 
 test('should delete messages', (t) => {
-  const store = configureStore(rootReducer, { aliases });
-  const users = ['foo', 'bar'].map(createUser);
-  const topicId = randomHash();
+  const { store, topicId } = t.context;
   const publishActions = [
     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
       user: users[0],
@@ -286,9 +288,7 @@ test('should delete messages', (t) => {
 
 
 test('should throws error when delete messages', (t) => {
-  const store = configureStore(rootReducer, { aliases });
-  const users = ['foo', 'bar'].map(createUser);
-  const topicId = randomHash();
+  const { store, topicId } = t.context;
   const publishActions = [
     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
       user: users[0],

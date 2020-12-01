@@ -18,17 +18,19 @@
       ]
     ]
   },
-  "devDependencies": {
-    "@babel/cli": "^7.12.8",
-    "@babel/core": "^7.12.9",
-    "@babel/preset-react": "^7.12.7"
-  },
   "dependencies": {
     "clsx": "^1.1.1",
     "human-elapsed": "^1.0.3",
     "styled-components": "^5.2.1"
   },
+  "devDependencies": {
+    "@babel/cli": "^7.12.8",
+    "@babel/core": "^7.12.9",
+    "@babel/preset-react": "^7.12.7",
+    "@cuser/client": "^0.0.1"
+  },
   "peerDependencies": {
-    "react": "17.0.1"
+    "react": "17.0.1",
+    "@cuser/client": "^0.0.1"
   }
 }

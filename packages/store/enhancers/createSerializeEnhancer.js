@@ -7,7 +7,7 @@ const {
   TYPE_ACTION_SEAL
 } = require('../types/actions');
 
-const ipdlActions = [
+const serializeActions = [
   TYPE_ACTION_RESOLVED,
   TYPE_ACTION_REHYDRATE,
   TYPE_ACTION_RESOLVED
@@ -56,7 +56,7 @@ const createSerializeEnhancer = ({
     }, { nested: true, test: processMap(pattern, action) });
   }, state);
 
-  const ipldReducer = (state, action) => {
+  const serializeReducer = (state, action) => {
     if (/@@redux\/INIT/.test(action.type)) {
       if (isPromise(state)) {
         state.then((payload) => store.dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
@@ -107,7 +107,7 @@ const createSerializeEnhancer = ({
     }
 
     // Dispatch rehydarte when action detected
-    if (!pending.length && !ipdlActions.includes(action.type)) {
+    if (!pending.length && !serializeActions.includes(action.type)) {
       process.nextTick(() => {
         debug('dispatching serializer for action %o', action);
         pending.push(action, { type: TYPE_ACTION_SEAL, payload: action.payload });
@@ -121,7 +121,7 @@ const createSerializeEnhancer = ({
     });
   }
 
-  store = createStore(ipldReducer, initialState, enhancer);
+  store = createStore(serializeReducer, initialState, enhancer);
 
   store.exec = (action) => {
     return new Promise((resolve, reject) => {

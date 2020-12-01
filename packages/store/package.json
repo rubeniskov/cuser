@@ -9,21 +9,23 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "mutant-json": "0.5.2",
     "redux": "^4.0.5",
-    "uuid": "^8.3.1",
-    "mutant-json": "0.5.1"
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
     "@cuser/proto": "^0.0.1",
-    "@cuser/validator": "^0.0.1",
     "@cuser/utils": "^0.0.1",
-    "traverse-json": "^0.5.0",
+    "@cuser/validator": "^0.0.1",
     "ava": "^3.13.0",
-    "nyc": "^15.1.0"
+    "faker": "^5.1.0",
+    "lorem-ipsum": "^2.0.3",
+    "nyc": "^15.1.0",
+    "traverse-json": "^0.5.1"
   },
   "peerDependencies": {
     "@cuser/proto": "^0.0.1",
-    "@cuser/validator": "^0.0.1",
-    "@cuser/utils": "^0.0.1"
+    "@cuser/utils": "^0.0.1",
+    "@cuser/validator": "^0.0.1"
   }
 }

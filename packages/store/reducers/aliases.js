@@ -13,6 +13,7 @@ const aliases = {
   '@message': wrapValidatorStateReducer(graphMessageSchema, require('./message')),
   '@user': wrapValidatorStateReducer(graphUserSchema, require('./user')),
   '@content': wrapValidatorStateReducer(graphContentSchema, require('./content')),
+  '@data': require('./data'),
   '@timestamp': require('./timestamp'),
   '@revision': require('./revision'),
   '@uuid': require('./uuid'),
