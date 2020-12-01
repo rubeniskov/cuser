@@ -30,7 +30,7 @@ $(GRAPHQL_OUTPUT)/%.graphql:
 	mkdir -p $(GRAPHQL_OUTPUT)
 	$(PROTOC) $(PROTOOPTS) -I$(PROTOCBUF) $(PROTOC_INCLUDES) \
 		--graphql_opt input_mode=service \
-    --graphql_opt field_name=preserve \
+		--graphql_opt field_name=preserve \
 		--graphql_out=$(GRAPHQL_OUTPUT) $(SERVICES) $(PROTOTYPES) $(PROTOCBUF)/payloads.proto
 	for file in $(GRAPHQL_OUTPUT)/*.graphql; do \
 		mv "$$file" "$(GRAPHQL_OUTPUT)/$$(basename "$$file" _pb.graphql).graphql"; \
@@ -57,11 +57,17 @@ $(TYPESCRIPT_TYPES)/%.d.ts:
 		--ts_proto_out=. \
 		$(PROTOTYPES)
 	node_modules/.bin/tsc  \
+		--target ES5 \
+		--skipLibCheck \
 		--outDir . *.ts
 	node_modules/.bin/tsc  \
+		--skipLibCheck \
 		--declaration \
 		--emitDeclarationOnly \
 		--outDir $(TYPESCRIPT_TYPES) *.ts
+	sed -i.bak 's/globalThis/global.globalThis || global/' *.js
+	rm *.js.bak
+
 	
 prepare: 
 	GO111MODULE=on \

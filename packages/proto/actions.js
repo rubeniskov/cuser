@@ -10,19 +10,19 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActionDeleteMessage = exports.ActionUpdateMessage = exports.ActionPublishMessage = exports.actionTypeToJSON = exports.actionTypeFromJSON = exports.ActionType = exports.protobufPackage = void 0;
 /* eslint-disable */
 var payloads_1 = require("./payloads");
 var minimal_1 = require("protobufjs/minimal");
 var baseActionPublishMessage = {
-    type: 0
+    type: 0,
 };
 var baseActionUpdateMessage = {
-    type: 0
+    type: 0,
 };
 var baseActionDeleteMessage = {
-    type: 0
+    type: 0,
 };
 exports.protobufPackage = 'cuser.actions';
 var ActionType;
@@ -129,7 +129,7 @@ exports.ActionPublishMessage = {
         message.type !== undefined && (obj.type = actionTypeToJSON(message.type));
         message.payload !== undefined && (obj.payload = message.payload ? payloads_1.PayloadPublishMessage.toJSON(message.payload) : undefined);
         return obj;
-    }
+    },
 };
 exports.ActionUpdateMessage = {
     encode: function (message, writer) {
@@ -197,7 +197,7 @@ exports.ActionUpdateMessage = {
         message.type !== undefined && (obj.type = actionTypeToJSON(message.type));
         message.payload !== undefined && (obj.payload = message.payload ? payloads_1.PayloadUpdateMessage.toJSON(message.payload) : undefined);
         return obj;
-    }
+    },
 };
 exports.ActionDeleteMessage = {
     encode: function (message, writer) {
@@ -265,5 +265,5 @@ exports.ActionDeleteMessage = {
         message.type !== undefined && (obj.type = actionTypeToJSON(message.type));
         message.payload !== undefined && (obj.payload = message.payload ? payloads_1.PayloadDeleteMessage.toJSON(message.payload) : undefined);
         return obj;
-    }
+    },
 };

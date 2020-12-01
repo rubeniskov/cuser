@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.GraphRoot_TopicsEntry = exports.GraphRoot = exports.GraphTopic = exports.GraphMessage = exports.GraphContent = exports.GraphUser = exports.graphTypeToJSON = exports.graphTypeFromJSON = exports.GraphType = exports.protobufPackage = void 0;
 /* eslint-disable */
 var minimal_1 = require("protobufjs/minimal");
@@ -18,30 +18,30 @@ var baseGraphUser = {
     type: 0,
     peerId: "",
     username: "",
-    avatar: ""
+    avatar: "",
 };
 var baseGraphContent = {
     type: 0,
     parent: "",
     revision: 0,
-    cdate: 0
+    cdate: 0,
 };
 var baseGraphMessage = {
     type: 0,
     id: "",
     parent: "",
     cdate: 0,
-    mdate: 0
+    mdate: 0,
 };
 var baseGraphTopic = {
     type: 0,
-    count: 0
+    count: 0,
 };
 var baseGraphRoot = {
-    type: 0
+    type: 0,
 };
 var baseGraphRoot_TopicsEntry = {
-    key: ""
+    key: "",
 };
 exports.protobufPackage = 'cuser.graphs';
 var GraphType;
@@ -192,7 +192,7 @@ exports.GraphUser = {
         message.username !== undefined && (obj.username = message.username);
         message.avatar !== undefined && (obj.avatar = message.avatar);
         return obj;
-    }
+    },
 };
 exports.GraphContent = {
     encode: function (message, writer) {
@@ -306,7 +306,7 @@ exports.GraphContent = {
         message.data !== undefined && (obj.data = base64FromBytes(message.data !== undefined ? message.data : new Uint8Array()));
         message.cdate !== undefined && (obj.cdate = message.cdate);
         return obj;
-    }
+    },
 };
 exports.GraphMessage = {
     encode: function (message, writer) {
@@ -461,7 +461,7 @@ exports.GraphMessage = {
         message.cdate !== undefined && (obj.cdate = message.cdate);
         message.mdate !== undefined && (obj.mdate = message.mdate);
         return obj;
-    }
+    },
 };
 exports.GraphTopic = {
     encode: function (message, writer) {
@@ -546,7 +546,7 @@ exports.GraphTopic = {
         message.message !== undefined && (obj.message = message.message ? exports.GraphMessage.toJSON(message.message) : undefined);
         message.count !== undefined && (obj.count = message.count);
         return obj;
-    }
+    },
 };
 exports.GraphRoot = {
     encode: function (message, writer) {
@@ -629,7 +629,7 @@ exports.GraphRoot = {
             });
         }
         return obj;
-    }
+    },
 };
 exports.GraphRoot_TopicsEntry = {
     encode: function (message, writer) {
@@ -697,9 +697,9 @@ exports.GraphRoot_TopicsEntry = {
         message.key !== undefined && (obj.key = message.key);
         message.value !== undefined && (obj.value = message.value ? exports.GraphTopic.toJSON(message.value) : undefined);
         return obj;
-    }
+    },
 };
-var windowBase64 = globalThis;
+var windowBase64 = global.globalThis || global;
 var atob = windowBase64.atob || (function (b64) { return Buffer.from(b64, 'base64').toString('binary'); });
 var btoa = windowBase64.btoa || (function (bin) { return Buffer.from(bin, 'binary').toString('base64'); });
 function bytesFromBase64(b64) {

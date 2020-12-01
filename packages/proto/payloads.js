@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.PayloadQueryMessagesResult = exports.PayloadQueryMessages = exports.PayloadDeleteMessage = exports.PayloadUpdateMessage = exports.PayloadPublishMessage = exports.PayloadContent = exports.PayloadUser = exports.protobufPackage = void 0;
 /* eslint-disable */
 var graphs_1 = require("./graphs");
@@ -18,24 +18,24 @@ var minimal_1 = require("protobufjs/minimal");
 var basePayloadUser = {
     peerId: "",
     username: "",
-    avatar: ""
+    avatar: "",
 };
 var basePayloadContent = {
-    data: ""
+    data: "",
 };
 var basePayloadPublishMessage = {
-    topicId: ""
+    topicId: "",
 };
 var basePayloadUpdateMessage = {
     topicId: "",
-    messageId: ""
+    messageId: "",
 };
 var basePayloadDeleteMessage = {
     topicId: "",
-    messageId: ""
+    messageId: "",
 };
 var basePayloadQueryMessages = {
-    topicId: ""
+    topicId: "",
 };
 var basePayloadQueryMessagesResult = {};
 exports.protobufPackage = 'cuser.payloads';
@@ -120,7 +120,7 @@ exports.PayloadUser = {
         message.username !== undefined && (obj.username = message.username);
         message.avatar !== undefined && (obj.avatar = message.avatar);
         return obj;
-    }
+    },
 };
 exports.PayloadContent = {
     encode: function (message, writer) {
@@ -169,7 +169,7 @@ exports.PayloadContent = {
         var obj = {};
         message.data !== undefined && (obj.data = message.data);
         return obj;
-    }
+    },
 };
 exports.PayloadPublishMessage = {
     encode: function (message, writer) {
@@ -256,7 +256,7 @@ exports.PayloadPublishMessage = {
         message.content !== undefined && (obj.content = message.content ? exports.PayloadContent.toJSON(message.content) : undefined);
         message.user !== undefined && (obj.user = message.user ? exports.PayloadUser.toJSON(message.user) : undefined);
         return obj;
-    }
+    },
 };
 exports.PayloadUpdateMessage = {
     encode: function (message, writer) {
@@ -360,7 +360,7 @@ exports.PayloadUpdateMessage = {
         message.content !== undefined && (obj.content = message.content ? exports.PayloadContent.toJSON(message.content) : undefined);
         message.user !== undefined && (obj.user = message.user ? exports.PayloadUser.toJSON(message.user) : undefined);
         return obj;
-    }
+    },
 };
 exports.PayloadDeleteMessage = {
     encode: function (message, writer) {
@@ -445,7 +445,7 @@ exports.PayloadDeleteMessage = {
         message.messageId !== undefined && (obj.messageId = message.messageId);
         message.user !== undefined && (obj.user = message.user ? exports.PayloadUser.toJSON(message.user) : undefined);
         return obj;
-    }
+    },
 };
 exports.PayloadQueryMessages = {
     encode: function (message, writer) {
@@ -570,7 +570,7 @@ exports.PayloadQueryMessages = {
         message.after !== undefined && (obj.after = message.after);
         message.offset !== undefined && (obj.offset = message.offset);
         return obj;
-    }
+    },
 };
 exports.PayloadQueryMessagesResult = {
     encode: function (message, writer) {
@@ -630,5 +630,5 @@ exports.PayloadQueryMessagesResult = {
             obj.messages = [];
         }
         return obj;
-    }
+    },
 };
