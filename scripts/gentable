@@ -1,0 +1,64 @@
+#!/usr/bin/env node 
+
+const path = require('path');
+const { execSync } = require('child_process');
+
+const gh = execSync('git remote -v').toString().split(/[\s\t\n]+/mg)[1].split(':')[1].replace('.git', '');
+
+const name = (pkg, ghdir) => {
+  return `[\`${pkg}\`](//github.com/${gh}/tree/master/${ghdir})`
+}
+
+const downloads = (pkg) => {
+  return `[![npm-downloads](https://img.shields.io/npm/dw/${pkg})](https://www.npmjs.com/package/${pkg})`
+}
+const version = (pkg, gh) => {
+  return `[![npm](https://img.shields.io/npm/v/${pkg}.svg)](//github.com/${gh}/releases)`
+}
+
+const coverage = (pkg) => {
+  return `[![codecov](https://codecov.io/gh/${gh}/branch/master/graph/badge.svg?flag=${pkg.split(/\//)[1]})](https://codecov.io/gh/${gh})`
+}
+
+
+const description = (pkg, gh, desc) => desc
+
+
+const packageBadges = {
+  name, version, coverage, description, downloads
+}
+
+let data = process.argv[2];
+
+if (!data) {
+  console.log('Need to pass <file with data>')
+  process.exit()
+}
+
+data = require(path.join(process.cwd(), data))
+
+// Creates the table row for a package
+const generatePackageRow = async item => {
+  const promises = data.columns.map(col => packageBadges[col](...item))
+  const vals = await Promise.all(promises)
+
+  return `| ${vals.join(' | ')} |`
+}
+
+// Generates a row for the table, depending if it's a package or a heading
+const generateRow = item => {
+  if (Array.isArray(item)) {
+    return generatePackageRow(item)
+  } else {
+    return `| **${item}** |`
+  }
+}
+
+(async () => {
+  const header = `| ${data.columns.join(' | ')} |`
+  const hr = `| ${data.columns.map(() => '---------').join('|')} |`
+  const promises = data.rows.map(row => generateRow(row))
+  const rows = (await Promise.all(promises)).join('\n')
+
+  console.log([header, hr, rows].join('\n'))
+})()

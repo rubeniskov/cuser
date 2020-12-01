@@ -1,11 +1,17 @@
 
 <h1 align="center">
-  <a href="./"><img width="250" src="docs/logo.svg" alt="libp2p hex logo" /></a>
+  <a href="./"><img width="250" src="docs/logo.svg" alt="cuser logo" /></a>
 </h1>
 
 >**C**hatting via **U**ncentralized **S**ervice with **E**ndless **R**esources
 
 <h3 align="center">No database, distributed message service, which provides a simple system to handle the resources through IPFS.</h3>
+
+## Status
+![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)
+![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)
+[![npm-downloads](https://img.shields.io/npm/dw/cuser)](https://www.npmjs.com/package/cuser)
+[![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?token=mI2c282XxH)](https://codecov.io/gh/rubeniskov/cuser)
 
 ## Motivation
 

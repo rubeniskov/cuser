@@ -12,7 +12,9 @@
   "scripts": {
     "prepare": "lerna bootstrap",
     "test": "lerna run test",
-    "docs": "./scripts/genreadme > README.md"
+    "docs": "./scripts/genreadme > README.md",
+    "precoverage": "lerna run coverage",
+    "coverage": "nyc merge packages/*/.nyc_output coverage.json && codecov"
   },
   "author": "",
   "license": "ISC",
@@ -21,7 +23,8 @@
     "ipfs-api": "^26.1.2"
   },
   "devDependencies": {
+    "codecov": "^3.8.1",
     "lerna": "^3.22.1",
-    "package-table": "^0.5.5"
+    "nyc": "^15.1.0"
   }
 }

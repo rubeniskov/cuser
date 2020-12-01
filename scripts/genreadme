@@ -1,8 +1,11 @@
 #!/usr/bin/env bash 
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 cat HEADER.md
 
 echo "## Packages"
 echo "List of packages currently in existence for cuser"
 
-package-table --data=package-list.json
+$SCRIPT_DIR/gentable package-list.json
 
