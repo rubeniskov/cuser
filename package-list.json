@@ -1,0 +1,24 @@
+{
+  "columns": [
+    "Package",
+    "Version",
+    "Deps",
+    "CI",
+    "Coverage",
+    "Lead Maintainer"
+  ],
+  "rows": [
+    "Cuser",
+    ["cuser/packages/core", "@cuser/core"],
+    ["cuser/packages/client", "@cuser/client"],
+    ["cuser/packages/cli", "@cuser/cli"],
+
+    "Express middlewares",
+    ["cuser/packages/express-middleware-auth", "@cuser/express-middleware-auth"],
+    ["cuser/packages/express-middleware-rest", "@cuser/express-middleware-rest"],
+    ["cuser/packages/express-middleware-grapqhl", "@cuser/express-middleware-grapqhl"],
+
+    "Intergrations",
+    ["cuser/packages/react", "@cuser/react"]
+  ]
+}

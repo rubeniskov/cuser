@@ -2,7 +2,7 @@
 
 Cuser integration for [React](https://es.reactjs.org/)
 
-checkout the [demo](https://github.com/rubeniskov/cuser) for more details
+checkout the [demo](../demo) for more details
 ## Installation
 
 ### NPM

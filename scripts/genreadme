@@ -1,0 +1,8 @@
+#!/usr/bin/env bash 
+cat HEADER.md
+
+echo "## Packages"
+echo "List of packages currently in existence for cuser"
+
+package-table --data=package-list.json
+

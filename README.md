@@ -1,9 +1,11 @@
-<img src="docs/logo.svg" />
+
+<h1 align="center">
+  <a href="./"><img width="250" src="docs/logo.svg" alt="libp2p hex logo" /></a>
+</h1>
 
 >**C**hatting via **U**ncentralized **S**ervice with **E**ndless **R**esources
 
-
-Is a no database, distributed message service, which provides a simple system to handle the resources through IPFS.
+<h3 align="center">No database, distributed message service, which provides a simple system to handle the resources through IPFS.</h3>
 
 ## Motivation
 
@@ -46,8 +48,6 @@ POST /api/v1/publish/
 graphql
 
 
-
-
 ## Diagram 
 <img src="./docs/diagram.svg">
 
@@ -84,3 +84,17 @@ https://example-app.com/cb?code=Yzk5ZDczMzRlNDEwY&state=TY2OTZhZGFk
 
 
 
+## Packages
+List of packages currently in existence for cuser
+| Package | Version | Deps | CI | Coverage | Lead Maintainer |
+| ---------|---------|---------|---------|---------|--------- |
+| **Cuser** |
+| [`@cuser/core`](//github.com/cuser/packages/core) | [![npm](https://img.shields.io/npm/v/@cuser/core.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/core/releases) | [![Deps](https://david-dm.org/cuser/packages/core.svg?style=flat-square)](https://david-dm.org/cuser/packages/core) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/core/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/core) | N/A |
+| [`@cuser/client`](//github.com/cuser/packages/client) | [![npm](https://img.shields.io/npm/v/@cuser/client.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/client/releases) | [![Deps](https://david-dm.org/cuser/packages/client.svg?style=flat-square)](https://david-dm.org/cuser/packages/client) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/client/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/client) | N/A |
+| [`@cuser/cli`](//github.com/cuser/packages/cli) | [![npm](https://img.shields.io/npm/v/@cuser/cli.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/cli/releases) | [![Deps](https://david-dm.org/cuser/packages/cli.svg?style=flat-square)](https://david-dm.org/cuser/packages/cli) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/cli/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/cli) | N/A |
+| **Express middlewares** |
+| [`@cuser/express-middleware-auth`](//github.com/cuser/packages/express-middleware-auth) | [![npm](https://img.shields.io/npm/v/@cuser/express-middleware-auth.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/express-middleware-auth/releases) | [![Deps](https://david-dm.org/cuser/packages/express-middleware-auth.svg?style=flat-square)](https://david-dm.org/cuser/packages/express-middleware-auth) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/express-middleware-auth/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/express-middleware-auth) | N/A |
+| [`@cuser/express-middleware-rest`](//github.com/cuser/packages/express-middleware-rest) | [![npm](https://img.shields.io/npm/v/@cuser/express-middleware-rest.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/express-middleware-rest/releases) | [![Deps](https://david-dm.org/cuser/packages/express-middleware-rest.svg?style=flat-square)](https://david-dm.org/cuser/packages/express-middleware-rest) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/express-middleware-rest/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/express-middleware-rest) | N/A |
+| [`@cuser/express-middleware-grapqhl`](//github.com/cuser/packages/express-middleware-grapqhl) | [![npm](https://img.shields.io/npm/v/@cuser/express-middleware-grapqhl.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/express-middleware-grapqhl/releases) | [![Deps](https://david-dm.org/cuser/packages/express-middleware-grapqhl.svg?style=flat-square)](https://david-dm.org/cuser/packages/express-middleware-grapqhl) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/express-middleware-grapqhl/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/express-middleware-grapqhl) | N/A |
+| **Intergrations** |
+| [`@cuser/react`](//github.com/cuser/packages/react) | [![npm](https://img.shields.io/npm/v/@cuser/react.svg?maxAge=86400&style=flat-square)](//github.com/cuser/packages/react/releases) | [![Deps](https://david-dm.org/cuser/packages/react.svg?style=flat-square)](https://david-dm.org/cuser/packages/react) | N/A | [![codecov](https://codecov.io/gh/cuser/packages/react/branch/master/graph/badge.svg?style=flat-square)](https://codecov.io/gh/cuser/packages/react) | N/A |
