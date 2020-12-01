@@ -5,13 +5,20 @@
 
 >**C**hatting via **U**ncentralized **S**ervice with **E**ndless **R**esources
 
-<h3 align="center">No database, distributed message service, which provides a simple system to handle the resources through IPFS.</h3>
+<h3 align="center">Distributed messaging service 🌐, with no database, no config and using IPFS layer to distribute the storage all over the universe ♾️.</h3>
 
 ## Status
 ![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)
 ![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)
 [![npm-downloads](https://img.shields.io/npm/dw/cuser)](https://www.npmjs.com/package/cuser)
 [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?token=mI2c282XxH)](https://codecov.io/gh/rubeniskov/cuser)
+[![patreon-donate](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://patreon.com/rubeniskov)
+[![github-sponsor](https://img.shields.io/badge/github-donate-yellow.svg)](https://github.com/sponsors/rubeniskov)
+[![paypal-sponsor](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://paypal.me/rubeniskov)
+
+<p align="center">
+  <a href="./"><img width="480" src="docs/demo_reel.gif" alt="cuser logo" /></a>
+</p>
 
 ## Motivation
 
