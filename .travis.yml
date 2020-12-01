@@ -1,0 +1,12 @@
+dist: xenial
+language: node_js
+cache: npm
+os:
+- linux
+env:
+  global:
+node_js:
+- '10'
+script:
+- npm test
+- npm run coverage

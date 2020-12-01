@@ -23,3 +23,4 @@ const createValidator = (schema) => {
 }
 
 module.exports = createValidator;
+module.exports.ValidationError = ValidationError;

@@ -1,0 +1,29 @@
+{
+  "name": "@cuser/store",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava -v"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "redux": "^4.0.5",
+    "uuid": "^8.3.1",
+    "mutant-json": "0.5.1"
+  },
+  "devDependencies": {
+    "@cuser/proto": "^0.0.1",
+    "@cuser/validator": "^0.0.1",
+    "@cuser/utils": "^0.0.1",
+    "traverse-json": "^0.5.0",
+    "ava": "^3.13.0",
+    "nyc": "^15.1.0"
+  },
+  "peerDependencies": {
+    "@cuser/proto": "^0.0.1",
+    "@cuser/validator": "^0.0.1",
+    "@cuser/utils": "^0.0.1"
+  }
+}

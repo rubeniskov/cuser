@@ -1,7 +1,7 @@
 {
   "name": "cuser",
   "version": "0.0.1",
-  "description": "Distributed user conversation system",
+  "description": "Distributed user messaging system",
   "private": true,
   "main": "index.js",
   "workspaces": {
@@ -10,7 +10,8 @@
     ]
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "lerna bootstrap",
+    "test": "lerna run test",
     "docs": "./scripts/genreadme > README.md"
   },
   "author": "",
@@ -20,6 +21,7 @@
     "ipfs-api": "^26.1.2"
   },
   "devDependencies": {
+    "lerna": "^3.22.1",
     "package-table": "^0.5.5"
   }
 }

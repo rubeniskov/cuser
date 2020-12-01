@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "exit 0",
     "prepare": "openssl req -new -x509 -nodes -subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost' -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365",
     "start:server": "DEBUG=cuser:* cuser start --cors",
     "start:client": "webpack serve --open localhost",

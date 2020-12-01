@@ -1,11 +1,14 @@
 {
-  "name": "@cuser/apollo-client",
+  "name": "@cuser/client-apollo",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@cuser/client": "^0.0.1"
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@cuser/validator",
+  "name": "@cuser/utils",
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
@@ -7,10 +7,5 @@
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "ajv": "^6.12.6",
-    "ajv-errors": "^1.0.1",
-    "ajv-merge-patch": "^4.1.0"
-  }
+  "license": "ISC"
 }
