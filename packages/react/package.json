@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov && codecov -F react",
     "build": "babel src --out-dir lib"
   },
   "author": "",
@@ -27,7 +29,10 @@
     "@babel/cli": "^7.12.8",
     "@babel/core": "^7.12.9",
     "@babel/preset-react": "^7.12.7",
-    "@cuser/client": "^0.0.1"
+    "@cuser/client": "^0.0.1",
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "nyc": "^15.1.0"
   },
   "peerDependencies": {
     "react": "17.0.1",

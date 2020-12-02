@@ -4,8 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov && codecov -F client"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "nyc": "^15.1.0"
+  }
 }

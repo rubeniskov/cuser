@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "exit 0"
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov && codecov -F core"
   },
   "author": "",
   "license": "ISC",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "ava": "^3.13.0",
+    "codecov": "^3.8.1",
     "nyc": "^15.1.0"
   }
 }

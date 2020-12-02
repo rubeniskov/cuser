@@ -6,7 +6,8 @@
     "cuser": "index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov && codecov -F cli"
   },
   "author": "",
   "license": "ISC",
@@ -15,5 +16,10 @@
     "@cuser/express-middleware-auth": "^0.0.1",
     "@cuser/express-middleware-graphql": "^0.0.1",
     "@cuser/express-middleware-rest": "^0.0.1"
+  },
+  "devDependencies": {
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "nyc": "^15.1.0"
   }
 }

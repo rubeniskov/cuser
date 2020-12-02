@@ -4,12 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov && codecov -F express-middleware-auth"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@cuser/auth": "^0.0.1",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "nyc": "^15.1.0"
   }
 }

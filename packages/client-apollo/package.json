@@ -4,11 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov && codecov -F client-apollo"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@cuser/client": "^0.0.1"
+  },
+  "devDependencies": {
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "nyc": "^15.1.0"
   }
 }
