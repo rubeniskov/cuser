@@ -8,8 +8,8 @@
 <h3 align="center">Distributed messaging service 🌐, with no database, no config and using IPFS layer to distribute the storage all over the universe ♾️.</h3>
 
 ## Status
-![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)
-![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)
+[![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)](https://github.com/rubeniskov/cuser/actions?query=workflow%3Aunit-testing)
+[![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)](https://github.com/rubeniskov/cuser/actions?query=workflow%3Anpm-publish)
 [![npm-downloads](https://img.shields.io/npm/dw/cuser)](https://www.npmjs.com/package/cuser)
 [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?token=mI2c282XxH)](https://codecov.io/gh/rubeniskov/cuser)
 [![patreon-donate](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://patreon.com/rubeniskov)
@@ -30,7 +30,11 @@ This allows create [SPA's Single Page Aplications](https://es.wikipedia.org/wiki
 
 - Root CID represents the main article which is associated to a hash in IPFS, it can be created using the CID provider of IPFS if the article is not a IPFS distributed file. 
 
+## Getting started
 
+```shell
+npm install -g cuser
+```
 
 ## Spam detection
 
