@@ -23,7 +23,7 @@
       "middlewares": [
         "@cuser/express-middleware-auth",
         "@cuser/express-middleware-rest",
-        "@cuser/express-middleware-grapqhl"
+        "@cuser/express-middleware-graphql"
       ],
       "integrations": [
         "@cuser/react"
