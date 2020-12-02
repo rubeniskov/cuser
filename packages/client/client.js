@@ -130,7 +130,7 @@ class CuserClient {
   }
 
   /**
-   * Gets the message from the CID given by parameter
+   * Gets the message from ipfs using the CID given by parameter
    * @param {CID} cid
    * @returns {GraphMessage}
    */

@@ -7,5 +7,6 @@
 ## Status
 [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?flag=client)](https://codecov.io/gh/rubeniskov/cuser)
 [![npm](https://img.shields.io/npm/v/@cuser/client.svg)](https://www.npmjs.com/package/@cuser/client)
+[![npm-downloads](https://img.shields.io/npm/dw/@cuser/client)](https://www.npmjs.com/package/@cuser/client)
 
 

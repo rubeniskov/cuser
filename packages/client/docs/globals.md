@@ -26,7 +26,7 @@
 
 • `Const` **createPubSub**: [createPubSub](globals.md#createpubsub) = require('./pubsub')
 
-*Defined in [client/client.js:5](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L5)*
+*Defined in [client/client.js:5](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L5)*
 
 ___
 
@@ -34,9 +34,9 @@ ___
 
 • `Const` **fetch**: [fetcher](globals.md#fetcher) = require('./fetch')
 
-*Defined in [client/fetch.js:2](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/fetch.js#L2)*
+*Defined in [client/fetch.js:2](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/fetch.js#L2)*
 
-*Defined in [client/client.js:4](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L4)*
+*Defined in [client/client.js:4](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L4)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • `Const` **messageIterator**: [messageIterator](globals.md#messageiterator) = require('./messageIterator')
 
-*Defined in [client/client.js:6](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L6)*
+*Defined in [client/client.js:6](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L6)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 •  **noPublisher**: [noPublisher](globals.md#nopublisher)
 
-*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L8)*
+*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L8)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 •  **parseUrl**: [parseUrl](globals.md#parseurl)
 
-*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L8)*
+*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L8)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • `Const` **toArray**: any = require('async-iterator-to-array')
 
-*Defined in [client/client.js:7](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L7)*
+*Defined in [client/client.js:7](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L7)*
 
 ## Functions
 
@@ -76,7 +76,7 @@ ___
 
 ▸ `Const`**createClient**(`node`: any, `cuserId`: any, `opts`: any): [CuserClient](classes/cuserclient.md)
 
-*Defined in [client/client.js:219](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L219)*
+*Defined in [client/client.js:219](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L219)*
 
 #### Parameters:
 
@@ -94,7 +94,7 @@ ___
 
 ▸ `Const`**fetcher**(`url`: string, `opts`: any): Promise\<any>
 
-*Defined in [client/fetch.js:20](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/fetch.js#L20)*
+*Defined in [client/fetch.js:20](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/fetch.js#L20)*
 
 Fetcher interface
 

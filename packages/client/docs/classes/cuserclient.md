@@ -50,7 +50,7 @@ client.getMessages(topicId).then((messages) => {
 
 \+ **new CuserClient**(`node`: IPFSAPI, `cuserId`: string, `opts?`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client/client.js:57](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L57)*
+*Defined in [client/client.js:57](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L57)*
 
 #### Parameters:
 
@@ -68,7 +68,7 @@ Name | Type | Default value | Description |
 
 ▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
 
-*Defined in [client/client.js:147](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L147)*
+*Defined in [client/client.js:147](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L147)*
 
 Authenticates a user with the required fields of username and avatar,
 this will epect to recieve an access_token to be used in publishing operations
@@ -88,9 +88,9 @@ ___
 
 ▸ **getMessage**(`cid`: CID): GraphMessage
 
-*Defined in [client/client.js:137](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L137)*
+*Defined in [client/client.js:137](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L137)*
 
-Gets the message from the CID given by parameter
+Gets the message from ipfs using the CID given by parameter
 
 #### Parameters:
 
@@ -106,7 +106,7 @@ ___
 
 ▸ **getMessages**(`topicId`: string, `opts`: CuserClientIteratorOptions): Promise\<GraphMessage[]> \| AsyncIterableIterator\<GraphMessage>
 
-*Defined in [client/client.js:106](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L106)*
+*Defined in [client/client.js:106](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L106)*
 
 Gets messages from `ipfs` layer
 
@@ -141,7 +141,7 @@ ___
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in [client/client.js:214](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L214)*
+*Defined in [client/client.js:214](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L214)*
 
 Subscribe to message changes of a certain topic.
 
