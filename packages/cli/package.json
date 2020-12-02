@@ -13,14 +13,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cuser/server": "^0.0.1",
     "@cuser/express-middleware-auth": "^0.0.1",
     "@cuser/express-middleware-graphql": "^0.0.1",
-    "@cuser/express-middleware-rest": "^0.0.1"
+    "@cuser/express-middleware-rest": "^0.0.1",
+    "@cuser/server": "^0.0.1"
   },
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
+    "execa": "^4.1.0",
     "nyc": "^15.1.0"
   }
 }

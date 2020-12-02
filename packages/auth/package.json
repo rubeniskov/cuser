@@ -10,12 +10,16 @@
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  },
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "nyc": "^15.1.0"
   },
   "peerDependencies": {
-    "@cuser/validator": "^0.0.1"
+    "@cuser/validator": "^0.0.1",
+    "@cuser/proto": "^0.0.1"
   }
 }

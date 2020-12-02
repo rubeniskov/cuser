@@ -1,4 +1,11 @@
 const test = require('ava');
+const execa = require('execa');
 
+test.cb('dummy test', (t) => {
+  const subprocess = execa('./index.js');
 
-test('dummy test', (t) => t.pass());
+  setTimeout(() => {
+    subprocess.cancel();
+    t.end();
+	}, 1000);
+});

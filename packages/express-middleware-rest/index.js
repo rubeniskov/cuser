@@ -47,4 +47,6 @@ module.exports = (cuser = require('@cuser/core')(), {
   if (swagger) {
     router.use(require('./swagger')());
   }
+
+  return router;
 };
