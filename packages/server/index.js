@@ -1,5 +1,6 @@
 const debug = require('debug')('cuser:server');
 const express = require('express');
+const { version } = require('./package.json');
 
 const defaults = {
   cors: false,
@@ -16,10 +17,12 @@ const server = (node, opts) => {
     auth,
     rest,
     grapqhl,
+    cuser = require('@cuser/core')(node, opts),
+    host,
+    port,
   } = { ...defaults, ...opts };
 
   const app = express();
-  const cuser = opts.cuser = require('@cuser/core')(node, opts);
 
   if(cors) {
     app.use(require('cors'));
@@ -42,20 +45,28 @@ const server = (node, opts) => {
     app.use(grpath(grapqhl, defaults.grapqhl), graphqlMiddleware(cuser));
   }
 
+  app.use('/', (_, res) => {
+    res.json({
+      version
+    });
+  });
+
   // Error handling
-  app.use(require('body-parser'), function (err, _, res, __) {
+  app.use(require('body-parser').json(), function (err, _, res, __) {
     res.json({
       ...err,
       message: err.message,
     });
   });
 
-  if (opts.port && opts.host) {
-    const hostname = [opts.host, opts.port].filter(Boolean).join(':');
+  if (port && host) {
+    const hostname = [host, port].filter(Boolean).join(':');
     app.listen(hostname, () => {
       debug('listening %s', hostname);
     });
   }
+
+  return app;
 }
 
 module.exports = server;

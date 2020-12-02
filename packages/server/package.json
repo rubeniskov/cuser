@@ -16,13 +16,14 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6",
     "@cuser/express-middleware-auth": "^0.0.1",
     "@cuser/express-middleware-graphql": "^0.0.1",
     "@cuser/express-middleware-rest": "^0.0.1",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "nyc": "^15.1.0"
+    "nodemon": "^2.0.6",
+    "nyc": "^15.1.0",
+    "supertest": "^6.0.1"
   },
   "peerDependencies": {
     "@cuser/express-middleware-auth": "^0.0.1",

@@ -1,6 +1,5 @@
 const Router = require('router');
 const bodyParser = require('body-parser');
-const { version } = require('./package.json');
 
 // const catchError = (req, res) =>
 module.exports = (cuser = require('@cuser/core')(), {
@@ -48,10 +47,4 @@ module.exports = (cuser = require('@cuser/core')(), {
   if (swagger) {
     router.use(require('./swagger')());
   }
-
-  return router.use('/', (_, res) => {
-    res.json({
-      version
-    });
-  });
 };
