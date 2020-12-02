@@ -1,14 +1,15 @@
 {
   "name": "@cuser/client",
   "version": "0.0.1",
-  "description": "client logic for reading and publishing using restfull transport",
+  "description": "client logic for reading and publishing message using restfull transport",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
     "postcoverage": "codecov -F client",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
-    "postdocs": "cat HEADER.md docs/classes/*.md > README.md"
+    "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
+    "prepare": "tsc --declaration --emitDeclarationOnly --outDir types"
   },
   "author": "",
   "license": "ISC",

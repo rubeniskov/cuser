@@ -112,7 +112,7 @@ class CuserClient {
    * Authenticates a user with the required fields of username and avatar,
    * this will epect to recieve an access_token to be used in publishing operations
    * @param {String} username
-   * @param {String} avatar data rul scheme https://tools.ietf.org/html/rfc2397
+   * @param {String} avatar data url scheme https://tools.ietf.org/html/rfc2397
    */
   async authenticate(username, avatar) {
     const peerId = await this._node.id();

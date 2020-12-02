@@ -8,8 +8,6 @@
 [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?flag=client)](https://codecov.io/gh/rubeniskov/cuser)
 [![npm](https://img.shields.io/npm/v/@cuser/client.svg)](https://www.npmjs.com/package/@cuser/client)
 
-> [Globals](../globals.md) / CuserClient
-
 # Class: CuserClient
 
 Cuser client instance which provides an interface to read, publish,

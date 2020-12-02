@@ -49,7 +49,7 @@ client.getMessages(topicId).then((messages) => {
 
 \+ **new CuserClient**(`node`: IPFSAPI, `cuserId`: string, `opts?`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client.js:50](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L50)*
+*Defined in [client.js:50](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L50)*
 
 #### Parameters:
 
@@ -67,7 +67,7 @@ Name | Type | Default value | Description |
 
 ▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
 
-*Defined in [client.js:117](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L117)*
+*Defined in [client.js:117](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L117)*
 
 Authenticates a user with the required fields of username and avatar,
 this will epect to recieve an access_token to be used in publishing operations
@@ -77,7 +77,7 @@ this will epect to recieve an access_token to be used in publishing operations
 Name | Type | Description |
 ------ | ------ | ------ |
 `username` | string |  |
-`avatar` | string | data rul scheme https://tools.ietf.org/html/rfc2397  |
+`avatar` | string | data url scheme https://tools.ietf.org/html/rfc2397  |
 
 **Returns:** Promise\<any>
 
@@ -87,7 +87,7 @@ ___
 
 ▸ **getMessage**(`cid`: CID): Promise\<AsyncIterable\<File \| Directory>>
 
-*Defined in [client.js:107](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L107)*
+*Defined in [client.js:107](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L107)*
 
 Gets the message from the CID given by parameter
 
@@ -105,7 +105,7 @@ ___
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in [client.js:184](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L184)*
+*Defined in [client.js:184](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L184)*
 
 Subscribe to message changes of a certain topic.
 
