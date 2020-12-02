@@ -2,9 +2,12 @@
 
 const path = require('path');
 const { execSync } = require('child_process');
+const glob = require('glob');
 
 const gh = execSync('git remote -v').toString().split(/[\s\t\n]+/mg)[1].split(':')[1].replace('.git', '');
 const html = false;
+
+const columns = ["name", "description", "version", "coverage", "downloads"];
 
 const createLink = (value, href) => {
   if (html) return `<a href="${href}">${value}</a>`
@@ -42,18 +45,9 @@ const packageBadges = {
   name, version, coverage, description, downloads
 }
 
-let data = process.argv[2];
-
-if (!data) {
-  console.log('Need to pass <file with data>')
-  process.exit()
-}
-
-data = require(path.join(process.cwd(), data))
-
 // Creates the table row for a package
 const generatePackageRow = async item => {
-  const promises = data.columns.map(col => packageBadges[col](...item))
+  const promises = columns.map(col => packageBadges[col](...item))
   const vals = await Promise.all(promises)
 
   return `| ${vals.join(' | ')} |`
@@ -68,10 +62,28 @@ const generateRow = item => {
   }
 }
 
+const pkg = require(path.resolve(process.cwd(), 'package.json'));
+
+const { workspaces } = pkg;
+const categories = workspaces.categories || {};
+const files = glob.sync(`${workspaces.packages.join(',')}`);
+
 (async () => {
-  const header = `| ${data.columns.join(' | ')} |`
-  const hr = `| ${data.columns.map(() => '---------').join('|')} |`
-  const promises = data.rows.map(row => generateRow(row))
+  const header = `| ${columns.join(' | ')} |`
+  const hr = `| ${columns.map(() => '---------').join('|')} |`
+  const packages = files
+    .map((filename) => ({
+      filename,
+      ...require(path.resolve(process.cwd(), filename, 'package.json'))
+    }))
+    
+  const promises = Object.entries(categories).reduce((prev, [name, modules]) => [...prev, generateRow(name[0].toUpperCase() + name.substring(1)), ...modules.map(moduleName => {
+    const pkg = packages.find(({ name }) => name === moduleName);
+    if (!pkg) return;
+    const { name, filename, description } = pkg;
+    return generateRow([name, filename, description])
+  }).filter(Boolean)], []);
+
   const rows = (await Promise.all(promises)).join('\n')
 
   console.log([header, hr, rows].join('\n'))

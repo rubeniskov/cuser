@@ -1,7 +1,7 @@
 {
   "name": "@cuser/cli",
   "version": "0.0.1",
-  "description": "",
+  "description": "command line interface",
   "bin": {
     "cuser": "index.js"
   },

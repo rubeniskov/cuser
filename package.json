@@ -7,7 +7,28 @@
   "workspaces": {
     "packages": [
       "packages/*"
-    ]
+    ],
+    "categories": {
+      "cuser": [
+        "@cuser/core", 
+        "@cuser/client", 
+        "@cuser/cli", 
+        "@cuser/server",
+        "@cuser/validator",
+        "@cuser/store",
+        "@cuser/auth",
+        "@cuser/utils",
+        "@cuser/proto"
+      ],
+      "middlewares": [
+        "@cuser/express-middleware-auth",
+        "@cuser/express-middleware-rest",
+        "@cuser/express-middleware-grapqhl"
+      ],
+      "integrations": [
+        "@cuser/react"
+      ]
+    }
   },
   "scripts": {
     "prepare": "lerna bootstrap",

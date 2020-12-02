@@ -1,7 +1,7 @@
 {
   "name": "@cuser/proto",
   "version": "0.0.1",
-  "description": "https://transform.tools/json-schema-to-protobuf",
+  "description": "typing, schemas and services based in protocol buffers",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",

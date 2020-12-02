@@ -1,7 +1,7 @@
 {
   "name": "@cuser/validator",
   "version": "0.0.1",
-  "description": "",
+  "description": "json schema validator",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",

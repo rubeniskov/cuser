@@ -1,7 +1,7 @@
 {
   "name": "@cuser/auth",
   "version": "0.0.1",
-  "description": "",
+  "description": "auth core utility",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",

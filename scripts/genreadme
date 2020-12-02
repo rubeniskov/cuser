@@ -7,5 +7,5 @@ cat HEADER.md
 echo "## Packages"
 echo "List of packages currently in existence for cuser"
 
-$SCRIPT_DIR/gentable package-list.json
+$SCRIPT_DIR/gentable
 

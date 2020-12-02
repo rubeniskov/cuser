@@ -1,7 +1,7 @@
 {
   "name": "@cuser/store",
   "version": "0.0.1",
-  "description": "",
+  "description": "store tree changes managment",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",

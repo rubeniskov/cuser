@@ -1,7 +1,7 @@
 {
   "name": "@cuser/server",
   "version": "0.0.1",
-  "description": "",
+  "description": "http server with express",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",

@@ -1,7 +1,7 @@
 {
   "name": "@cuser/react",
   "version": "0.0.1",
-  "description": "",
+  "description": "react ui components for visualize cuser",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",
