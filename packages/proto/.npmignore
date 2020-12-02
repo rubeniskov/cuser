@@ -4,3 +4,4 @@ testing
 
 *.test.js
 test.js
+Makefile

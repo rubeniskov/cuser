@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",
-    "coverage": "nyc report --reporter=lcov && codecov -F express-middleware-graphql"
+    "coverage": "nyc report --reporter=lcov",
+    "postcoverage": "codecov -F express-middleware-graphql"
   },
   "author": "",
   "license": "ISC",

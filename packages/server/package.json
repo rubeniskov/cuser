@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",
-    "coverage": "nyc report --reporter=lcov && codecov -F server",
+    "coverage": "nyc report --reporter=lcov",
+    "postcoverage": "codecov -F server",
     "start": "nodemon index.js"
   },
   "author": "",

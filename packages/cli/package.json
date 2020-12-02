@@ -7,7 +7,8 @@
   },
   "scripts": {
     "test": "nyc ava -v",
-    "coverage": "nyc report --reporter=lcov && codecov -F cli"
+    "coverage": "nyc report --reporter=lcov",
+    "postcoverage": "codecov -F cli"
   },
   "author": "",
   "license": "ISC",
