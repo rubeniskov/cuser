@@ -7,7 +7,8 @@
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
     "postcoverage": "codecov -F client",
-    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --excludeNotExported --excludeNotDocumented"
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "postdocs": "cat HEADER.md docs/classes/*.md > README.md"
   },
   "author": "",
   "license": "ISC",

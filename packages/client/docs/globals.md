@@ -1,7 +1,3 @@
-**[@cuser/client](README.md)**
-
-> Globals
-
 # @cuser/client
 
 ## Index
@@ -12,54 +8,93 @@
 
 ### Variables
 
-* [EventEmitter](globals.md#eventemitter)
-* [\_fetch](globals.md#_fetch)
 * [createPubSub](globals.md#createpubsub)
 * [fetch](globals.md#fetch)
+* [messageIterator](globals.md#messageiterator)
+* [noPublisher](globals.md#nopublisher)
+* [parseUrl](globals.md#parseurl)
+* [toArray](globals.md#toarray)
 
 ### Functions
 
+* [createClient](globals.md#createclient)
 * [fetcher](globals.md#fetcher)
 
 ## Variables
-
-### EventEmitter
-
-• `Const` **EventEmitter**: [EventEmitter](globals.md#eventemitter) = require('events')
-
-*Defined in [client.js:3](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L3)*
-
-___
-
-### \_fetch
-
-• `Const` **\_fetch**: [fetcher](globals.md#fetcher) = require('./fetcher')
-
-*Defined in [client.js:4](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L4)*
-
-___
 
 ### createPubSub
 
 • `Const` **createPubSub**: [createPubSub](globals.md#createpubsub) = require('./pubsub')
 
-*Defined in [client.js:5](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L5)*
+*Defined in [client.js:4](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L4)*
 
 ___
 
 ### fetch
 
-• `Const` **fetch**: any = global.fetch \|\| require('node-' + 'fetch')
+• `Const` **fetch**: [fetcher](globals.md#fetcher) = require('./fetch')
 
-*Defined in [fetcher.js:2](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/fetcher.js#L2)*
+*Defined in fetch.js:2*
+
+*Defined in [client.js:3](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L3)*
+
+___
+
+### messageIterator
+
+• `Const` **messageIterator**: [messageIterator](globals.md#messageiterator) = require('./messageIterator')
+
+*Defined in [client.js:5](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L5)*
+
+___
+
+### noPublisher
+
+•  **noPublisher**: [noPublisher](globals.md#nopublisher)
+
+*Defined in [client.js:7](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L7)*
+
+___
+
+### parseUrl
+
+•  **parseUrl**: [parseUrl](globals.md#parseurl)
+
+*Defined in [client.js:7](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L7)*
+
+___
+
+### toArray
+
+• `Const` **toArray**: any = require('async-iterator-to-array')
+
+*Defined in [client.js:6](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L6)*
 
 ## Functions
+
+### createClient
+
+▸ `Const`**createClient**(`node`: any, `cuserId`: any, `opts`: any): [CuserClient](classes/cuserclient.md)
+
+*Defined in [client.js:189](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L189)*
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`node` | any |
+`cuserId` | any |
+`opts` | any |
+
+**Returns:** [CuserClient](classes/cuserclient.md)
+
+___
 
 ### fetcher
 
 ▸ `Const`**fetcher**(`url`: string, `opts`: any): Promise\<any>
 
-*Defined in [fetcher.js:20](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/fetcher.js#L20)*
+*Defined in fetch.js:20*
 
 Fetcher interface
 

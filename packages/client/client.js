@@ -1,22 +1,14 @@
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('ipfs-core/src/components').CID} CID */
-const _fetch = require('./fetcher');
+const fetch = require('./fetch');
 const createPubSub = require('./pubsub');
 const messageIterator = require('./messageIterator');
 const toArray = require('async-iterator-to-array');
-
-const parseUrl = (url) => {
-  if (!url && global.location) {
-    return global.location.protocol + '//' + global.location.hostname
-  }
-  return url;
-}
-
-const noPublisher = () => { throw new Error('CuserClient: options.url must be defined to enable publisher capabilities') };
+const { parseUrl, noPublisher } = require('./utils');
 
 /**
  * @typedef {Object} CuserClientOptions
- * @prop {Function} [fetch=_fetch] fetch function using to resolve requests
+ * @prop {Function} [fetch=fetch] fetch function using to resolve requests
  * @prop {Function} [url=global.location] url to the api rest
  */
 
@@ -61,30 +53,24 @@ class CuserClient {
    * @param {String} cuserId
    * @param {CuserClientOptions} opts
    */
-  constructor(node, cuserId, opts) {
-    const {
-      url,
-      routes,
-      fetch = _fetch,
-    } = { ...opts };
-
+  constructor(node, cuserId, opts = {}) {
     if (!node) {
-      throw new Error(`node must be defined an be an instance of IPFS`);
+      throw new Error(`CuserClient: node must be defined an be an instance of IPFS`);
     }
 
     if (!cuserId) {
-      throw new Error(`cuserId must be defined in order to resolve the resources`);
+      throw new Error(`CuserClient: cuserId must be defined in order to resolve the resources`);
     }
 
     this._cuserId = cuserId;
-    this._url = parseUrl(url);
+    this._url = parseUrl(opts.url);
     this._node = node;
-    this._fetch = this._url ? fetch : noPublisher;
+    this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
     this._pubsub = createPubSub(this._node);
     this._routes = {
       publisher: '/v1/message',
       auth: '/auth',
-      ...routes
+      ...opts.routes
     }
   }
 
@@ -99,7 +85,7 @@ class CuserClient {
     const iterops = this._node.get(this._cuserId)
       .then(({ topics }) => {
         if (!topics[topicId]) {
-          throw new Error(`topicId "${topicId}" doesn't exists`);
+          throw new Error(`CuserClient: topicId "${topicId}" doesn't exists`);
         }
         return topics[topicId];
       })
@@ -200,8 +186,8 @@ class CuserClient {
   }
 }
 
-const createClient = (node, opts) => {
-  return new CuserClient(node, opts);
+const createClient = (node, cuserId, opts) => {
+  return new CuserClient(node, cuserId, opts);
 }
 
 module.exports = createClient;

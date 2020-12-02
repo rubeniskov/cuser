@@ -22,9 +22,9 @@ const fetcher = (url, opts) => fetch(url, {
   ...defaults,
 }).then((response) => {
   if (response.status < 400) {
-    return response.json();
+    return response.json().then((data) => [data, response]);
   }
-  return response.json().then((err) => Promise.reject(err));
+  return response.json().then((err) => Promise.reject([err, response]));
 });
 
 module.exports = fetcher;

@@ -37,8 +37,12 @@ const createPubSub = (node, opts) => {
   const room = node.pubsub ? createRoom(node) : createRoomFromEventEmiter(node);
 
   return {
-    broadcast: (topicId, evt) => {
-      room.broadcast(encode({ topicId, ...evt }));
+    /**
+     * @param {String} topicId
+     * @param {Object} payload
+     */
+    broadcast: (topicId, payload) => {
+      room.broadcast(encode({ topicId, ...payload }));
     },
     subscribe: (topicId, subscriber) => {
 

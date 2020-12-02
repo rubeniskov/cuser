@@ -1,7 +1,3 @@
-**[@cuser/client](../README.md)**
-
-> [Globals](../globals.md) / CuserClient
-
 # Class: CuserClient
 
 Cuser client instance which provides an interface to read, publish,
@@ -43,33 +39,73 @@ client.getMessages(topicId).then((messages) => {
 
 ### Methods
 
+* [authenticate](cuserclient.md#authenticate)
+* [getMessage](cuserclient.md#getmessage)
 * [subscribe](cuserclient.md#subscribe)
 
 ## Constructors
 
 ### constructor
 
-\+ **new CuserClient**(`node`: IPFSAPI, `targetCID`: string, `opts`: CuserClientOptions): [CuserClient](cuserclient.md)
+\+ **new CuserClient**(`node`: IPFSAPI, `cuserId`: string, `opts?`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client.js:48](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L48)*
+*Defined in [client.js:50](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L50)*
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`node` | IPFSAPI |  |
-`targetCID` | string |  |
-`opts` | CuserClientOptions |   |
+Name | Type | Default value | Description |
+------ | ------ | ------ | ------ |
+`node` | IPFSAPI | - |  |
+`cuserId` | string | - |  |
+`opts` | CuserClientOptions | {} |   |
 
 **Returns:** [CuserClient](cuserclient.md)
 
 ## Methods
 
+### authenticate
+
+▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
+
+*Defined in [client.js:117](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L117)*
+
+Authenticates a user with the required fields of username and avatar,
+this will epect to recieve an access_token to be used in publishing operations
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`username` | string |  |
+`avatar` | string | data rul scheme https://tools.ietf.org/html/rfc2397  |
+
+**Returns:** Promise\<any>
+
+___
+
+### getMessage
+
+▸ **getMessage**(`cid`: CID): Promise\<AsyncIterable\<File \| Directory>>
+
+*Defined in [client.js:107](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L107)*
+
+Gets the message from the CID given by parameter
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`cid` | CID |   |
+
+**Returns:** Promise\<AsyncIterable\<File \| Directory>>
+
+___
+
 ### subscribe
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in [client.js:161](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L161)*
+*Defined in [client.js:184](https://github.com/rubeniskov/cuser/blob/3395c13/packages/client/client.js#L184)*
 
 Subscribe to message changes of a certain topic.
 
@@ -83,15 +119,15 @@ client.subscribe('CUSTOM_TOPIC_ID', ({ type, messageCid }) => {
  switch(type) {
    case 'created':
      // when a user publish a message
-     // console.log(client.get(messageCid));
+     // console.log(client.getMessage(messageCid));
      break;
    case 'updated':
      // when a user updates a message
-     // console.log(client.get(messageCid));
+     // console.log(client.getMessage(messageCid));
      break;
    case 'deleted':
      // when a user removes a message
-     // console.log(client.get(messageCid));
+     // console.log(client.getMessage(messageCid));
      break;
  }
 });
