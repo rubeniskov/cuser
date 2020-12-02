@@ -14,7 +14,8 @@
     "test": "lerna run test",
     "docs": "./scripts/genreadme > README.md",
     "precoverage": "lerna run coverage",
-    "coverage": "nyc merge packages/*/.nyc_output coverage.json && codecov"
+    "coverage": "./scripts/gencoverage",
+    "postcoverage": "codecov --file coverage.json"
   },
   "author": "",
   "license": "ISC",
