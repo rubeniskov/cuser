@@ -1,8 +1,18 @@
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('ipfs-core/src/components').CID} CID */
-const EventEmitter = require('events');
 const _fetch = require('./fetcher');
 const createPubSub = require('./pubsub');
+const messageIterator = require('./messageIterator');
+const toArray = require('async-iterator-to-array');
+
+const parseUrl = (url) => {
+  if (!url && global.location) {
+    return global.location.protocol + '//' + global.location.hostname
+  }
+  return url;
+}
+
+const noPublisher = () => { throw new Error('CuserClient: options.url must be defined to enable publisher capabilities') };
 
 /**
  * @typedef {Object} CuserClientOptions
@@ -17,7 +27,7 @@ const createPubSub = require('./pubsub');
  */
 
 /**
- * @callback CuserClientEventListener
+ * @callback CuserClientSubscriber
  * @param {CuserClientEvent} event
  */
 
@@ -48,86 +58,113 @@ const createPubSub = require('./pubsub');
 class CuserClient {
   /**
    * @param {Node} node
-   * @param {String} targetCID
+   * @param {String} cuserId
    * @param {CuserClientOptions} opts
    */
-  constructor(node, targetCID, opts) {
-    super();
+  constructor(node, cuserId, opts) {
     const {
-      url = global.location.protocol + '//' + global.location.hostname,
-      fetch = _fetch
+      url,
+      routes,
+      fetch = _fetch,
     } = { ...opts };
 
     if (!node) {
       throw new Error(`node must be defined an be an instance of IPFS`);
     }
 
-    if (!targetCID) {
-      throw new Error(`targetCID must be defined in order to resolve the resources`);
+    if (!cuserId) {
+      throw new Error(`cuserId must be defined in order to resolve the resources`);
     }
 
-    this._targetCID = targetCID;
-    this._url = url;
+    this._cuserId = cuserId;
+    this._url = parseUrl(url);
     this._node = node;
-    this._fetch = fetch;
+    this._fetch = this._url ? fetch : noPublisher;
     this._pubsub = createPubSub(this._node);
+    this._routes = {
+      publisher: '/v1/message',
+      auth: '/auth',
+      ...routes
+    }
   }
 
-  async getMessages(topicId, { limit = 10, offset = 0 } = {}) {
-    // const await = await this._node.get(this._targetCID);
-    // return new Promise((resolve) => {
-    //   setTimeout(() => {
-    //     resolve({
-    //       messages: this.__messages__.slice(offset, offset + limit),
-    //       count: this.__messages__.length,
-    //     });
-    //   }, Math.random() * 2000);
-    // });
+  getMessages(topicId, opts) {
+    const iops = {
+      limit: 10,
+      offset: 0,
+      iter: false,
+      ...opts
+    }
+
+    const iterops = this._node.get(this._cuserId)
+      .then(({ topics }) => {
+        if (!topics[topicId]) {
+          throw new Error(`topicId "${topicId}" doesn't exists`);
+        }
+        return topics[topicId];
+      })
+      .then(({ message, count }) => ({ ...iops, root: message, count }));
+
+    const iterator = messageIterator(this.getMessage.bind(this), iterops);
+
+    if (iops.iter) {
+      return iterator
+    }
+
+    return toArray(iterator);
+  }
+
+  /**
+   * Gets the message from the CID given by parameter
+   * @param {CID} cid
+   */
+  async getMessage(cid) {
+    return this._node.get(cid);
+  }
+
+  /**
+   * Authenticates a user with the required fields of username and avatar,
+   * this will epect to recieve an access_token to be used in publishing operations
+   * @param {String} username
+   * @param {String} avatar data rul scheme https://tools.ietf.org/html/rfc2397
+   */
+  async authenticate(username, avatar) {
+    const peerId = await this._node.id();
+
+    return this._fetch(this._url + this._routes.auth,{
+      method: 'POST',
+      body: JSON.stringify({ peerId, username, avatar }),
+    });
   }
 
   async publishMessage(topicId, accessToken, content) {
-    // const message = {
-    //   id: 'asdasdasdasd'+ this.__messages__.length,
-    //   mdate: new Date().getTime(),
-    //   content: {
-    //     data: content
-    //   },
-    //   user: {
-    //     peerId: 'asdasdasdasd',
-    //     username: 'asdasd',
-    //     avatar: 'https://avatars3.githubusercontent.com/u/6261914?s=460&u=2412cfab92dbef27237a478c0e073a59086762c2&v=4'
-    //   }
-    // };
-
-    // this.__messages__.unshift(message);
-
-    // return new Promise((resolve) => setTimeout(() => {
-    //   this.emit(`message:${topicId}`, message);
-    //   resolve();
-    // }, 2000));
-  }
-
-  async updateMessage(topicId, accessToken, content) {
-
-  }
-
-  async deleteMessage(topicId, accessToken, content) {
-
-  }
-
-  async get(cid) {
-    const node = await this._node;
-    return node.get(cid);
-  }
-
-  async authenticate(payload) {
-    const node = await this._node;
-    const peerId = await node.id();
-
-    return this._fetcher(this._url + '/auth',{
+    return this._fetch(this._url + this._routes.publisher,{
       method: 'POST',
-      body: JSON.stringify({ ...payload, peerId }),
-    })
+      body: JSON.stringify({ topicId, content }),
+      headers: {
+        'Authentication': accessToken
+      },
+    });
+  }
+
+  async updateMessage(topicId, accessToken, messageId, content) {
+    return this._fetch(this._url + this._routes.publisher,{
+      method: 'PATCH',
+      body: JSON.stringify({ topicId, messageId, content }),
+      headers: {
+        'Authentication': accessToken
+      },
+    });
+  }
+
+  async deleteMessage(topicId, accessToken, messageId) {
+    return this._fetch(this._url + this._routes.publisher,{
+      method: 'DELETE',
+      body: JSON.stringify({ topicId, messageId }),
+      headers: {
+        'Authentication': accessToken
+      },
+    });
   }
 
   /**
@@ -142,29 +179,30 @@ class CuserClient {
    *  switch(type) {
    *    case 'created':
    *      // when a user publish a message
-   *      // console.log(client.get(messageCid));
+   *      // console.log(client.getMessage(messageCid));
    *      break;
    *    case 'updated':
    *      // when a user updates a message
-   *      // console.log(client.get(messageCid));
+   *      // console.log(client.getMessage(messageCid));
    *      break;
    *    case 'deleted':
    *      // when a user removes a message
-   *      // console.log(client.get(messageCid));
+   *      // console.log(client.getMessage(messageCid));
    *      break;
    *  }
    * });
    * ```
-   * @param {String} topicId
-   * @param {CuserClientEventListener} listener
+   * @param {String} topicId topic identifier
+   * @param {CuserClientSubscriber} subscriber function event subscriber
    */
   subscribe(topicId, subscriber) {
     return this._pubsub.subscribe(topicId, subscriber);
   }
 }
 
-CuserClient.createClient = (node, opts) => {
+const createClient = (node, opts) => {
   return new CuserClient(node, opts);
 }
 
-module.exports = CuserClient;
+module.exports = createClient;
+module.exports.CuserClient = CuserClient;

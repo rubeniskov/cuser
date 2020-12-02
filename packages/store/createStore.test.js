@@ -10,7 +10,7 @@ const {
 } = require('./types/actions');
 
 const createStore = require('./createStore');
-const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex")
+const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
 
 let users;
 

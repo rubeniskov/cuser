@@ -23,6 +23,7 @@
     "typescript": "4.0.5"
   },
   "dependencies": {
+    "async-iterator-to-array": "^0.0.1",
     "cbor": "^5.1.0",
     "ipfs-pubsub-room": "^2.0.1",
     "node-fetch": "^2.6.1"

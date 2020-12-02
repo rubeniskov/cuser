@@ -51,7 +51,7 @@ client.getMessages(topicId).then((messages) => {
 
 \+ **new CuserClient**(`node`: IPFSAPI, `targetCID`: string, `opts`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in client.js:48*
+*Defined in [client.js:48](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L48)*
 
 #### Parameters:
 
@@ -67,9 +67,9 @@ Name | Type | Description |
 
 ### subscribe
 
-▸ **subscribe**(`topicId`: string, `subscriber`: any): (Anonymous function)
+▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in client.js:161*
+*Defined in [client.js:161](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L161)*
 
 Subscribe to message changes of a certain topic.
 
@@ -99,9 +99,9 @@ client.subscribe('CUSTOM_TOPIC_ID', ({ type, messageCid }) => {
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`topicId` | string |
-`subscriber` | any |
+Name | Type | Description |
+------ | ------ | ------ |
+`topicId` | string | topic identifier |
+`subscriber` | CuserClientSubscriber | function event subscriber  |
 
 **Returns:** (Anonymous function)

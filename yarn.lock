@@ -3179,6 +3179,11 @@ async-each@^1.0.1:
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.3.tgz#b727dbf87d7651602f06f4d4ac387f47d91b0cbf"
   integrity sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
 
+async-iterator-to-array@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/async-iterator-to-array/-/async-iterator-to-array-0.0.1.tgz#3ab70698c68b4219ff36e7327c5a4880917b0d49"
+  integrity sha512-BH6nAEYCRjNh24ylW8juMrHq5k/wx2l3kLcFjVZQ3uNYNKHQmVb9UbXxDo9Z8YUjhCGTthUaR9hBf4aK+aHRQg==
+
 async-limiter@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.1.tgz#dd379e94f0db8310b08291f9d64c3209766617fd"

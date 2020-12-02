@@ -27,7 +27,7 @@
 
 • `Const` **EventEmitter**: [EventEmitter](globals.md#eventemitter) = require('events')
 
-*Defined in client.js:3*
+*Defined in [client.js:3](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L3)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • `Const` **\_fetch**: [fetcher](globals.md#fetcher) = require('./fetcher')
 
-*Defined in client.js:4*
+*Defined in [client.js:4](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L4)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • `Const` **createPubSub**: [createPubSub](globals.md#createpubsub) = require('./pubsub')
 
-*Defined in client.js:5*
+*Defined in [client.js:5](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/client.js#L5)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • `Const` **fetch**: any = global.fetch \|\| require('node-' + 'fetch')
 
-*Defined in fetcher.js:2*
+*Defined in [fetcher.js:2](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/fetcher.js#L2)*
 
 ## Functions
 
@@ -59,7 +59,7 @@ ___
 
 ▸ `Const`**fetcher**(`url`: string, `opts`: any): Promise\<any>
 
-*Defined in fetcher.js:20*
+*Defined in [fetcher.js:20](https://github.com/rubeniskov/cuser/blob/ad6573a/packages/client/fetcher.js#L20)*
 
 Fetcher interface
 
