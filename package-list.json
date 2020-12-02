@@ -18,7 +18,7 @@
     ["@cuser/utils", "packages/utils", "common utils used by cuser"],
     ["@cuser/proto", "packages/proto", "typing, schemas and services based in protocol bufers"],
 
-    "Express middlewares",
+    "Middlewares",
     ["@cuser/express-middleware-auth", "packages/express-middleware-auth"],
     ["@cuser/express-middleware-rest", "packages/express-middleware-rest"],
     ["@cuser/express-middleware-grapqhl", "packages/express-middleware-grapqhl"],

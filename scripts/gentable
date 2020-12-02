@@ -4,24 +4,38 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const gh = execSync('git remote -v').toString().split(/[\s\t\n]+/mg)[1].split(':')[1].replace('.git', '');
+const html = false;
 
-const name = (pkg, ghdir) => {
-  return `[\`${pkg}\`](//github.com/${gh}/tree/master/${ghdir})`
+const createLink = (value, href) => {
+  if (html) return `<a href="${href}">${value}</a>`
+  return `[${value}](${href})`;
+} 
+const createBadge = (name, image) => {
+  if (html) return `<img src="${image}" alt="${name}"/>`
+  return `![${name}](${image})`;
 }
+const name = (pkg, ghdir) => createLink(`\`${pkg}\``, `//github.com/${gh}/tree/master/${ghdir}`);
 
-const downloads = (pkg) => {
-  return `[![npm-downloads](https://img.shields.io/npm/dw/${pkg})](https://www.npmjs.com/package/${pkg})`
-}
-const version = (pkg, gh) => {
-  return `[![npm](https://img.shields.io/npm/v/${pkg}.svg)](https://www.npmjs.com/package/${pkg})`
-}
+const downloads = (pkg) => createLink(
+  createBadge(
+    'npm-downloads', 
+    `https://img.shields.io/npm/dw/${pkg}`), 
+  `https://www.npmjs.com/package/${pkg}`)
 
-const coverage = (pkg) => {
-  return `[![codecov](https://codecov.io/gh/${gh}/branch/master/graph/badge.svg?flag=${pkg.split(/\//)[1]})](https://codecov.io/gh/${gh})`
-}
+const version = (pkg) => createLink(
+  createBadge(
+    'npm-version', 
+    `https://img.shields.io/npm/v/${pkg}.svg`), 
+  `https://www.npmjs.com/package/${pkg}`)
+
+const coverage = (pkg) => createLink(
+  createBadge(
+    'codecov', 
+    `https://codecov.io/gh/${gh}/branch/master/graph/badge.svg?flag=${pkg.split(/\//)[1]}`), 
+  `https://codecov.io/gh/${gh}`)
 
 
-const description = (pkg, gh, desc) => desc
+const description = (_, __, desc) => desc
 
 
 const packageBadges = {
