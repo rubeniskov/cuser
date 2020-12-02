@@ -6,13 +6,28 @@
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
-    "postcoverage": "codecov -F client"
+    "postcoverage": "codecov -F client",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --excludeNotExported --excludeNotDocumented"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "nyc": "^15.1.0"
+    "ipfs": "^0.52.2",
+    "jsdoc": "^3.6.6",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.1",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.11",
+    "typescript": "4.0.5"
+  },
+  "dependencies": {
+    "cbor": "^5.1.0",
+    "ipfs-pubsub-room": "^2.0.1",
+    "node-fetch": "^2.6.1"
+  },
+  "peerDependencies": {
+    "ipfs-core": "^0.3.0"
   }
 }

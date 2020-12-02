@@ -3,12 +3,15 @@ const EventEmitter = require('events')
 
 const avatars = new Array(4).fill(null).map((_,idx) => (`https://www.w3schools.com/w3images/avatar${idx + 1}.png`))
 
-const usernames = ['aurora', 'alice', 'bob', 'katelyn']
+const usernames = ['aurora', 'alice', 'bob', 'katelyn'];
+
+/**
+ * test
+ */
 class CuserClient extends EventEmitter {
   constructor(node, opts) {
     super();
     const {
-      // url = global.location.hostname
       url = global.location.protocol + '//' + global.location.hostname + ':3000'
     } = { ...opts };
 
@@ -23,20 +26,20 @@ class CuserClient extends EventEmitter {
     }).then((response) => response.status < 400 ? response.json() : response.json().then((err) => Promise.reject(err)));
     this._url = url;
 
-    this.__messages__ = new Array(200).fill().map((_,idx) => {
-      const rand = Math.floor(Math.random() * avatars.length);
-      return ({
-      id: 'asdasdasdasd'+ idx,
-      mdate: new Date().getTime(),
-      content: {
-        data: `Test message content nº ${idx}`
-      },
-      user: {
-        peerId: 'asdasdasdasd',
-        username: usernames[rand],
-        avatar: avatars[rand]
-      }
-    })}).reverse();
+    // this.__messages__ = new Array(200).fill().map((_,idx) => {
+    //   const rand = Math.floor(Math.random() * avatars.length);
+    //   return ({
+    //   id: 'asdasdasdasd'+ idx,
+    //   mdate: new Date().getTime(),
+    //   content: {
+    //     data: `Test message content nº ${idx}`
+    //   },
+    //   user: {
+    //     peerId: 'asdasdasdasd',
+    //     username: usernames[rand],
+    //     avatar: avatars[rand]
+    //   }
+    // })}).reverse();
   }
 
   async getMessages(topicId, limit = 10, offset = 0) {
@@ -50,7 +53,7 @@ class CuserClient extends EventEmitter {
     });
   }
 
-  publishMessage(topicId, accessToken, content) {
+  async publishMessage(topicId, accessToken, content) {
     const message = {
       id: 'asdasdasdasd'+ this.__messages__.length,
       mdate: new Date().getTime(),
@@ -72,11 +75,11 @@ class CuserClient extends EventEmitter {
     }, 2000));
   }
 
-  updateMessage(topicId, accessToken, content) {
+  async updateMessage(topicId, accessToken, content) {
 
   }
 
-  deleteMessage(topicId, accessToken, content) {
+  async deleteMessage(topicId, accessToken, content) {
 
   }
 
@@ -89,39 +92,12 @@ class CuserClient extends EventEmitter {
 
   async authenticate(payload) {
     return this._node.then(({ id }) => id().then(({ id }) => id))
-    .then((peerId) => this._fetcher(this._url + '/auth',{
-      method: 'POST',
-      body: JSON.stringify({ ...payload, peerId }),
-    }));
+      .then((peerId) => this._fetcher(this._url + '/auth',{
+        method: 'POST',
+        body: JSON.stringify({ ...payload, peerId }),
+      }));
   }
 }
-
-// const getMessages = (node) => {
-
-// }
-
-// const publishMessage = (url) => {
-
-// }
-
-// const deleteMessage = (url) => {
-
-// }
-
-// const deleteMessage = (url) => {
-
-// }
-
-
-// const createClient = (node, url, {
-//   fetch = fetch
-// } = {}) => {
-
-
-//   return {
-//     getMessages: getMessages.bind(null, node)
-//   }
-// }
 
 CuserClient.createClient = (node, opts) => {
   return new CuserClient(node, opts);
