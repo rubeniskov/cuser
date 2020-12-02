@@ -1,10 +1,17 @@
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('ipfs-core/src/components').CID} CID */
+/** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
 const fetch = require('./fetch');
 const createPubSub = require('./pubsub');
 const messageIterator = require('./messageIterator');
 const toArray = require('async-iterator-to-array');
 const { parseUrl, noPublisher } = require('./utils');
+
+/**
+ * @typedef {Object} CuserClientIteratorOptions
+ * @prop {Number} [offset=0]
+ * @prop {Number} [limit=10]
+ */
 
 /**
  * @typedef {Object} CuserClientOptions
@@ -74,10 +81,32 @@ class CuserClient {
     }
   }
 
+  /**
+   * Gets messages from `ipfs` layer
+   * @param {String} topicId
+   * @param {CuserClientIteratorOptions} opts
+   * @returns {Promise<GraphMessage[]>|AsyncIterableIterator<GraphMessage>}
+   * @example
+   * ### Array
+   * ```javascript
+   * const messages = client.getMessages('custom_topic_id');
+   * console.log(messages);
+   * ```
+   * ### Iterator
+   * ```javascript
+   * const messages = client.getMessages('custom_topic_id', {
+   *   iter: true,
+   * });
+   * for await (let value of messages) {
+   *   console.log(value);
+   * }
+   * ```
+   *
+   */
   getMessages(topicId, opts) {
     const iops = {
-      limit: 10,
       offset: 0,
+      limit: 10,
       iter: false,
       ...opts
     }
@@ -103,6 +132,7 @@ class CuserClient {
   /**
    * Gets the message from the CID given by parameter
    * @param {CID} cid
+   * @returns {GraphMessage}
    */
   async getMessage(cid) {
     return this._node.get(cid);

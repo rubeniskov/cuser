@@ -9,7 +9,7 @@
     "postcoverage": "codecov -F client",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
     "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
-    "prepare": "tsc --declaration --emitDeclarationOnly --outDir types"
+    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
   "author": "",
   "license": "ISC",

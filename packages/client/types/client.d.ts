@@ -1,8 +1,13 @@
 export = createClient;
 declare function createClient(node: any, cuserId: any, opts: any): CuserClient;
 declare namespace createClient {
-    export { CuserClient, Node, CID, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
+    export { CuserClient, Node, CID, GraphMessage, CuserClientIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
 }
+/**
+ * @typedef {Object} CuserClientIteratorOptions
+ * @prop {Number} [offset=0]
+ * @prop {Number} [limit=10]
+ */
 /**
  * @typedef {Object} CuserClientOptions
  * @prop {Function} [fetch=fetch] fetch function using to resolve requests
@@ -57,12 +62,35 @@ declare class CuserClient {
         subscribe: (topicId: any, subscriber: any) => () => any;
     };
     _routes: any;
-    getMessages(topicId: any, opts: any): any;
+    /**
+     * Gets messages from `ipfs` layer
+     * @param {String} topicId
+     * @param {CuserClientIteratorOptions} opts
+     * @returns {Promise<GraphMessage[]>|AsyncIterableIterator<GraphMessage>}
+     * @example
+     * ### Array
+     * ```javascript
+     * const messages = client.getMessages('custom_topic_id');
+     * console.log(messages);
+     * ```
+     * ### Iterator
+     * ```javascript
+     * const messages = client.getMessages('custom_topic_id', {
+     *   iter: true,
+     * });
+     * for await (let value of messages) {
+     *   console.log(value);
+     * }
+     * ```
+     *
+     */
+    getMessages(topicId: string, opts: CuserClientIteratorOptions): Promise<GraphMessage[]> | AsyncIterableIterator<GraphMessage>;
     /**
      * Gets the message from the CID given by parameter
      * @param {CID} cid
+     * @returns {GraphMessage}
      */
-    getMessage(cid: CID): Promise<AsyncIterable<import("ipfs-core/src/utils").File | import("ipfs-core/src/utils").Directory>>;
+    getMessage(cid: CID): GraphMessage;
     /**
      * Authenticates a user with the required fields of username and avatar,
      * this will epect to recieve an access_token to be used in publishing operations
@@ -136,6 +164,11 @@ type Node = {
     stop: import("ipfs-core/src/components").Stop;
 };
 type CID = import("cids");
+type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
+type CuserClientIteratorOptions = {
+    offset?: number;
+    limit?: number;
+};
 type CuserClientOptions = {
     /**
      * fetch function using to resolve requests

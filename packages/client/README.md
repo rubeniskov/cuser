@@ -52,6 +52,7 @@ client.getMessages(topicId).then((messages) => {
 
 * [authenticate](cuserclient.md#authenticate)
 * [getMessage](cuserclient.md#getmessage)
+* [getMessages](cuserclient.md#getmessages)
 * [subscribe](cuserclient.md#subscribe)
 
 ## Constructors
@@ -60,7 +61,7 @@ client.getMessages(topicId).then((messages) => {
 
 \+ **new CuserClient**(`node`: IPFSAPI, `cuserId`: string, `opts?`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client.js:50](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L50)*
+*Defined in [client/client.js:57](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L57)*
 
 #### Parameters:
 
@@ -78,7 +79,7 @@ Name | Type | Default value | Description |
 
 ▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
 
-*Defined in [client.js:117](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L117)*
+*Defined in [client/client.js:147](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L147)*
 
 Authenticates a user with the required fields of username and avatar,
 this will epect to recieve an access_token to be used in publishing operations
@@ -96,19 +97,54 @@ ___
 
 ### getMessage
 
-▸ **getMessage**(`cid`: CID): Promise\<AsyncIterable\<File \| Directory>>
+▸ **getMessage**(`cid`: CID): GraphMessage
 
-*Defined in [client.js:107](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L107)*
+*Defined in [client/client.js:137](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L137)*
 
 Gets the message from the CID given by parameter
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`cid` | CID |   |
+Name | Type |
+------ | ------ |
+`cid` | CID |
 
-**Returns:** Promise\<AsyncIterable\<File \| Directory>>
+**Returns:** GraphMessage
+
+___
+
+### getMessages
+
+▸ **getMessages**(`topicId`: string, `opts`: CuserClientIteratorOptions): Promise\<GraphMessage[]> \| AsyncIterableIterator\<GraphMessage>
+
+*Defined in [client/client.js:106](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L106)*
+
+Gets messages from `ipfs` layer
+
+**`example`** 
+### Array
+```javascript
+const messages = client.getMessages('custom_topic_id');
+console.log(messages);
+```
+### Iterator
+```javascript
+const messages = client.getMessages('custom_topic_id', {
+  iter: true,
+});
+for await (let value of messages) {
+  console.log(value);
+}
+```
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`topicId` | string |
+`opts` | CuserClientIteratorOptions |
+
+**Returns:** Promise\<GraphMessage[]> \| AsyncIterableIterator\<GraphMessage>
 
 ___
 
@@ -116,7 +152,7 @@ ___
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in [client.js:184](https://github.com/rubeniskov/cuser/blob/21afbe1/packages/client/client.js#L184)*
+*Defined in [client/client.js:214](https://github.com/rubeniskov/cuser/blob/32a47bf/packages/client/client.js#L214)*
 
 Subscribe to message changes of a certain topic.
 
