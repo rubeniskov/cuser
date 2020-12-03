@@ -1,8 +1,10 @@
+// @ts-check
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('ipfs-core/src/components').CID} CID */
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
 const fetch = require('./fetch');
 const createPubSub = require('./pubsub');
+const CID = require('ipfs-core').CID;
 const messageIterator = require('./messageIterator');
 const toArray = require('async-iterator-to-array');
 const { parseUrl, noPublisher } = require('./utils');
@@ -16,7 +18,8 @@ const { parseUrl, noPublisher } = require('./utils');
 /**
  * @typedef {Object} CuserClientOptions
  * @prop {Function} [fetch=fetch] fetch function using to resolve requests
- * @prop {Function} [url=global.location] url to the api rest
+ * @prop {String} [url=global.location] url to the api rest
+ * @prop {Record<string, string>} [routes={publisher: '/v1/message', auth: '/auth'}] routes used to resolve enpoints
  */
 
 /**
@@ -69,11 +72,14 @@ class CuserClient {
       throw new Error(`CuserClient: cuserId must be defined in order to resolve the resources`);
     }
 
+    // this._cuserId = new CID(cuserId);
     this._cuserId = cuserId;
     this._url = parseUrl(opts.url);
     this._node = node;
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
-    this._pubsub = createPubSub(this._node);
+    this._pubsub = createPubSub(this._node, {
+      channel: cuserId
+    });
     this._routes = {
       publisher: '/v1/message',
       auth: '/auth',
@@ -85,7 +91,7 @@ class CuserClient {
    * Gets messages from `ipfs` layer
    * @param {String} topicId
    * @param {CuserClientIteratorOptions} opts
-   * @returns {Promise<GraphMessage[]>|AsyncIterableIterator<GraphMessage>}
+   * @returns {Promise<GraphMessage[]>|AsyncIterator<GraphMessage>}
    * @example
    * ### Array
    * ```javascript
@@ -110,9 +116,9 @@ class CuserClient {
       iter: false,
       ...opts
     }
-
-    const iterops = this._node.get(this._cuserId)
-      .then(({ topics }) => {
+    // @ts-ignore
+    const iterops = this._node.dag.get(this._cuserId)
+      .then(({ value: { topics }}) => {
         if (!topics[topicId]) {
           throw new Error(`CuserClient: topicId "${topicId}" doesn't exists`);
         }
@@ -123,6 +129,7 @@ class CuserClient {
     const iterator = messageIterator(this.getMessage.bind(this), iterops);
 
     if (iops.iter) {
+      // @ts-ignore
       return iterator
     }
 
@@ -132,10 +139,11 @@ class CuserClient {
   /**
    * Gets the message from ipfs using the CID given by parameter
    * @param {CID} cid
-   * @returns {GraphMessage}
+   * @returns {Promise<GraphMessage>}
    */
   async getMessage(cid) {
-    return this._node.get(cid);
+    const { value } = await this._node.dag.get(cid);
+    return value;
   }
 
   /**
@@ -153,6 +161,14 @@ class CuserClient {
     });
   }
 
+  /**
+   * Publish a new message for certain topic using topicId as identifier
+   * and accessToken to identify the user
+   * @param {String} topicId
+   * @param {String} accessToken
+   * @param {String} content
+   * @returns {Promise<[Object,Response]>}
+   */
   async publishMessage(topicId, accessToken, content) {
     return this._fetch(this._url + this._routes.publisher,{
       method: 'POST',
@@ -163,6 +179,15 @@ class CuserClient {
     });
   }
 
+  /**
+   * Updates message for certain topic using topicId as identifier
+   * and accessToken to identify the user
+   * @param {String} topicId
+   * @param {String} accessToken
+   * @param {String} messageId
+   * @param {String} content
+   * @returns {Promise<[Object,Response]>}
+   */
   async updateMessage(topicId, accessToken, messageId, content) {
     return this._fetch(this._url + this._routes.publisher,{
       method: 'PATCH',
@@ -173,6 +198,14 @@ class CuserClient {
     });
   }
 
+ /**
+  * Deletes message for certain topic using topicId as identifier
+  * and accessToken to identify the user
+  * @param {String} topicId
+  * @param {String} accessToken
+  * @param {String} messageId
+  * @returns {Promise<[Object,Response]>}
+  */
   async deleteMessage(topicId, accessToken, messageId) {
     return this._fetch(this._url + this._routes.publisher,{
       method: 'DELETE',

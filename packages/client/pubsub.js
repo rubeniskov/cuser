@@ -1,9 +1,23 @@
+// @ts-check
+/** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 const Room = require('ipfs-pubsub-room');
 const cbor = require('cbor');
 const EventEmiter = require('events');
 
+/**
+ * @typedef {Object} CuserClientPubSubOptions
+ * @prop {(data: Object) => Buffer} [encode=cbor.encode] Encoder function to serialize event object
+ * @prop {(data: Object) => Buffer} [decode=cbor.decodeFirstSync] Decoder function to unserialize event object
+ * @prop {String} [channel='@cuser']
+ */
+
+/**
+ * Creates a room using EventEmiter
+ * @param {Node} node
+ */
 const createRoomFromEventEmiter = (node) => {
   const id = node.id();
+  // @ts-ignore
   const evm = new EventEmiter();
   return {
     on: evm.on.bind(evm),
@@ -19,6 +33,11 @@ const createRoomFromEventEmiter = (node) => {
   }
 }
 
+/**
+ * Creates pubsub cuser to listen changes on cuser network
+ * @param {Node} node
+ * @param {CuserClientPubSubOptions} [opts]
+ */
 const createPubSub = (node, opts) => {
   const {
     encode = cbor.encode,

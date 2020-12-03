@@ -1,3 +1,4 @@
+// @ts-check
 /** @typedef {import('node-fetch').Op} */
 const fetch = global.fetch || require('node-' + 'fetch');
 

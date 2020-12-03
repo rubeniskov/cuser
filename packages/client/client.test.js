@@ -12,24 +12,26 @@ test.beforeEach((t) => {
   const topicId = t.context.topicId = 'custom_topic_id';
   const node = t.context.node = {
     id: () => Promise.resolve({ id }),
-    get: (hash) => Promise.resolve(cache[hash]),
-    put: (data) => {
-      const hash = md5(data);
-      cache[hash] = data;
-      return hash
-    },
+    dag: {
+      get: (hash) => Promise.resolve({ value: cache[hash], remainderPath: '/' }),
+      put: (data) => {
+        const hash = md5(data);
+        cache[hash] = data;
+        return hash
+      },
+    }
   };
 
-  id = node.put({
+  id = node.dag.put({
     topics: {
       [topicId]: {
-        message: node.put({
+        message: node.dag.put({
           content: { data: 'this is a test 4' },
-          parent: node.put({
+          parent: node.dag.put({
             content: { data: 'this is a test 3' },
-            parent: node.put({
+            parent: node.dag.put({
               content: { data: 'this is a test 2' },
-              parent: node.put({
+              parent: node.dag.put({
                 content: { data: 'this is a test 1' },
                 parent: null
               })
