@@ -2,33 +2,26 @@
   "name": "@cuser/core",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "core.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
-    "postcoverage": "codecov -F core"
+    "postcoverage": "codecov -F core",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "postdocs": "cat HEADER.md docs/classes/*.md FOOTER.md > README.md",
+    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@ipld/block": "^6.0.4",
-    "ajv": "^6.12.6",
-    "ajv-errors": "^1.0.1",
-    "ajv-merge-patch": "^4.1.0",
-    "debug": "^4.3.1",
-    "deep-equal": "^2.0.4",
-    "deepmerge": "^4.2.2",
-    "ipfs-core": "^0.2.1",
-    "ipld-raw": "^6.0.0",
-    "is-plain-object": "^5.0.0",
-    "mutant-json": "0.5.1",
-    "@cuser/proto": "0.0.1",
-    "redux": "^4.0.5",
-    "uuid": "^8.3.1"
+    "debug": "^4.3.1"
   },
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.11",
+    "typescript": "4.0.5"
   }
 }
