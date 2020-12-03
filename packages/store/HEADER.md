@@ -7,7 +7,7 @@
 ## Status
 [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?flag=store)](https://codecov.io/gh/rubeniskov/cuser)
 [![npm](https://img.shields.io/npm/v/@cuser/store.svg)](https://www.npmjs.com/package/@cuser/store)
-
+[![npm-downloads](https://img.shields.io/npm/dw/@cuser/store)](https://www.npmjs.com/package/@cuser/store)
 
 Store dedicated to manage the tree changes of cuser state 
 
