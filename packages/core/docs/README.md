@@ -104,9 +104,11 @@ ___
 
 ### resolve
 
-▸ **resolve**(`cid`: string): Promise\<CID>
+▸ **resolve**(`cid`: string): Promise\<string>
 
-*Defined in core.js:90*
+*Defined in core.js:91*
+
+Resolve the linked dag cid
 
 #### Parameters:
 
@@ -114,7 +116,7 @@ Name | Type |
 ------ | ------ |
 `cid` | string |
 
-**Returns:** Promise\<CID>
+**Returns:** Promise\<string>
 ### References
 
 - https://github.com/ipfs/js-ipfs#documentation

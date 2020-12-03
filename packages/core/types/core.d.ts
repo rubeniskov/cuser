@@ -6,7 +6,7 @@ export = createCore;
  */
 declare function createCore(node: Node, opts: CuserCoreOptions): CuserCore;
 declare namespace createCore {
-    export { CuserCore, CID, PublishResult, Node, PutOptions, AbortOptions, CuserCoreOptions };
+    export { CuserCore, PublishResult, Node, PutOptions, AbortOptions, CuserCoreOptions };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -80,9 +80,9 @@ declare class CuserCore {
     /**
      * @param {Uint8Array} buf
      * @param {AbortOptions} opts
-     * @returns {Promise<CID>}
+     * @returns {Promise<String>}
      */
-    put(buf: Uint8Array, opts: AbortOptions): Promise<CID>;
+    put(buf: Uint8Array, opts: AbortOptions): Promise<string>;
     /**
      *
      * @param {String} cid
@@ -91,12 +91,12 @@ declare class CuserCore {
      */
     get(cid: string, opts: AbortOptions): Promise<any>;
     /**
+     * Resolve the linked dag cid
      * @param {String} cid
-     * @returns {Promise<CID>}
+     * @returns {Promise<String>}
      */
-    resolve(cid: string): Promise<CID>;
+    resolve(cid: string): Promise<string>;
 }
-type CID = import("cids");
 type PublishResult = {
     name: string;
     value: string;

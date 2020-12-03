@@ -1,9 +1,9 @@
-/** @typedef {import("ipfs-core/src/components").CID} CID */
 /** @typedef {import("ipfs-core/src/components/name/publish").PublishResult} PublishResult */
 /** @typedef {import("ipfs-core/src/components").IPFSAPI} Node */
 /** @typedef {import("ipfs-core/src/components/block/put").PutOptions} PutOptions */
 /** @typedef {import("ipfs-core/src/utils").AbortOptions} AbortOptions */
 const all = require("it-all");
+const debug = require("debug")('cuser:core');
 
 /**
  * @typedef {Object} CuserCoreOptions
@@ -50,6 +50,7 @@ class CuserCore {
     if (!state.enabled) {
       throw new Error('CuserCore: ipns pubsub is not enabled, options.EXPERIMENTAL.ipnsPubsub = true');
     }
+    debug(`publishing "${cid}"`);
     return node.name.publish(cid, {
       ...this._options,
       ...opts
@@ -59,10 +60,11 @@ class CuserCore {
   /**
    * @param {Uint8Array} buf
    * @param {AbortOptions} opts
-   * @returns {Promise<CID>}
+   * @returns {Promise<String>}
    */
   async put(buf, opts) {
     const node = await this._node;
+    debug(`putting ${buf.toString()}`);
     return node.dag.put(buf, {
       ...this._options,
       ...opts
@@ -77,6 +79,7 @@ class CuserCore {
    */
   async get(cid, opts) {
     const node = await this._node;
+    debug(`getting "${cid}"`);
     return node.dag.get(cid, {
       ...this._options,
       ...opts
@@ -91,6 +94,7 @@ class CuserCore {
   async resolve(cid) {
     const node = await this._node;
     const id = await cid;
+    debug(`resolving "${id}"`);
     const [resolved] = await all(node.name.resolve(id))
     return resolved.replace(/^\/ipfs\//, '');
   }
