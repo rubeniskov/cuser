@@ -26,7 +26,7 @@ ipfs.dag in order to normalize the mainly used methods and allows future replace
 
 \+ **new CuserCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](cusercore.md)
 
-*Defined in [core.js:21](https://github.com/rubeniskov/cuser/blob/6809c33/packages/core/core.js#L21)*
+*Defined in [core.js:21](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L21)*
 
 #### Parameters:
 
@@ -43,7 +43,7 @@ Name | Type | Description |
 
 ▸ **get**(`cid`: string, `opts`: AbortOptions): Promise\<any>
 
-*Defined in [core.js:80](https://github.com/rubeniskov/cuser/blob/6809c33/packages/core/core.js#L80)*
+*Defined in [core.js:80](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L80)*
 
 #### Parameters:
 
@@ -60,7 +60,7 @@ ___
 
 ▸ **publish**(`cid`: string, `opts`: AbortOptions): Promise\<PublishResult>
 
-*Defined in [core.js:47](https://github.com/rubeniskov/cuser/blob/6809c33/packages/core/core.js#L47)*
+*Defined in [core.js:47](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L47)*
 
 Publish using ipns to link the current cid to a fixed entry
 
@@ -79,7 +79,7 @@ ___
 
 ▸ **put**(`buf`: Uint8Array, `opts`: AbortOptions): Promise\<string>
 
-*Defined in [core.js:65](https://github.com/rubeniskov/cuser/blob/6809c33/packages/core/core.js#L65)*
+*Defined in [core.js:65](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L65)*
 
 #### Parameters:
 
@@ -96,7 +96,7 @@ ___
 
 ▸ **resolve**(`cid`: string): Promise\<string>
 
-*Defined in [core.js:94](https://github.com/rubeniskov/cuser/blob/6809c33/packages/core/core.js#L94)*
+*Defined in [core.js:94](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L94)*
 
 Resolve the linked dag cid
 

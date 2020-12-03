@@ -21,7 +21,7 @@ const debug = require("debug")('cuser:core');
 class CuserCore {
   /**
    * @param {Node} node
-   * @param {CuserCoreOptions} opts
+   * @param {CuserCoreOptions} [opts]
    */
   constructor(node, opts) {
     if (!node) {
@@ -41,7 +41,7 @@ class CuserCore {
   /**
    * Publish using ipns to link the current cid to a fixed entry
    * @param {String} cid
-   * @param {AbortOptions} opts
+   * @param {AbortOptions} [opts]
    * @returns {Promise<PublishResult>}
    */
   async publish(cid, opts) {
@@ -58,23 +58,23 @@ class CuserCore {
   }
 
   /**
-   * @param {Uint8Array} buf
-   * @param {AbortOptions} opts
+   * @param {Object} value
+   * @param {AbortOptions} [opts]
    * @returns {Promise<String>}
    */
-  async put(buf, opts) {
+  async put(value, opts) {
     const node = await this._node;
-    debug(`putting ${buf.toString()}`);
-    return node.dag.put(buf, {
+    debug(`putting ${value.toString()}`);
+    return node.dag.put(value, {
       ...this._options,
       ...opts
-    });
+    }).then((cid) => cid.toString());
   }
 
   /**
    *
    * @param {String} cid
-   * @param {AbortOptions} opts
+   * @param {AbortOptions} [opts]
    * @returns {Promise<any>}
    */
   async get(cid, opts) {
@@ -88,12 +88,12 @@ class CuserCore {
 
   /**
    * Resolve the linked dag cid
-   * @param {String} cid
+   * @param {String} [cid]
    * @returns {Promise<String>}
    */
   async resolve(cid) {
     const node = await this._node;
-    const id = await cid;
+    const id = await (cid || node.id().then(({ id }) => id));
     debug(`resolving "${id}"`);
     const [resolved] = await all(node.name.resolve(id))
     return resolved.replace(/^\/ipfs\//, '');
@@ -103,7 +103,7 @@ class CuserCore {
 /**
  *
  * @param {Node} node
- * @param {CuserCoreOptions} opts
+ * @param {CuserCoreOptions} [opts]
  */
 const createCore = (node, opts) => new CuserCore(node, opts);
 

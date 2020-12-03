@@ -2,9 +2,9 @@ export = createCore;
 /**
  *
  * @param {Node} node
- * @param {CuserCoreOptions} opts
+ * @param {CuserCoreOptions} [opts]
  */
-declare function createCore(node: Node, opts: CuserCoreOptions): CuserCore;
+declare function createCore(node: Node, opts?: CuserCoreOptions): CuserCore;
 declare namespace createCore {
     export { CuserCore, PublishResult, Node, PutOptions, AbortOptions, CuserCoreOptions };
 }
@@ -60,9 +60,9 @@ type CuserCoreOptions = {
 declare class CuserCore {
     /**
      * @param {Node} node
-     * @param {CuserCoreOptions} opts
+     * @param {CuserCoreOptions} [opts]
      */
-    constructor(node: Node, opts: CuserCoreOptions);
+    constructor(node: Node, opts?: CuserCoreOptions);
     _options: {
         format: string;
         hashAlg: string;
@@ -73,29 +73,29 @@ declare class CuserCore {
     /**
      * Publish using ipns to link the current cid to a fixed entry
      * @param {String} cid
-     * @param {AbortOptions} opts
+     * @param {AbortOptions} [opts]
      * @returns {Promise<PublishResult>}
      */
-    publish(cid: string, opts: AbortOptions): Promise<PublishResult>;
+    publish(cid: string, opts?: AbortOptions): Promise<PublishResult>;
     /**
-     * @param {Uint8Array} buf
-     * @param {AbortOptions} opts
+     * @param {Object} value
+     * @param {AbortOptions} [opts]
      * @returns {Promise<String>}
      */
-    put(buf: Uint8Array, opts: AbortOptions): Promise<string>;
+    put(value: any, opts?: AbortOptions): Promise<string>;
     /**
      *
      * @param {String} cid
-     * @param {AbortOptions} opts
+     * @param {AbortOptions} [opts]
      * @returns {Promise<any>}
      */
-    get(cid: string, opts: AbortOptions): Promise<any>;
+    get(cid: string, opts?: AbortOptions): Promise<any>;
     /**
      * Resolve the linked dag cid
-     * @param {String} cid
+     * @param {String} [cid]
      * @returns {Promise<String>}
      */
-    resolve(cid: string): Promise<string>;
+    resolve(cid?: string): Promise<string>;
 }
 type PublishResult = {
     name: string;

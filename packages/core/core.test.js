@@ -43,7 +43,7 @@ test.beforeEach((t) => {
       put: sinon.spy((data) => {
         const hash = md5(data);
         cache[hash] = data;
-        return hash
+        return Promise.resolve(hash)
       }),
     }
   };
@@ -111,6 +111,24 @@ test('should publish a hash', async (t) => {
   t.true(node.name.pubsub.state.calledOnce);
   t.is(hash, value);
   t.is(name, id);
+});
+
+test('should resolve a hash using self id', async (t) => {
+  const { node } = t.context;
+  const { id } = await node.id();
+  const core = createCore(node);
+  const hash = await core.put({
+    'foo': 'bar'
+  });
+  const { name, value } = await core.publish(hash);
+
+  t.true(node.name.pubsub.state.calledOnce);
+  t.is(hash, value);
+  t.is(name, id);
+
+  const resolved = await core.resolve();
+
+  t.is(hash, resolved);
 });
 
 test('should resolve a hash', async (t) => {
