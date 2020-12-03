@@ -1,4 +1,5 @@
-const debug = require('debug')('cuser:store:monitor');
+// @ts-check
+const debug = require('debug')('cuser:store-monitor');
 
 const monitorReducerEnhancer = createStore => (
   reducer,

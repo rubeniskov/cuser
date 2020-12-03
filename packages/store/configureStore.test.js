@@ -6,12 +6,12 @@ const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE,
-} = require('./types/actions');
+} = require('./rtypes/actions');
 const {
   TYPE_ERROR_INVALID_ACTION,
   TYPE_ERROR_USER_MUST_BE_THE_OWNER,
   TYPE_ERROR_MISSING_RESOURCE_ID,
-} = require('./types/errors');
+} = require('./rtypes/errors');
 
 const createAction = require('./utils/createAction');
 const createUsers = require('./testing/createUsers');

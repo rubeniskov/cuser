@@ -1,13 +1,14 @@
+// @ts-check
 /** @typedef {import("@cuser/proto/types/graphs").GraphContent} GraphContent */
-/** @typedef {import("@cuser/proto/types/actions").ActionPublishMessageContent} ActionPublishMessageContent */
-/** @typedef {import("@cuser/proto/types/actions").ActionUpdateMessageContent} ActionUpdateMessageContent */
+/** @typedef {import("@cuser/proto/types/actions").ActionPublishMessage} ActionPublishMessage */
+/** @typedef {import("@cuser/proto/types/actions").ActionUpdateMessage} ActionUpdateMessage */
 
 // Core
 const assert = require('@cuser/utils/assert');
 // Types
 const { GraphType } = require('@cuser/proto/graphs');
-const { TYPE_ACTION_PUBLISH_MESSAGE, TYPE_ACTION_UPDATE_MESSAGE } = require('../types/actions');
-const { TYPE_ERROR_MISSING_PREVIOUS_STATE } = require('../types/errors');
+const { TYPE_ACTION_PUBLISH_MESSAGE, TYPE_ACTION_UPDATE_MESSAGE } = require('../rtypes/actions');
+const { TYPE_ERROR_MISSING_PREVIOUS_STATE } = require('../rtypes/errors');
 // Utils
 const createReducer = require('../utils/createReducer');
 
@@ -17,7 +18,7 @@ const createReducer = require('../utils/createReducer');
  * when update action, the current state will be swaped to parent in order
  * to keep the tree changes
  * @param {GraphContent} [state]
- * @param {ActionPublishMessageContent|ActionUpdateMessageContent} action
+ * @param {ActionPublishMessage|ActionUpdateMessage} action
  */
 const contentReducer = createReducer({
   [TYPE_ACTION_PUBLISH_MESSAGE]: () => ({

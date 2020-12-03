@@ -1,3 +1,8 @@
+// @ts-check
+/** @typedef {import('redux').Store} Store */
+/** @typedef {import('redux').Action} Action */
+/** @typedef {import('./configureStore').CuserConfigureStoreOptions} CuserConfigureStoreOptions */
+/** @typedef {import('./enhancers/createSerializeEnhancer').CuserSerializeEnhancerOptions} CuserSerializeEnhancerOptions */
 const configureStore = require('./configureStore');
 const createSerializeEnhancer = require('./enhancers/createSerializeEnhancer');
 const rootReducer = require('./reducers');
@@ -6,7 +11,7 @@ const reducerAliases = require('./reducers/aliases');
 const {
   TYPE_ACTION_REHYDRATE,
   TYPE_ACTION_SEAL
-} = require('./types/actions');
+} = require('./rtypes/actions');
 
 const rehydrateReducer = (state, { type }, { deserialize, isDeserializable }) => {
   if (deserialize && type === TYPE_ACTION_REHYDRATE && isDeserializable(state)) {
@@ -27,7 +32,23 @@ const wrapReducer = (reducer, wrapOpts) => (state, action, reducerOpts) => {
   return sealReducer(reducer(rehydrateReducer(state, action, opts), action, opts), action, opts)
 }
 
-module.exports = (opts) => {
+/**
+ * @typedef {CuserSerializeEnhancerOptions} CuserStoreOptions
+ */
+
+/**
+ * @typedef {Object} CuserStore
+ * @prop {(action: Action) => Promise<any>} exec
+ * @prop {() => any} getState
+ * @prop {(subscriber: Function) => any} subscribe
+ */
+
+/**
+ *
+ * @param {CuserStoreOptions} opts
+ * @returns {Store & CuserStore}
+ */
+const createStore = (opts) => {
   const copts = {
     isDeserializable: () => true,
     isSerializable: () => true,
@@ -58,3 +79,5 @@ module.exports = (opts) => {
     ...copts,
   })
 };
+
+module.exports = createStore;

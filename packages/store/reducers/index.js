@@ -1,15 +1,19 @@
+// @ts-check
 const { GraphType } = require('@cuser/proto/graphs');
 const wrapValidatorActionReducer = require('../utils/wrapValidatorActionReducer');
 const createReducer = require('../utils/createReducer')
+// @ts-ignore
 const publishMessageActionSchema = require('@cuser/proto/schemas/ActionPublishMessage.json');
+// @ts-ignore
 const updateMessageActionSchema = require('@cuser/proto/schemas/ActionUpdateMessage.json');
+// @ts-ignore
 const deleteMessageActionSchema = require('@cuser/proto/schemas/ActionDeleteMessage.json');
 
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE,
-} = require('../types/actions');
+} = require('../rtypes/actions');
 
 const rootReducer = () => {
   return {

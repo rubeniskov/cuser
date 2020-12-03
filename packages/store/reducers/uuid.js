@@ -1,3 +1,4 @@
+// @ts-check
 const uuid = require('@cuser/utils/uuid');
 
 const uuidReducer = () => uuid();

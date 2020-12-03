@@ -1,3 +1,4 @@
+// @ts-check
 const Ajv = require('ajv');
 const ajv = new Ajv({schemaId: '$id', allErrors: true, jsonPointers: true});
 // ajv.addMetaSchema(require("ajv/lib/refs/json-schema-draft-04.json"));
@@ -6,7 +7,7 @@ require('ajv-merge-patch')(ajv);
 const { format } = require('util');
 const {
   TYPE_ERROR_INVALID_ACTION
-} = require('../types/errors');
+} = require('../rtypes/errors');
 
 class ValidationError extends Error {
   constructor(message, v) {

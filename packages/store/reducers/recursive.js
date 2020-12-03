@@ -1,8 +1,9 @@
+// @ts-check
 const mutateJson = require('mutant-json');
 const isPromise = require('is-promise');
 
 const recursiveReducer = (reducer, opts) => {
-  return (state, action, { resolve } = {}) => {
+  return (state, action, { resolve = (a, _) => a } = {}) => {
     if (typeof state !== 'object') {
       return state;
     }

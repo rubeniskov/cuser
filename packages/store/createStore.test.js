@@ -7,7 +7,7 @@ const createUsers = require('./testing/createUsers');
 
 const {
   TYPE_ACTION_PUBLISH_MESSAGE
-} = require('./types/actions');
+} = require('./rtypes/actions');
 
 const createStore = require('./createStore');
 const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");

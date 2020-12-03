@@ -1,6 +1,6 @@
+// @ts-check
 /** @typedef {import('redux').Reducer} Reducer */
 /** @typedef {import('redux').StoreEnhancer} StoreEnhancer */
-/** @typedef {import('redux').PreloadedState} PreloadedState */
 const { createStore, compose, applyMiddleware } = require('redux');
 const monitorReducerEnhancer = require('./enhancers/monitorReducerEnhancer');
 const createResolveReducer = require('./createResolveReducer');
@@ -9,8 +9,8 @@ const loggerMiddleware = require('./middlewares/loggerMiddleware');
 
 /**
  * @typedef {Object} CuserConfigureStoreOptions
- * @prop {PreloadedState} preloadedState
- * @prop {StoreEnhancer} enhancer
+ * @prop {any} [preloadedState]
+ * @prop {StoreEnhancer} [enhancer]
  */
 
 

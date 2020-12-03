@@ -1,3 +1,4 @@
+// @ts-check
 const timestamp = require("@cuser/utils/timestamp");
 
 const timestampReducer = () => timestamp();

@@ -1,3 +1,4 @@
+// @ts-check
 const Ajv = require('ajv');
 const ajv = new Ajv({schemaId: '$id', allErrors: true, jsonPointers: true});
 require('ajv-errors')(ajv);
@@ -5,7 +6,7 @@ require('ajv-merge-patch')(ajv);
 const { format } = require('util');
 const {
   TYPE_ERROR_INVALID_STATE,
-} = require('../types/errors');
+} = require('../rtypes/errors');
 const isPromise = require('is-promise');
 
 class ValidationError extends Error {

@@ -1,4 +1,5 @@
-const actions = require('../types/actions');
+// @ts-check
+const actions = require('../rtypes/actions');
 const actionTypesArray = Object.values(actions);
 
 const createReducer = (mutations) => {

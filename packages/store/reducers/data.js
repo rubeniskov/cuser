@@ -1,7 +1,8 @@
-/** @typedef {import("@cuser/proto/types/actions").ActionPublishMessageContent} ActionPublishMessageContent */
-/** @typedef {import("@cuser/proto/types/actions").ActionUpdateMessageContent} ActionUpdateMessageContent */
+// @ts-check
+/** @typedef {import("@cuser/proto/types/actions").ActionPublishMessage} ActionPublishMessage */
+/** @typedef {import("@cuser/proto/types/actions").ActionUpdateMessage} ActionUpdateMessage */
 
-const { TYPE_ACTION_PUBLISH_MESSAGE, TYPE_ACTION_UPDATE_MESSAGE } = require('../types/actions');
+const { TYPE_ACTION_PUBLISH_MESSAGE, TYPE_ACTION_UPDATE_MESSAGE } = require('../rtypes/actions');
 // Utils
 const createReducer = require('../utils/createReducer');
 
@@ -9,7 +10,7 @@ const createReducer = require('../utils/createReducer');
 /**
  * Data string state
  * @param {string} [state]
- * @param {ActionPublishMessageContent|ActionUpdateMessageContent} action
+ * @param {ActionPublishMessage|ActionUpdateMessage} action
  */
 const dataReducer = createReducer({
   [TYPE_ACTION_PUBLISH_MESSAGE]: (_, {

@@ -1,3 +1,5 @@
+// @ts-check
+
 /** @typedef {import("@cuser/proto/types/graphs").GraphMessage} GraphMessage */
 /** @typedef {import("@cuser/proto/types/actions").ActionPublishMessage} ActionPublishMessage */
 /** @typedef {import("@cuser/proto/types/actions").ActionUpdateMessage} ActionUpdateMessage */
@@ -10,11 +12,11 @@ const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE
-} = require('../types/actions');
+} = require('../rtypes/actions');
 const {
   TYPE_ERROR_USER_MUST_BE_THE_OWNER,
   TYPE_ERROR_MISSING_RESOURCE_ID,
-} = require('../types/errors');
+} = require('../rtypes/errors');
 // Utils
 const createReducer = require('../utils/createReducer');
 // Reducers
