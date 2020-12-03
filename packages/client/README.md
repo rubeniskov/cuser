@@ -52,9 +52,12 @@ client.getMessages(topicId).then((messages) => {
 ### Methods
 
 * [authenticate](cuserclient.md#authenticate)
+* [deleteMessage](cuserclient.md#deletemessage)
 * [getMessage](cuserclient.md#getmessage)
 * [getMessages](cuserclient.md#getmessages)
+* [publishMessage](cuserclient.md#publishmessage)
 * [subscribe](cuserclient.md#subscribe)
+* [updateMessage](cuserclient.md#updatemessage)
 
 ## Constructors
 
@@ -62,7 +65,7 @@ client.getMessages(topicId).then((messages) => {
 
 \+ **new CuserClient**(`node`: IPFSAPI, `cuserId`: string, `opts?`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client/client.js:57](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L57)*
+*Defined in [client/client.js:60](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L60)*
 
 #### Parameters:
 
@@ -80,7 +83,7 @@ Name | Type | Default value | Description |
 
 ▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
 
-*Defined in [client/client.js:147](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L147)*
+*Defined in [client/client.js:155](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L155)*
 
 Authenticates a user with the required fields of username and avatar,
 this will epect to recieve an access_token to be used in publishing operations
@@ -96,11 +99,32 @@ Name | Type | Description |
 
 ___
 
+### deleteMessage
+
+▸ **deleteMessage**(`topicId`: string, `accessToken`: string, `messageId`: string): Promise\<[any, Response]>
+
+*Defined in [client/client.js:209](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L209)*
+
+Deletes message for certain topic using topicId as identifier
+and accessToken to identify the user
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`topicId` | string |
+`accessToken` | string |
+`messageId` | string |
+
+**Returns:** Promise\<[any, Response]>
+
+___
+
 ### getMessage
 
-▸ **getMessage**(`cid`: CID): GraphMessage
+▸ **getMessage**(`cid`: [CID](../globals.md#cid)): Promise\<GraphMessage>
 
-*Defined in [client/client.js:137](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L137)*
+*Defined in [client/client.js:144](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L144)*
 
 Gets the message from ipfs using the CID given by parameter
 
@@ -108,17 +132,17 @@ Gets the message from ipfs using the CID given by parameter
 
 Name | Type |
 ------ | ------ |
-`cid` | CID |
+`cid` | [CID](../globals.md#cid) |
 
-**Returns:** GraphMessage
+**Returns:** Promise\<GraphMessage>
 
 ___
 
 ### getMessages
 
-▸ **getMessages**(`topicId`: string, `opts`: CuserClientIteratorOptions): Promise\<GraphMessage[]> \| AsyncIterableIterator\<GraphMessage>
+▸ **getMessages**(`topicId`: string, `opts`: CuserClientIteratorOptions): Promise\<GraphMessage[]> \| AsyncIterator\<GraphMessage, any, undefined>
 
-*Defined in [client/client.js:106](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L106)*
+*Defined in [client/client.js:112](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L112)*
 
 Gets messages from `ipfs` layer
 
@@ -145,7 +169,28 @@ Name | Type |
 `topicId` | string |
 `opts` | CuserClientIteratorOptions |
 
-**Returns:** Promise\<GraphMessage[]> \| AsyncIterableIterator\<GraphMessage>
+**Returns:** Promise\<GraphMessage[]> \| AsyncIterator\<GraphMessage, any, undefined>
+
+___
+
+### publishMessage
+
+▸ **publishMessage**(`topicId`: string, `accessToken`: string, `content`: string): Promise\<[any, Response]>
+
+*Defined in [client/client.js:172](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L172)*
+
+Publish a new message for certain topic using topicId as identifier
+and accessToken to identify the user
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`topicId` | string |
+`accessToken` | string |
+`content` | string |
+
+**Returns:** Promise\<[any, Response]>
 
 ___
 
@@ -153,7 +198,7 @@ ___
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in [client/client.js:214](https://github.com/rubeniskov/cuser/blob/4a98396/packages/client/client.js#L214)*
+*Defined in [client/client.js:247](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L247)*
 
 Subscribe to message changes of a certain topic.
 
@@ -189,3 +234,25 @@ Name | Type | Description |
 `subscriber` | CuserClientSubscriber | function event subscriber  |
 
 **Returns:** (Anonymous function)
+
+___
+
+### updateMessage
+
+▸ **updateMessage**(`topicId`: string, `accessToken`: string, `messageId`: string, `content`: string): Promise\<[any, Response]>
+
+*Defined in [client/client.js:191](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L191)*
+
+Updates message for certain topic using topicId as identifier
+and accessToken to identify the user
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`topicId` | string |
+`accessToken` | string |
+`messageId` | string |
+`content` | string |
+
+**Returns:** Promise\<[any, Response]>

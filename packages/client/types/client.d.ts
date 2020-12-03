@@ -11,7 +11,8 @@ declare namespace createClient {
 /**
  * @typedef {Object} CuserClientOptions
  * @prop {Function} [fetch=fetch] fetch function using to resolve requests
- * @prop {Function} [url=global.location] url to the api rest
+ * @prop {String} [url=global.location] url to the api rest
+ * @prop {Record<string, string>} [routes={publisher: '/v1/message', auth: '/auth'}] routes used to resolve enpoints
  */
 /**
  * @typedef {Object} CuserClientEvent
@@ -54,19 +55,22 @@ declare class CuserClient {
      */
     constructor(node: Node, cuserId: string, opts?: CuserClientOptions);
     _cuserId: string;
-    _url: any;
+    _url: string;
     _node: import("ipfs-core/src/components").IPFSAPI;
     _fetch: Function;
     _pubsub: {
         broadcast: (topicId: string, payload: any) => void;
         subscribe: (topicId: any, subscriber: any) => () => any;
     };
-    _routes: any;
+    _routes: {
+        publisher: string;
+        auth: string;
+    };
     /**
      * Gets messages from `ipfs` layer
      * @param {String} topicId
      * @param {CuserClientIteratorOptions} opts
-     * @returns {Promise<GraphMessage[]>|AsyncIterableIterator<GraphMessage>}
+     * @returns {Promise<GraphMessage[]>|AsyncIterator<GraphMessage>}
      * @example
      * ### Array
      * ```javascript
@@ -84,13 +88,13 @@ declare class CuserClient {
      * ```
      *
      */
-    getMessages(topicId: string, opts: CuserClientIteratorOptions): Promise<GraphMessage[]> | AsyncIterableIterator<GraphMessage>;
+    getMessages(topicId: string, opts: CuserClientIteratorOptions): Promise<GraphMessage[]> | AsyncIterator<GraphMessage>;
     /**
-     * Gets the message from the CID given by parameter
+     * Gets the message from ipfs using the CID given by parameter
      * @param {CID} cid
-     * @returns {GraphMessage}
+     * @returns {Promise<GraphMessage>}
      */
-    getMessage(cid: CID): GraphMessage;
+    getMessage(cid: CID): Promise<GraphMessage>;
     /**
      * Authenticates a user with the required fields of username and avatar,
      * this will epect to recieve an access_token to be used in publishing operations
@@ -98,9 +102,34 @@ declare class CuserClient {
      * @param {String} avatar data url scheme https://tools.ietf.org/html/rfc2397
      */
     authenticate(username: string, avatar: string): Promise<any>;
-    publishMessage(topicId: any, accessToken: any, content: any): Promise<any>;
-    updateMessage(topicId: any, accessToken: any, messageId: any, content: any): Promise<any>;
-    deleteMessage(topicId: any, accessToken: any, messageId: any): Promise<any>;
+    /**
+     * Publish a new message for certain topic using topicId as identifier
+     * and accessToken to identify the user
+     * @param {String} topicId
+     * @param {String} accessToken
+     * @param {String} content
+     * @returns {Promise<[Object,Response]>}
+     */
+    publishMessage(topicId: string, accessToken: string, content: string): Promise<[any, Response]>;
+    /**
+     * Updates message for certain topic using topicId as identifier
+     * and accessToken to identify the user
+     * @param {String} topicId
+     * @param {String} accessToken
+     * @param {String} messageId
+     * @param {String} content
+     * @returns {Promise<[Object,Response]>}
+     */
+    updateMessage(topicId: string, accessToken: string, messageId: string, content: string): Promise<[any, Response]>;
+    /**
+     * Deletes message for certain topic using topicId as identifier
+     * and accessToken to identify the user
+     * @param {String} topicId
+     * @param {String} accessToken
+     * @param {String} messageId
+     * @returns {Promise<[Object,Response]>}
+     */
+    deleteMessage(topicId: string, accessToken: string, messageId: string): Promise<[any, Response]>;
     /**
      * Subscribe to message changes of a certain topic.
      * @example
@@ -177,10 +206,15 @@ type CuserClientOptions = {
     /**
      * url to the api rest
      */
-    url?: Function;
+    url?: string;
+    /**
+     * routes used to resolve enpoints
+     */
+    routes?: Record<string, string>;
 };
 type CuserClientEvent = {
     type: ('created' | 'updated' | 'deleted');
     messageId: CID;
 };
 type CuserClientSubscriber = (event: CuserClientEvent) => any;
+declare const CID: typeof import("cids");
