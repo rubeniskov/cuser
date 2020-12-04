@@ -23,7 +23,7 @@
 
 ▸ `Const`**assert**(`assertion`: any, ...`args`: any[]): void
 
-*Defined in [assert.js:7](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/assert.js#L7)*
+*Defined in [assert.js:7](https://github.com/rubeniskov/cuser/blob/4d78bfd/packages/utils/assert.js#L7)*
 
 Asserts a condition to raise an error when not fullfilled
 
@@ -42,15 +42,19 @@ ___
 
 ▸ `Const`**formatErr**(...`args`: any[]): Error
 
-*Defined in [formatErr.js:7](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/formatErr.js#L7)*
+*Defined in [formatErr.js:10](https://github.com/rubeniskov/cuser/blob/4d78bfd/packages/utils/formatErr.js#L10)*
 
 Formats an error like sprintf
 
+**`example`** 
+formatErr('messsage errro with argument %s', 'foo')
+formatErr(TypeError, 'messsage errro with argument %s and custom Error constructor', 'foo')
+
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`...args` | any[] |   |
+Name | Type |
+------ | ------ |
+`...args` | any[] |
 
 **Returns:** Error
 
@@ -60,7 +64,7 @@ ___
 
 ▸ `Const`**timestamp**(): number
 
-*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/timestamp.js#L5)*
+*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/4d78bfd/packages/utils/timestamp.js#L5)*
 
 Gets current timestamp
 
@@ -81,7 +85,7 @@ Gets current timestamp
 
 ▸ `Const`**assert**(`assertion`: any, ...`args`: any[]): void
 
-*Defined in [assert.js:7](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/assert.js#L7)*
+*Defined in [assert.js:7](https://github.com/rubeniskov/cuser/blob/4d78bfd/packages/utils/assert.js#L7)*
 
 Asserts a condition to raise an error when not fullfilled
 
@@ -100,15 +104,19 @@ ___
 
 ▸ `Const`**formatErr**(...`args`: any[]): Error
 
-*Defined in [formatErr.js:7](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/formatErr.js#L7)*
+*Defined in [formatErr.js:10](https://github.com/rubeniskov/cuser/blob/4d78bfd/packages/utils/formatErr.js#L10)*
 
 Formats an error like sprintf
 
+**`example`** 
+formatErr('messsage errro with argument %s', 'foo')
+formatErr(TypeError, 'messsage errro with argument %s and custom Error constructor', 'foo')
+
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`...args` | any[] |   |
+Name | Type |
+------ | ------ |
+`...args` | any[] |
 
 **Returns:** Error
 
@@ -118,7 +126,7 @@ ___
 
 ▸ `Const`**timestamp**(): number
 
-*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/timestamp.js#L5)*
+*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/4d78bfd/packages/utils/timestamp.js#L5)*
 
 Gets current timestamp
 
