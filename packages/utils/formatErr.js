@@ -4,8 +4,10 @@ const format = require('util').format;
  * Formats an error like sprintf
  * @param  {...any} args
  * @example
- * formatErr('messsage errro with argument %s', 'foo')
- * formatErr(TypeError, 'messsage errro with argument %s and custom Error constructor', 'foo')
+ * ```javascript
+ * formatErr('messsage error with argument %s', 'foo')
+ * formatErr(TypeError, 'messsage error with argument %s and custom Error constructor', 'foo')
+ * ```
  */
 const formatErr = (...args) => {
   let Err = Error;
