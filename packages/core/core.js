@@ -93,10 +93,19 @@ class CuserCore {
    */
   async resolve(cid) {
     const node = await this._node;
-    const id = await (cid || node.id().then(({ id }) => id));
+    const id = await (cid || this.peerId());
     debug(`resolving "${id}"`);
     const [resolved] = await all(node.name.resolve(id))
     return resolved.replace(/^\/ipfs\//, '');
+  }
+
+  /**
+   * Gets the node peerId
+   */
+  async peerId() {
+    const node = await this._node;
+    const { id } = await node.id();
+    return id;
   }
 }
 

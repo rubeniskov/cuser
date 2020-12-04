@@ -4,24 +4,24 @@
 
 ### Classes
 
-* [CuserCore](classes/cusercore.md)
+* [CuserCore](docs/classes/cusercore.md)
 
 ### Variables
 
-* [all](globals.md#all)
-* [debug](globals.md#debug)
+* [all](docs/globals.md#all)
+* [debug](docs/globals.md#debug)
 
 ### Functions
 
-* [createCore](globals.md#createcore)
+* [createCore](docs/globals.md#createcore)
 
 ## Variables
 
 ### all
 
-• `Const` **all**: [all](globals.md#all) = require("it-all")
+• `Const` **all**: [all](docs/globals.md#all) = require("it-all")
 
-*Defined in [core.js:5](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L5)*
+*Defined in [core.js:5](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L5)*
 
 ___
 
@@ -29,21 +29,21 @@ ___
 
 • `Const` **debug**: Debugger = require("debug")('cuser:core')
 
-*Defined in [core.js:6](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L6)*
+*Defined in [core.js:6](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L6)*
 
 ## Functions
 
 ### createCore
 
-▸ `Const`**createCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](classes/cusercore.md)
+▸ `Const`**createCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
-*Defined in [core.js:108](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L108)*
+*Defined in [core.js:117](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L117)*
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`node` | IPFSAPI |  |
-`opts` | CuserCoreOptions |   |
+Name | Type |
+------ | ------ |
+`node` | IPFSAPI |
+`opts` | CuserCoreOptions |
 
-**Returns:** [CuserCore](classes/cusercore.md)
+**Returns:** [CuserCore](docs/classes/cusercore.md)

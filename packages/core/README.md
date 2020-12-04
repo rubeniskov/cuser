@@ -21,31 +21,32 @@ ipfs.dag in order to normalize the mainly used methods and allows future replace
 
 ### Constructors
 
-* [constructor](cusercore.md#constructor)
+* [constructor](docs/classes/cusercore.md#constructor)
 
 ### Methods
 
-* [get](cusercore.md#get)
-* [publish](cusercore.md#publish)
-* [put](cusercore.md#put)
-* [resolve](cusercore.md#resolve)
+* [get](docs/classes/cusercore.md#get)
+* [peerId](docs/classes/cusercore.md#peerid)
+* [publish](docs/classes/cusercore.md#publish)
+* [put](docs/classes/cusercore.md#put)
+* [resolve](docs/classes/cusercore.md#resolve)
 
 ## Constructors
 
 ### constructor
 
-\+ **new CuserCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](cusercore.md)
+\+ **new CuserCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
-*Defined in [core.js:21](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L21)*
+*Defined in [core.js:21](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L21)*
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`node` | IPFSAPI |  |
-`opts` | CuserCoreOptions |   |
+Name | Type |
+------ | ------ |
+`node` | IPFSAPI |
+`opts` | CuserCoreOptions |
 
-**Returns:** [CuserCore](cusercore.md)
+**Returns:** [CuserCore](docs/classes/cusercore.md)
 
 ## Methods
 
@@ -53,7 +54,7 @@ Name | Type | Description |
 
 ▸ **get**(`cid`: string, `opts`: AbortOptions): Promise\<any>
 
-*Defined in [core.js:80](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L80)*
+*Defined in [core.js:80](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L80)*
 
 #### Parameters:
 
@@ -66,11 +67,23 @@ Name | Type |
 
 ___
 
+### peerId
+
+▸ **peerId**(): Promise\<string>
+
+*Defined in [core.js:105](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L105)*
+
+Gets the node peerId
+
+**Returns:** Promise\<string>
+
+___
+
 ### publish
 
 ▸ **publish**(`cid`: string, `opts`: AbortOptions): Promise\<PublishResult>
 
-*Defined in [core.js:47](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L47)*
+*Defined in [core.js:47](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L47)*
 
 Publish using ipns to link the current cid to a fixed entry
 
@@ -87,15 +100,15 @@ ___
 
 ### put
 
-▸ **put**(`buf`: Uint8Array, `opts`: AbortOptions): Promise\<string>
+▸ **put**(`value`: any, `opts`: AbortOptions): Promise\<string>
 
-*Defined in [core.js:65](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L65)*
+*Defined in [core.js:65](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L65)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`buf` | Uint8Array |
+`value` | any |
 `opts` | AbortOptions |
 
 **Returns:** Promise\<string>
@@ -106,7 +119,7 @@ ___
 
 ▸ **resolve**(`cid`: string): Promise\<string>
 
-*Defined in [core.js:94](https://github.com/rubeniskov/cuser/blob/db032fa/packages/core/core.js#L94)*
+*Defined in [core.js:94](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L94)*
 
 Resolve the linked dag cid
 

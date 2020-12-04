@@ -7,7 +7,7 @@
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
     "postcoverage": "codecov -F core",
-    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --namedAnchors --hideProjectName --publicPath docs/ --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
     "postdocs": "cat HEADER.md docs/classes/*.md FOOTER.md > README.md",
     "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },

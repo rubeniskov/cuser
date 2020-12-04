@@ -96,6 +96,10 @@ declare class CuserCore {
      * @returns {Promise<String>}
      */
     resolve(cid?: string): Promise<string>;
+    /**
+     * Gets the node peerId
+     */
+    peerId(): Promise<string>;
 }
 type PublishResult = {
     name: string;
