@@ -2,8 +2,20 @@
   "name": "cuser",
   "version": "0.0.1",
   "description": "Distributed user messaging system",
-  "private": true,
+  "engines": {
+    "yarn": ">=1.5.0"
+  },
   "main": "index.js",
+  "scripts": {
+    "prepare": "lerna bootstrap",
+    "test": "lerna run test",
+    "docs": "./scripts/genreadme > README.md",
+    "precoverage": "lerna run coverage",
+    "coverage": "./scripts/gencoverage",
+    "postcoverage": "codecov --file coverage.json"
+  },
+  "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
+  "license": "MIT",
   "workspaces": {
     "packages": [
       "packages/*"
@@ -11,6 +23,8 @@
     "categories": {
       "cuser": [
         "@cuser/core", 
+        "@cuser/publisher",
+        "@cuser/crypto", 
         "@cuser/client", 
         "@cuser/cli", 
         "@cuser/server",
@@ -30,16 +44,6 @@
       ]
     }
   },
-  "scripts": {
-    "prepare": "lerna bootstrap",
-    "test": "lerna run test",
-    "docs": "./scripts/genreadme > README.md",
-    "precoverage": "lerna run coverage",
-    "coverage": "./scripts/gencoverage",
-    "postcoverage": "codecov --file coverage.json"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "ipfs": "^0.52.1",
     "ipfs-api": "^26.1.2"
