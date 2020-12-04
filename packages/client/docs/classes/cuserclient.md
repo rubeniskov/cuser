@@ -50,7 +50,7 @@ client.getMessages(topicId).then((messages) => {
 
 \+ **new CuserClient**(`node`: IPFSAPI, `cuserId`: string, `opts?`: CuserClientOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client/client.js:59](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L59)*
+*Defined in [client/client.js:70](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L70)*
 
 #### Parameters:
 
@@ -68,7 +68,7 @@ Name | Type | Default value |
 
 ▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
 
-*Defined in [client/client.js:152](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L152)*
+*Defined in [client/client.js:174](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L174)*
 
 Authenticates a user with the required fields of username and avatar,
 this will epect to recieve an access_token to be used in publishing operations
@@ -88,7 +88,7 @@ ___
 
 ▸ **deleteMessage**(`topicId`: string, `accessToken`: string, `messageId`: string): Promise\<[any, Response]>
 
-*Defined in [client/client.js:206](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L206)*
+*Defined in [client/client.js:228](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L228)*
 
 Deletes message for certain topic using topicId as identifier
 and accessToken to identify the user
@@ -109,7 +109,7 @@ ___
 
 ▸ **getMessage**(`cid`: string): Promise\<GraphMessage>
 
-*Defined in [client/client.js:142](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L142)*
+*Defined in [client/client.js:164](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L164)*
 
 Gets the message from ipfs using the CID given by parameter
 
@@ -125,9 +125,9 @@ ___
 
 ### getMessages
 
-▸ **getMessages**(`topicId`: string, `opts`: CuserClientIteratorOptions): Promise\<GraphMessage[]> \| AsyncIterator\<GraphMessage, any, undefined>
+▸ **getMessages**(`topicId`: string, `opts`: CuserClientMessagesIteratorOptions): Promise\<CuserClientMessageIteratorResult[]>
 
-*Defined in [client/client.js:110](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L110)*
+*Defined in [client/client.js:121](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L121)*
 
 Gets messages from `ipfs` layer
 
@@ -152,9 +152,9 @@ for await (let value of messages) {
 Name | Type |
 ------ | ------ |
 `topicId` | string |
-`opts` | CuserClientIteratorOptions |
+`opts` | CuserClientMessagesIteratorOptions |
 
-**Returns:** Promise\<GraphMessage[]> \| AsyncIterator\<GraphMessage, any, undefined>
+**Returns:** Promise\<CuserClientMessageIteratorResult[]>
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 ▸ **publishMessage**(`topicId`: string, `accessToken`: string, `content`: string): Promise\<[any, Response]>
 
-*Defined in [client/client.js:169](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L169)*
+*Defined in [client/client.js:191](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L191)*
 
 Publish a new message for certain topic using topicId as identifier
 and accessToken to identify the user
@@ -183,7 +183,7 @@ ___
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): (Anonymous function)
 
-*Defined in [client/client.js:244](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L244)*
+*Defined in [client/client.js:266](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L266)*
 
 Subscribe to message changes of a certain topic.
 
@@ -226,7 +226,7 @@ ___
 
 ▸ **updateMessage**(`topicId`: string, `accessToken`: string, `messageId`: string, `content`: string): Promise\<[any, Response]>
 
-*Defined in [client/client.js:188](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L188)*
+*Defined in [client/client.js:210](https://github.com/rubeniskov/cuser/blob/07db02c/packages/client/client.js#L210)*
 
 Updates message for certain topic using topicId as identifier
 and accessToken to identify the user

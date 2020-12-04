@@ -1,13 +1,16 @@
 
 const test = require('ava');
-const crypto = require('crypto');
 const sinon = require('sinon');
 const createClient = require('./client');
 
-const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
+const {
+  md5,
+  getMesageEntryFromCache,
+  genObjectMessages
+} = require('./testing');
 
 test.beforeEach((t) => {
-  const cache = {};
+  const cache = t.context.cache = genObjectMessages(100);
   let id;
   const topicId = t.context.topicId = 'custom_topic_id';
   const node = t.context.node = {
@@ -25,20 +28,8 @@ test.beforeEach((t) => {
   id = node.dag.put({
     topics: {
       [topicId]: {
-        message: node.dag.put({
-          content: { data: 'this is a test 4' },
-          parent: node.dag.put({
-            content: { data: 'this is a test 3' },
-            parent: node.dag.put({
-              content: { data: 'this is a test 2' },
-              parent: node.dag.put({
-                content: { data: 'this is a test 1' },
-                parent: null
-              })
-            })
-          })
-        }),
-        count: 4
+        message: getMesageEntryFromCache(cache, 99)[0],
+        count: 100
       }
     }
   });
@@ -57,6 +48,21 @@ test('should raise an error when cuserId not defined', (t) => {
     createClient({}, null)
   }, {
     message: /CuserClient: cuserId must be defined in order to resolve the resources/
+  });
+});
+
+test('should raise an error when topic has not message property', async (t) => {
+  const { node, cache } = t.context;
+  const cuserId = 'custom_cuser_id';
+  const topicId = 'custom_topic_id';
+  cache[cuserId] = {
+    topics: {
+      [topicId]: {}
+    }
+  }
+  const client = createClient(node, cuserId);
+  await t.throwsAsync(() => client.getMessages(topicId), {
+    message: /CuserClient: error signature topic "custom_topic_id", message is not detected/
   });
 });
 
@@ -88,10 +94,12 @@ test('should resolve messages using array', async (t) => {
   const { node } = t.context;
   const { id: cuserId } = await node.id();
   const client = createClient(node, cuserId);
+
   const messages = await client.getMessages('custom_topic_id');
 
   t.true(Array.isArray(messages));
-  t.true(!!messages.length);
+  t.deepEqual(['node', 'cursor'], Object.keys(messages[0]))
+  t.is(messages.length, 10);
 });
 
 test('should resolve messages using iterator', async (t) => {
@@ -99,13 +107,30 @@ test('should resolve messages using iterator', async (t) => {
   const { id: cuserId } = await node.id();
   const client = createClient(node, cuserId);
   const messages = client.getMessages('custom_topic_id', {
-    iter: true,
+    iterator: true,
   });
 
-  t.plan(4);
+  t.plan(10);
   for await (let value of messages) {
     t.is(typeof value, 'object');
   }
+});
+
+test('should resolve messages after certain id', async (t) => {
+  const { node } = t.context;
+  const { id: cuserId } = await node.id();
+  const client = createClient(node, cuserId);
+
+  const messages = await client.getMessages('custom_topic_id')
+    .then((prev) => client.getMessages('custom_topic_id', {
+      after: prev[prev.length - 1].cursor,
+    })
+    .then((next) => [...prev, ...next]));
+
+  t.is(messages[0].node.id, 99);
+  t.is(messages[messages.length - 1].node.id, 80);
+  t.is(messages.length, 20);
+
 });
 
 test('should raise an error when url can be resolved and is not provided at options when publishMessage', async (t) => {

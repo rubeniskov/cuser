@@ -6,7 +6,7 @@ export = createClient;
  */
 declare function createClient(node: Node, cuserId: string, opts?: CuserClientOptions): CuserClient;
 declare namespace createClient {
-    export { CuserClient, Node, GraphMessage, CuserClientIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
+    export { CuserClient, Node, GraphMessage, CuserClientMessageIteratorResult, CuserClientMessagesIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -55,9 +55,19 @@ type CuserClientOptions = {
     routes?: Record<string, string>;
 };
 /**
- * @typedef {Object} CuserClientIteratorOptions
+ * @typedef {Object} CuserClientMessageIteratorResult
+ * @prop {GraphMessage} node
+ * @prop {String} cursor
+ */
+/**
+ * Iteration options for traversing messages using pagination
+ * interface like [graphql](https://graphql.org/learn/pagination/)
+ * @typedef {Object} CuserClientMessagesIteratorOptions
+ * @prop {Number} [after=null]
+ * @prop {Number} [first=10]
  * @prop {Number} [offset=0]
- * @prop {Number} [limit=10]
+ * @prop {Boolean} [iterator=false] Return the iterator instead of array
+ * @prop {(node: GraphMessage, cursor: String) => CuserClientMessageIteratorResult} [map] The iterator mapper
  */
 /**
  * @typedef {Object} CuserClientOptions
@@ -120,8 +130,8 @@ declare class CuserClient {
     /**
      * Gets messages from `ipfs` layer
      * @param {String} topicId
-     * @param {CuserClientIteratorOptions} opts
-     * @returns {Promise<GraphMessage[]>|AsyncIterator<GraphMessage>}
+     * @param {CuserClientMessagesIteratorOptions} opts
+     * @returns {Promise<CuserClientMessageIteratorResult[]>}
      * @example
      * ### Array
      * ```javascript
@@ -139,7 +149,7 @@ declare class CuserClient {
      * ```
      *
      */
-    getMessages(topicId: string, opts: CuserClientIteratorOptions): Promise<GraphMessage[]> | AsyncIterator<GraphMessage>;
+    getMessages(topicId: string, opts: CuserClientMessagesIteratorOptions): Promise<CuserClientMessageIteratorResult[]>;
     /**
      * Gets the message from ipfs using the CID given by parameter
      * @param {String} cid
@@ -212,9 +222,26 @@ declare class CuserClient {
     subscribe(topicId: string, subscriber: CuserClientSubscriber): () => any;
 }
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
-type CuserClientIteratorOptions = {
+type CuserClientMessageIteratorResult = {
+    node: GraphMessage;
+    cursor: string;
+};
+/**
+ * Iteration options for traversing messages using pagination
+ * interface like [graphql](https://graphql.org/learn/pagination/)
+ */
+type CuserClientMessagesIteratorOptions = {
+    after?: number;
+    first?: number;
     offset?: number;
-    limit?: number;
+    /**
+     * Return the iterator instead of array
+     */
+    iterator?: boolean;
+    /**
+     * The iterator mapper
+     */
+    map?: (node: GraphMessage, cursor: string) => CuserClientMessageIteratorResult;
 };
 type CuserClientEvent = {
     type: ('created' | 'updated' | 'deleted');

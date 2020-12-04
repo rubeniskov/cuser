@@ -5,13 +5,24 @@ const createCore = require('@cuser/core');
 const toArray = require('async-iterator-to-array');
 const fetch = require('./fetch');
 const createPubSub = require('./pubsub');
-const messageIterator = require('./messageIterator');
+const createMessageIterator = require('./messageIterator');
 const { parseUrl, noPublisher } = require('./utils');
 
 /**
- * @typedef {Object} CuserClientIteratorOptions
+ * @typedef {Object} CuserClientMessageIteratorResult
+ * @prop {GraphMessage} node
+ * @prop {String} cursor
+ */
+
+/**
+ * Iteration options for traversing messages using pagination
+ * interface like [graphql](https://graphql.org/learn/pagination/)
+ * @typedef {Object} CuserClientMessagesIteratorOptions
+ * @prop {Number} [after=null]
+ * @prop {Number} [first=10]
  * @prop {Number} [offset=0]
- * @prop {Number} [limit=10]
+ * @prop {Boolean} [iterator=false] Return the iterator instead of array
+ * @prop {(node: GraphMessage, cursor: String) => CuserClientMessageIteratorResult} [map] The iterator mapper
  */
 
 /**
@@ -88,8 +99,8 @@ class CuserClient {
   /**
    * Gets messages from `ipfs` layer
    * @param {String} topicId
-   * @param {CuserClientIteratorOptions} opts
-   * @returns {Promise<GraphMessage[]>|AsyncIterator<GraphMessage>}
+   * @param {CuserClientMessagesIteratorOptions} opts
+   * @returns {Promise<CuserClientMessageIteratorResult[]>}
    * @example
    * ### Array
    * ```javascript
@@ -108,30 +119,41 @@ class CuserClient {
    *
    */
   getMessages(topicId, opts) {
-    const iops = {
+    const iopts = {
+      after: null,
+      first: 10,
       offset: 0,
-      limit: 10,
-      iter: false,
+      iterator: false,
+      map: (node, cursor) => ({ node, cursor }),
       ...opts
     }
-    console.log(this._cuserId);
-    const iterops = this._core.get(this._cuserId)
+
+    const message = iopts.after ? Promise.resolve(iopts.after) : this._core.get(this._cuserId)
       .then(({ topics }) => {
         if (!topics[topicId]) {
           throw new Error(`CuserClient: topicId "${topicId}" doesn't exists`);
         }
-        return topics[topicId];
-      })
-      .then(({ message, count }) => ({ ...iops, root: message, count }));
+        const { message } = topics[topicId];
 
-    const iterator = messageIterator(this.getMessage.bind(this), iterops);
+        if (!message) {
+          throw new Error(`CuserClient: error signature topic "${topicId}", message is not detected`);
+        }
+        return message;
+      });
 
-    if (iops.iter) {
+
+    const messageIterator = createMessageIterator(this.getMessage.bind(this), message, {
+      limit: iopts.first,
+      skip: (iopts.offset + iopts.after ? 1 : 0),
+      map: iopts.map,
+    });
+
+    if (iopts.iterator) {
       // @ts-ignore
-      return iterator
+      return messageIterator
     }
 
-    return toArray(iterator);
+    return toArray(messageIterator);
   }
 
   /**
