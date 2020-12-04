@@ -1,5 +1,4 @@
-const format = require('util').format;
-
+export = formatErr;
 /**
  * Formats an error like sprintf
  * @param  {...any} args
@@ -7,12 +6,4 @@ const format = require('util').format;
  * formatErr('messsage errro with argument %s', 'foo')
  * formatErr(TypeError, 'messsage errro with argument %s and custom Error constructor', 'foo')
  */
-const formatErr = (...args) => {
-  let Err = Error;
-  if (typeof args[0] !== 'string') {
-    Err = args.shift();
-  }
-  return new Err(format(...args));
-}
-
-module.exports = formatErr;
+declare function formatErr(...args: any[]): Error;

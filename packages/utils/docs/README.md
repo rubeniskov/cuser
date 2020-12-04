@@ -7,7 +7,6 @@
 [![npm](https://img.shields.io/npm/v/@cuser/utils.svg)](https://www.npmjs.com/package/@cuser/utils)
 [![npm-downloads](https://img.shields.io/npm/dw/@cuser/utils)](https://www.npmjs.com/package/@cuser/utils)
 
-
 # @cuser/utils
 
 ## Index
@@ -43,19 +42,15 @@ ___
 
 ▸ `Const`**formatErr**(...`args`: any[]): Error
 
-*Defined in [formatErr.js:10](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/formatErr.js#L10)*
+*Defined in [formatErr.js:7](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/formatErr.js#L7)*
 
 Formats an error like sprintf
 
-**`example`** 
-formatErr('messsage errro with argument %s', 'foo')
-formatErr(TypeError, 'messsage errro with argument %s and custom Error constructor', 'foo')
-
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`...args` | any[] |
+Name | Type | Description |
+------ | ------ | ------ |
+`...args` | any[] |   |
 
 **Returns:** Error
 
@@ -105,19 +100,15 @@ ___
 
 ▸ `Const`**formatErr**(...`args`: any[]): Error
 
-*Defined in [formatErr.js:10](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/formatErr.js#L10)*
+*Defined in [formatErr.js:7](https://github.com/rubeniskov/cuser/blob/ad00da2/packages/utils/formatErr.js#L7)*
 
 Formats an error like sprintf
 
-**`example`** 
-formatErr('messsage errro with argument %s', 'foo')
-formatErr(TypeError, 'messsage errro with argument %s and custom Error constructor', 'foo')
-
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`...args` | any[] |
+Name | Type | Description |
+------ | ------ | ------ |
+`...args` | any[] |   |
 
 **Returns:** Error
 
