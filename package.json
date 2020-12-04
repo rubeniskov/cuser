@@ -2,6 +2,7 @@
   "name": "cuser",
   "version": "0.0.1",
   "description": "Distributed user messaging system",
+  "private": true,
   "engines": {
     "yarn": ">=1.5.0"
   },
