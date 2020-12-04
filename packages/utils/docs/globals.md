@@ -14,16 +14,22 @@
 
 ▸ `Const`**assert**(`assertion`: any, ...`args`: any[]): void
 
-*Defined in [assert.js:7](https://github.com/rubeniskov/cuser/blob/3af5e9e/packages/utils/assert.js#L7)*
+*Defined in [assert.js:12](https://github.com/rubeniskov/cuser/blob/4e627ee/packages/utils/assert.js#L12)*
 
 Asserts a condition to raise an error when not fullfilled
 
+**`example`** 
+```javascript
+assert(true, 'should not raise the custom error with args %s', 'foo');
+assert(false, 'should raise the custom error with args %s', 'foo');
+```
+
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`assertion` | any | - |
-`...args` | any[] |   |
+Name | Type |
+------ | ------ |
+`assertion` | any |
+`...args` | any[] |
 
 **Returns:** void
 
@@ -33,7 +39,7 @@ ___
 
 ▸ `Const`**formatErr**(...`args`: any[]): Error
 
-*Defined in [formatErr.js:12](https://github.com/rubeniskov/cuser/blob/3af5e9e/packages/utils/formatErr.js#L12)*
+*Defined in [formatErr.js:12](https://github.com/rubeniskov/cuser/blob/4e627ee/packages/utils/formatErr.js#L12)*
 
 Formats an error like sprintf
 
@@ -57,7 +63,7 @@ ___
 
 ▸ `Const`**timestamp**(): number
 
-*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/3af5e9e/packages/utils/timestamp.js#L5)*
+*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/4e627ee/packages/utils/timestamp.js#L5)*
 
 Gets current timestamp
 
