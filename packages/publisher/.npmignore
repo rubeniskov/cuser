@@ -1,0 +1,8 @@
+.nyc_output
+coverage
+testing
+
+*.test.js
+test.js
+tsconfig.json
+docs

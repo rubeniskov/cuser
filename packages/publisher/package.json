@@ -1,0 +1,27 @@
+{
+  "name": "@cuser/publisher",
+  "version": "0.0.1",
+  "description": "publisher functionality",
+  "main": "publisher.js",
+  "scripts": {
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov",
+    "postcoverage": "codecov -F publisher",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
+    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@cuser/store": "^0.0.1"
+  },
+  "devDependencies": {
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "nyc": "^15.1.0",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.11",
+    "typescript": "4.0.5"
+  }
+}
