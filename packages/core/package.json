@@ -11,8 +11,16 @@
     "postdocs": "cat HEADER.md docs/classes/*.md FOOTER.md > README.md",
     "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rubeniskov/cuser/issues"
+  },
+  "homepage": "https://github.com/rubeniskov/cuser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubeniskov/cuser.git"
+  },
   "dependencies": {
     "debug": "^4.3.1",
     "it-all": "^1.0.4"
