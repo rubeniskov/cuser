@@ -70,7 +70,7 @@ const createSerializeEnhancer = (opts) => {
           debug("reducer %s %s %s %s", action.type, path, JSON.stringify(prevState, null, 2), JSON.stringify(result, null, 2));
           return ({ value })
         }));
-      }, { nested: true, test: processMap(pattern, action) });
+      }, { nested: true, promise: true, test: processMap(pattern, action) });
     }, state);
 
     const serializeReducer = (state, action) => {
