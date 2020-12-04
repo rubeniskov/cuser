@@ -1,17 +1,14 @@
 #!/usr/bin/env node
+// @ts-check
+const yargs = require('yargs');
+const { hideBin } = require('yargs/helpers');
 
-const { create } = require('ipfs');
-const server = require('@cuser/server');
+const cmds = require('./cmds')
 
-const node = create({
-  EXPERIMENTAL: {
-    ipnsPubsub: true,
-  }
-});
 
-server(node, {
-  secret: process.env.SECRET || '',
-  port: process.env.PORT || 3000,
-  host: process.env.HOST || '0.0.0.0',
-  cors: process.argv.includes('--cors') || false,
-});
+yargs(hideBin(process.argv))
+  .command(cmds.serve)
+  .command(cmds.topic)
+  .demandCommand(1)
+  .epilog('copyright 2020')
+  .argv
