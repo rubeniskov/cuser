@@ -1,12 +1,11 @@
 // @ts-check
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
-/** @typedef {import('ipfs-core/src/components').CID} CID */
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
+const createCore = require('@cuser/core');
+const toArray = require('async-iterator-to-array');
 const fetch = require('./fetch');
 const createPubSub = require('./pubsub');
-const CID = require('ipfs-core').CID;
 const messageIterator = require('./messageIterator');
-const toArray = require('async-iterator-to-array');
 const { parseUrl, noPublisher } = require('./utils');
 
 /**
@@ -25,7 +24,7 @@ const { parseUrl, noPublisher } = require('./utils');
 /**
  * @typedef {Object} CuserClientEvent
  * @prop {('created'|'updated'|'deleted')} type
- * @prop {CID} messageId
+ * @prop {String} messageId
  */
 
 /**
@@ -47,8 +46,8 @@ const { parseUrl, noPublisher } = require('./utils');
  * const { create } = require('ipfs');
  *
  * const node = create({ ...ipfsOptions });
- * const targetCid = 'CUSER_SERVER_IDENTIFIER';
- * const client = new CuserClient(node, targetCid);
+ * const cuserId = 'CUSER_SERVER_IDENTIFIER';
+ * const client = new CuserClient(node, cuserId);
  * const topicId = 'custom-topic-id';
  *
  * client.getMessages(topicId).then((messages) => {
@@ -61,7 +60,7 @@ class CuserClient {
   /**
    * @param {Node} node
    * @param {String} cuserId
-   * @param {CuserClientOptions} opts
+   * @param {CuserClientOptions} [opts]
    */
   constructor(node, cuserId, opts = {}) {
     if (!node) {
@@ -72,12 +71,11 @@ class CuserClient {
       throw new Error(`CuserClient: cuserId must be defined in order to resolve the resources`);
     }
 
-    // this._cuserId = new CID(cuserId);
     this._cuserId = cuserId;
     this._url = parseUrl(opts.url);
-    this._node = node;
+    this._core = createCore(node);
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
-    this._pubsub = createPubSub(this._node, {
+    this._pubsub = createPubSub(node, {
       channel: cuserId
     });
     this._routes = {
@@ -116,9 +114,9 @@ class CuserClient {
       iter: false,
       ...opts
     }
-    // @ts-ignore
-    const iterops = this._node.dag.get(this._cuserId)
-      .then(({ value: { topics }}) => {
+    console.log(this._cuserId);
+    const iterops = this._core.get(this._cuserId)
+      .then(({ topics }) => {
         if (!topics[topicId]) {
           throw new Error(`CuserClient: topicId "${topicId}" doesn't exists`);
         }
@@ -138,12 +136,11 @@ class CuserClient {
 
   /**
    * Gets the message from ipfs using the CID given by parameter
-   * @param {CID} cid
+   * @param {String} cid
    * @returns {Promise<GraphMessage>}
    */
   async getMessage(cid) {
-    const { value } = await this._node.dag.get(cid);
-    return value;
+    return this._core.get(cid);
   }
 
   /**
@@ -153,7 +150,7 @@ class CuserClient {
    * @param {String} avatar data url scheme https://tools.ietf.org/html/rfc2397
    */
   async authenticate(username, avatar) {
-    const peerId = await this._node.id();
+    const peerId = await this._core.peerId();
 
     return this._fetch(this._url + this._routes.auth,{
       method: 'POST',
@@ -249,6 +246,11 @@ class CuserClient {
   }
 }
 
+/**
+ * @param {Node} node
+ * @param {String} cuserId
+ * @param {CuserClientOptions} [opts]
+ */
 const createClient = (node, cuserId, opts) => {
   return new CuserClient(node, cuserId, opts);
 }

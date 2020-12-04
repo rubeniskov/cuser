@@ -1,8 +1,59 @@
 export = createClient;
-declare function createClient(node: any, cuserId: any, opts: any): CuserClient;
+/**
+ * @param {Node} node
+ * @param {String} cuserId
+ * @param {CuserClientOptions} [opts]
+ */
+declare function createClient(node: Node, cuserId: string, opts?: CuserClientOptions): CuserClient;
 declare namespace createClient {
-    export { CuserClient, Node, CID, GraphMessage, CuserClientIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
+    export { CuserClient, Node, GraphMessage, CuserClientIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
 }
+type Node = {
+    add: import("ipfs-core/src/components").Add;
+    bitswap: import("ipfs-core/src/components").BitSwap;
+    block: import("ipfs-core/src/components").Block;
+    bootstrap: import("ipfs-core/src/components").Bootstrap;
+    cat: import("ipfs-core/src/components").Cat;
+    config: import("ipfs-core/src/components").Config;
+    dag: import("ipfs-core/src/components").DAG;
+    dht: import("ipfs-core/src/components").DHT;
+    dns: import("ipfs-core/src/components").DNS;
+    files: import("ipfs-core/src/components").Files;
+    get: import("ipfs-core/src/components").Get;
+    id: import("ipfs-core/src/components").ID;
+    isOnline: import("ipfs-core/src/components").IsOnline;
+    key: import("ipfs-core/src/components").Key;
+    libp2p: any;
+    ls: import("ipfs-core/src/components").LS;
+    name: import("ipfs-core/src/components").Name;
+    object: import("ipfs-core/src/components").ObjectAPI;
+    pin: import("ipfs-core/src/components").Pin;
+    ping: import("ipfs-core/src/components").Ping;
+    pubsub: import("ipfs-core/src/components").PubSub;
+    refs: import("ipfs-core/src/components").Refs;
+    repo: import("ipfs-core/src/components").Repo;
+    resolve: import("ipfs-core/src/components").Resolve;
+    stats: import("ipfs-core/src/components").Stats;
+    swarm: import("ipfs-core/src/components").Swarm;
+    version: import("ipfs-core/src/components").Version;
+    init: import("ipfs-core/src/components").Init;
+    start: import("ipfs-core/src/components").Start;
+    stop: import("ipfs-core/src/components").Stop;
+};
+type CuserClientOptions = {
+    /**
+     * fetch function using to resolve requests
+     */
+    fetch?: Function;
+    /**
+     * url to the api rest
+     */
+    url?: string;
+    /**
+     * routes used to resolve enpoints
+     */
+    routes?: Record<string, string>;
+};
 /**
  * @typedef {Object} CuserClientIteratorOptions
  * @prop {Number} [offset=0]
@@ -17,7 +68,7 @@ declare namespace createClient {
 /**
  * @typedef {Object} CuserClientEvent
  * @prop {('created'|'updated'|'deleted')} type
- * @prop {CID} messageId
+ * @prop {String} messageId
  */
 /**
  * @callback CuserClientSubscriber
@@ -37,8 +88,8 @@ declare namespace createClient {
  * const { create } = require('ipfs');
  *
  * const node = create({ ...ipfsOptions });
- * const targetCid = 'CUSER_SERVER_IDENTIFIER';
- * const client = new CuserClient(node, targetCid);
+ * const cuserId = 'CUSER_SERVER_IDENTIFIER';
+ * const client = new CuserClient(node, cuserId);
  * const topicId = 'custom-topic-id';
  *
  * client.getMessages(topicId).then((messages) => {
@@ -51,12 +102,12 @@ declare class CuserClient {
     /**
      * @param {Node} node
      * @param {String} cuserId
-     * @param {CuserClientOptions} opts
+     * @param {CuserClientOptions} [opts]
      */
     constructor(node: Node, cuserId: string, opts?: CuserClientOptions);
     _cuserId: string;
     _url: string;
-    _node: import("ipfs-core/src/components").IPFSAPI;
+    _core: any;
     _fetch: Function;
     _pubsub: {
         broadcast: (topicId: string, payload: any) => void;
@@ -91,10 +142,10 @@ declare class CuserClient {
     getMessages(topicId: string, opts: CuserClientIteratorOptions): Promise<GraphMessage[]> | AsyncIterator<GraphMessage>;
     /**
      * Gets the message from ipfs using the CID given by parameter
-     * @param {CID} cid
+     * @param {String} cid
      * @returns {Promise<GraphMessage>}
      */
-    getMessage(cid: CID): Promise<GraphMessage>;
+    getMessage(cid: string): Promise<GraphMessage>;
     /**
      * Authenticates a user with the required fields of username and avatar,
      * this will epect to recieve an access_token to be used in publishing operations
@@ -160,61 +211,13 @@ declare class CuserClient {
      */
     subscribe(topicId: string, subscriber: CuserClientSubscriber): () => any;
 }
-type Node = {
-    add: import("ipfs-core/src/components").Add;
-    bitswap: import("ipfs-core/src/components").BitSwap;
-    block: import("ipfs-core/src/components").Block;
-    bootstrap: import("ipfs-core/src/components").Bootstrap;
-    cat: import("ipfs-core/src/components").Cat;
-    config: import("ipfs-core/src/components").Config;
-    dag: import("ipfs-core/src/components").DAG;
-    dht: import("ipfs-core/src/components").DHT;
-    dns: import("ipfs-core/src/components").DNS;
-    files: import("ipfs-core/src/components").Files;
-    get: import("ipfs-core/src/components").Get;
-    id: import("ipfs-core/src/components").ID;
-    isOnline: import("ipfs-core/src/components").IsOnline;
-    key: import("ipfs-core/src/components").Key;
-    libp2p: any;
-    ls: import("ipfs-core/src/components").LS;
-    name: import("ipfs-core/src/components").Name;
-    object: import("ipfs-core/src/components").ObjectAPI;
-    pin: import("ipfs-core/src/components").Pin;
-    ping: import("ipfs-core/src/components").Ping;
-    pubsub: import("ipfs-core/src/components").PubSub;
-    refs: import("ipfs-core/src/components").Refs;
-    repo: import("ipfs-core/src/components").Repo;
-    resolve: import("ipfs-core/src/components").Resolve;
-    stats: import("ipfs-core/src/components").Stats;
-    swarm: import("ipfs-core/src/components").Swarm;
-    version: import("ipfs-core/src/components").Version;
-    init: import("ipfs-core/src/components").Init;
-    start: import("ipfs-core/src/components").Start;
-    stop: import("ipfs-core/src/components").Stop;
-};
-type CID = import("cids");
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
 type CuserClientIteratorOptions = {
     offset?: number;
     limit?: number;
 };
-type CuserClientOptions = {
-    /**
-     * fetch function using to resolve requests
-     */
-    fetch?: Function;
-    /**
-     * url to the api rest
-     */
-    url?: string;
-    /**
-     * routes used to resolve enpoints
-     */
-    routes?: Record<string, string>;
-};
 type CuserClientEvent = {
     type: ('created' | 'updated' | 'deleted');
-    messageId: CID;
+    messageId: string;
 };
 type CuserClientSubscriber = (event: CuserClientEvent) => any;
-declare const CID: typeof import("cids");

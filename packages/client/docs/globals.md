@@ -8,8 +8,8 @@
 
 ### Variables
 
-* [CID](globals.md#cid)
 * [Room](globals.md#room)
+* [createCore](globals.md#createcore)
 * [fetch](globals.md#fetch)
 * [messageIterator](globals.md#messageiterator)
 * [toArray](globals.md#toarray)
@@ -25,19 +25,19 @@
 
 ## Variables
 
-### CID
-
-• `Const` **CID**: [CID](globals.md#cid) = require('ipfs-core').CID
-
-*Defined in [client/client.js:7](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L7)*
-
-___
-
 ### Room
 
 • `Const` **Room**: any = require('ipfs-pubsub-room')
 
-*Defined in [client/pubsub.js:3](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/pubsub.js#L3)*
+*Defined in [client/pubsub.js:3](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/pubsub.js#L3)*
+
+___
+
+### createCore
+
+• `Const` **createCore**: any = require('@cuser/core')
+
+*Defined in [client/client.js:4](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L4)*
 
 ___
 
@@ -45,9 +45,9 @@ ___
 
 • `Const` **fetch**: [fetcher](globals.md#fetcher) = require('./fetch')
 
-*Defined in [client/fetch.js:3](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/fetch.js#L3)*
+*Defined in [client/fetch.js:3](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/fetch.js#L3)*
 
-*Defined in [client/client.js:5](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L5)*
+*Defined in [client/client.js:6](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L6)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • `Const` **messageIterator**: [messageIterator](globals.md#messageiterator) = require('./messageIterator')
 
-*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L8)*
+*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L8)*
 
 ___
 
@@ -63,23 +63,23 @@ ___
 
 • `Const` **toArray**: any = require('async-iterator-to-array')
 
-*Defined in [client/client.js:9](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L9)*
+*Defined in [client/client.js:5](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L5)*
 
 ## Functions
 
 ### createClient
 
-▸ `Const`**createClient**(`node`: any, `cuserId`: any, `opts`: any): [CuserClient](classes/cuserclient.md)
+▸ `Const`**createClient**(`node`: IPFSAPI, `cuserId`: string, `opts`: CuserClientOptions): [CuserClient](classes/cuserclient.md)
 
-*Defined in [client/client.js:252](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/client.js#L252)*
+*Defined in [client/client.js:254](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/client.js#L254)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`node` | any |
-`cuserId` | any |
-`opts` | any |
+`node` | IPFSAPI |
+`cuserId` | string |
+`opts` | CuserClientOptions |
 
 **Returns:** [CuserClient](classes/cuserclient.md)
 
@@ -89,7 +89,7 @@ ___
 
 ▸ `Const`**createPubSub**(`node`: IPFSAPI, `opts`: CuserClientPubSubOptions): object
 
-*Defined in [client/pubsub.js:41](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/pubsub.js#L41)*
+*Defined in [client/pubsub.js:41](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/pubsub.js#L41)*
 
 Creates pubsub cuser to listen changes on cuser network
 
@@ -113,7 +113,7 @@ ___
 
 ▸ `Const`**createRoomFromEventEmiter**(`node`: IPFSAPI): object
 
-*Defined in [client/pubsub.js:18](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/pubsub.js#L18)*
+*Defined in [client/pubsub.js:18](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/pubsub.js#L18)*
 
 Creates a room using EventEmiter
 
@@ -137,7 +137,7 @@ ___
 
 ▸ `Const`**fetcher**(`url`: string, `opts`: any): Promise\<any>
 
-*Defined in [client/fetch.js:21](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/fetch.js#L21)*
+*Defined in [client/fetch.js:21](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/fetch.js#L21)*
 
 Fetcher interface
 
@@ -156,7 +156,7 @@ ___
 
 ▸ `Const`**noPublisher**(): never
 
-*Defined in [client/utils.js:17](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/utils.js#L17)*
+*Defined in [client/utils.js:17](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/utils.js#L17)*
 
 No publisher function
 
@@ -168,7 +168,7 @@ ___
 
 ▸ `Const`**parseUrl**(`url`: string): string
 
-*Defined in [client/utils.js:7](https://github.com/rubeniskov/cuser/blob/2609725/packages/client/utils.js#L7)*
+*Defined in [client/utils.js:7](https://github.com/rubeniskov/cuser/blob/2225de6/packages/client/utils.js#L7)*
 
 if url guess url from global.location
 

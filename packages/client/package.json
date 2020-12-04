@@ -2,7 +2,7 @@
   "name": "@cuser/client",
   "version": "0.0.1",
   "description": "client logic for reading and publishing message using restfull transport",
-  "main": "index.js",
+  "main": "client.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
@@ -25,6 +25,7 @@
     "typescript": "4.0.5"
   },
   "dependencies": {
+    "@cuser/core": "^0.0.1",
     "async-iterator-to-array": "^0.0.1",
     "cbor": "^5.1.0",
     "ipfs-pubsub-room": "^2.0.1",

@@ -208,7 +208,7 @@ test('should send POST request when using authenticate', async (t) => {
   t.deepEqual(fetch.args[0], [
     'http://example.com/auth',{
       method: 'POST',
-      body: `{"peerId":{"id":"${cuserId}"},"username":"${username}","avatar":"${avatar}"}`
+      body: `{"peerId":"${cuserId}","username":"${username}","avatar":"${avatar}"}`
     }
   ]);
 });

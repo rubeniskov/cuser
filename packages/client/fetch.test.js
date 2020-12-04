@@ -6,16 +6,15 @@ test('should return a fetch function', (t) => {
 });
 
 test('should works as expected', async (t) => {
-  const [data, res] = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-  t.is(res.status, 200);
+  const data = await fetch('https://jsonplaceholder.typicode.com/todos/1');
   t.is(typeof data, 'object');
 });
 
 test('should raise an error when status > 400', async (t) => {
   try {
     await fetch('https://jsonplaceholder.typicode.com/nonexists')
-  } catch([data, res]) {
-    t.is(res.status, 404);
-    t.is(typeof data, 'object');
+  } catch(err) {
+    t.truthy(err);
+    t.is(typeof err, 'object');
   }
 });

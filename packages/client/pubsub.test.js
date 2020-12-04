@@ -12,7 +12,7 @@ test.before(async (t) => {
 
 const testSubscription = (t, pubsub) => {
   const type = 'created';
-  const messageCid = 'juas';
+  const messageCid = 'custom_message_id';
   const topicId = 'custom_topic_id';
 
   t.plan(5);
