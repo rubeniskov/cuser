@@ -110,13 +110,12 @@ class CuserClient {
    * ### Iterator
    * ```javascript
    * const messages = client.getMessages('custom_topic_id', {
-   *   iter: true,
+   *   iterator: true,
    * });
    * for await (let value of messages) {
    *   console.log(value);
    * }
    * ```
-   *
    */
   getMessages(topicId, opts) {
     const iopts = {
