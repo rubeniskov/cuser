@@ -6,6 +6,11 @@ test('should expose ValidationError class', (t) => {
   t.truthy(ValidationError);
 });
 
+test('should create an instance of ValidationError', (t) => {
+  const { ValidationError } = createValidator;
+  t.true(new ValidationError() instanceof ValidationError);
+});
+
 
 test('should raise an error when object has not a valid schema', (t) => {
   const validate = createValidator({

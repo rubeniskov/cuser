@@ -7,7 +7,6 @@
 [![npm](https://img.shields.io/npm/v/@cuser/validator.svg)](https://www.npmjs.com/package/@cuser/validator)
 [![npm-downloads](https://img.shields.io/npm/dw/@cuser/validator)](https://www.npmjs.com/package/@cuser/validator)
 
-
 # @cuser/validator
 
 ## Index
@@ -26,9 +25,9 @@
 
 ▸ `Const`**createValidator**(`schema`: any): validate
 
-*Defined in [index.js:27](https://github.com/rubeniskov/cuser/blob/61e448a/packages/validator/index.js#L27)*
+*Defined in [index.js:27](https://github.com/rubeniskov/cuser/blob/1ba00b1/packages/validator/index.js#L27)*
 
-Creates a validator which raise a ValidationError when the object doesn't fit the schema
+Creates a validator which raise a ValidatonError when the object doesn't fit the schema
 
 #### Parameters:
 
@@ -59,7 +58,7 @@ Validator error class with nested errors
 
 \+ **new ValidationError**(`message`: any, `validator`: ValidateFunction): [ValidationError](docs/classes/validationerror.md)
 
-*Defined in [index.js:11](https://github.com/rubeniskov/cuser/blob/61e448a/packages/validator/index.js#L11)*
+*Defined in [index.js:11](https://github.com/rubeniskov/cuser/blob/1ba00b1/packages/validator/index.js#L11)*
 
 #### Parameters:
 

@@ -6,10 +6,21 @@
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
-    "postcoverage": "codecov -F validator"
+    "postcoverage": "codecov -F validator",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --namedAnchors --hideProjectName --publicPath docs/ --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "postdocs": "cat HEADER.md docs/globals.md docs/classes/*.md > README.md",
+    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rubeniskov/cuser/issues"
+  },
+  "homepage": "https://github.com/rubeniskov/cuser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubeniskov/cuser.git"
+  },
   "dependencies": {
     "ajv": "^6.12.6",
     "ajv-errors": "^1.0.1",
@@ -18,6 +29,9 @@
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "nyc": "^15.1.0"
+    "nyc": "^15.1.0",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.11",
+    "typescript": "4.0.5"
   }
 }
