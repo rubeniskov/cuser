@@ -1,7 +1,7 @@
 {
   "name": "@cuser/crypto",
   "version": "0.0.1",
-  "description": "",
+  "description": "cuser crypto utilities",
   "main": "index.js",
   "scripts": {
     "test": "nyc ava -v",
