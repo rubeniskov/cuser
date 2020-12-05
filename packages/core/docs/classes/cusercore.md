@@ -28,7 +28,7 @@ ipfs.dag in order to normalize the mainly used methods and allows future replace
 
 \+ **new CuserCore**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
-*Defined in [core.js:27](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L27)*
+*Defined in [core.js:28](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L28)*
 
 #### Parameters:
 
@@ -45,7 +45,7 @@ Name | Type |
 
 ▸ **get**(`cid`: string, `opts`: AbortOptions): Promise\<any>
 
-*Defined in [core.js:89](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L89)*
+*Defined in [core.js:91](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L91)*
 
 #### Parameters:
 
@@ -62,7 +62,7 @@ ___
 
 ▸ **peerId**(): Promise\<string>
 
-*Defined in [core.js:114](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L114)*
+*Defined in [core.js:117](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L117)*
 
 Gets the node peerId
 
@@ -74,7 +74,7 @@ ___
 
 ▸ **publish**(`cid`: string, `opts`: AbortOptions): Promise\<PublishResult>
 
-*Defined in [core.js:54](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L54)*
+*Defined in [core.js:56](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L56)*
 
 Publish using ipns to link the current cid to a fixed entry
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **pubsub**(`opts`: CuserClientPubSubOptions): [ClientCorePubSub](docs/classes/clientcorepubsub.md)
 
-*Defined in [core.js:123](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L123)*
+*Defined in [core.js:126](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L126)*
 
 #### Parameters:
 
@@ -109,7 +109,7 @@ ___
 
 ▸ **put**(`value`: any, `opts`: AbortOptions & PutOptions): Promise\<string>
 
-*Defined in [core.js:73](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L73)*
+*Defined in [core.js:75](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L75)*
 
 #### Parameters:
 
@@ -126,7 +126,7 @@ ___
 
 ▸ **resolve**(`cid`: string): Promise\<string>
 
-*Defined in [core.js:103](https://github.com/rubeniskov/cuser/blob/3388de0/packages/core/core.js#L103)*
+*Defined in [core.js:106](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L106)*
 
 Resolve the linked dag cid
 

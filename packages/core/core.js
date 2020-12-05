@@ -17,6 +17,7 @@ const debug = require("debug")('cuser:core');
  * @prop {String} [hashAlg='sha3-512']
  * @prop {Number} [timeout=30000]
  * @prop {Boolean} [allowOffline=true]
+ * @prop {Function} [parseCid=(hash: string) => CID]
  */
 
 
@@ -40,6 +41,7 @@ class CuserCore {
       hashAlg: 'sha3-512',
       timeout: 30000,
       allowOffline: true,
+      parseCid: (str) => new CID(str),
       ...opts
     };
     this._node = node;
@@ -88,8 +90,9 @@ class CuserCore {
    */
   async get(cid, opts) {
     const node = await this._node;
+    const { parseCid } = this._options;
     debug(`getting "${cid}"`);
-    return node.dag.get(new CID(cid), {
+    return node.dag.get(parseCid(cid), {
       ...this._options,
       ...opts
     }).then(({ value }) => value);

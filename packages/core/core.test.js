@@ -74,7 +74,9 @@ test('should puts object into dag', async (t) => {
 
 test('should gets the content of hash', async (t) => {
   const { node } = t.context;
-  const core = createCore(node);
+  const core = createCore(node, {
+    parseCid: a => a
+  });
   const mixed = {
     'foo': 'bar'
   }
@@ -149,11 +151,20 @@ test('should resolve a hash', async (t) => {
   t.is(hash, resolved);
 });
 
-// test('should resolve using ipns', async (t) => {
-//   const { node } = t.context;
-//   const { id } = await node.id();
-//   const core = createCore(node);
-//   const hash = await core.resolve('test');
+test('should use default parseCid when get', async (t) => {
+  const { node } = t.context;
+  const core = createCore(node);
 
-//   t.is(id, hash);
-// });
+
+  await t.notThrowsAsync(() => core.get('Qmaf8QEShGonUSAXoGb4wQy827RtvBLNwnxiftRzdTK5w9'));
+});
+
+test('should pubsub works as expected', (t) => {
+  const { node } = t.context;
+  const core = createCore(node);
+
+  const pubsub = core.pubsub();
+
+  t.is(typeof pubsub.subscribe, 'function');
+  t.is(typeof pubsub.broadcast, 'function');
+});

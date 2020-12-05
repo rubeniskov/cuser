@@ -23,7 +23,7 @@ Creates pubsub to listen changes on cuser network
 
 \+ **new ClientCorePubSub**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `opts`: CuserClientPubSubOptions): [ClientCorePubSub](docs/classes/clientcorepubsub.md)
 
-*Defined in pubsub.js:43*
+*Defined in [pubsub.js:43](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L43)*
 
 #### Parameters:
 
@@ -40,7 +40,7 @@ Name | Type |
 
 ▸ **broadcast**(`payload`: any): void
 
-*Defined in pubsub.js:72*
+*Defined in [pubsub.js:72](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L72)*
 
 #### Parameters:
 
@@ -56,7 +56,7 @@ ___
 
 ▸ **subscribe**(`subscriber`: (payload: Object) => void): (Anonymous function)
 
-*Defined in pubsub.js:78*
+*Defined in [pubsub.js:78](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L78)*
 
 #### Parameters:
 

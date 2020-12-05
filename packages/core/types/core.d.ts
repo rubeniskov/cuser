@@ -45,6 +45,7 @@ type CuserCoreOptions = {
     hashAlg?: string;
     timeout?: number;
     allowOffline?: boolean;
+    parseCid?: Function;
 };
 /**
  * @typedef {Object} CuserCoreOptions
@@ -53,6 +54,7 @@ type CuserCoreOptions = {
  * @prop {String} [hashAlg='sha3-512']
  * @prop {Number} [timeout=30000]
  * @prop {Boolean} [allowOffline=true]
+ * @prop {Function} [parseCid=(hash: string) => CID]
  */
 /**
  * Core logic to manage the dag tree and specify the dag format, this will wraps
@@ -70,6 +72,7 @@ declare class CuserCore {
         hashAlg: string;
         timeout: number;
         allowOffline: boolean;
+        parseCid: Function | ((str: any) => CID);
     };
     _node: import("ipfs-core/src/components").IPFSAPI | Promise<import("ipfs-core/src/components").IPFSAPI>;
     /**
@@ -135,5 +138,5 @@ type CuserClientPubSubOptions = {
     decode?: (buf: Buffer) => any;
     channel?: string;
 };
-import createPubSub = require("./pubsub");
 import CID = require("cids");
+import createPubSub = require("./pubsub");

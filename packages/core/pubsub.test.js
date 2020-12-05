@@ -13,11 +13,14 @@ test.before(async (t) => {
 const testSubscription = (t, pubsub) => {
   const expected = { foo: 'bar', bar: 'foo' };
 
-  t.plan(5);
+  t.plan(6);
 
   const unsubscribe = pubsub.subscribe((payload) => {
     t.deepEqual(expected, payload.data);
-    console.log(payload);
+    t.true(Object.prototype.hasOwnProperty.call(payload, 'seqno'));
+    t.true(Object.prototype.hasOwnProperty.call(payload, 'from'));
+    t.true(Object.prototype.hasOwnProperty.call(payload, 'receivedFrom'));
+    t.true(Object.prototype.hasOwnProperty.call(payload, 'topicIDs'));
     unsubscribe();
     pubsub.broadcast(payload);
     t.end();
