@@ -1,0 +1,50 @@
+{
+  "name": "@cuser/reader",
+  "version": "0.0.1",
+  "description": "messages reader from the ipfs transport layer",
+  "main": "reader.js",
+  "scripts": {
+    "test": "nyc ava -v",
+    "coverage": "nyc report --reporter=lcov",
+    "postcoverage": "codecov -F reader",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
+    "types": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
+  },
+  "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rubeniskov/cuser/issues"
+  },
+  "homepage": "https://github.com/rubeniskov/cuser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubeniskov/cuser.git"
+  },
+  "devDependencies": {
+    "ava": "^3.13.0",
+    "codecov": "^3.8.1",
+    "ipfs": "^0.52.2",
+    "jsdoc": "^3.6.6",
+    "nyc": "^15.1.0",
+    "sinon": "^9.2.1",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.11",
+    "typescript": "4.1.2",
+    "@cuser/proto": "v0.0.1",
+    "@cuser/core": "v0.0.1"
+  },
+  "dependencies": {
+    "@cuser/core": "v0.0.1",
+    "async-iterator-to-array": "^0.0.1"
+  },
+  "peerDependencies": {
+    "@cuser/proto": "v0.0.1",
+    "ipfs-core": "^0.3.0"
+  },
+  "nyc": {
+    "exclude": [
+      "testing", "*.test.js"
+    ]
+  }
+}

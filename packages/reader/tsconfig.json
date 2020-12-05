@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es5",
+    "outDir": "./lib",
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "testing", "coverage", "*.test.js", "test.js"]
+}
