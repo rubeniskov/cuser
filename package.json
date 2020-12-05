@@ -25,6 +25,7 @@
       "cuser": [
         "@cuser/core", 
         "@cuser/publisher",
+        "@cuser/reader",
         "@cuser/crypto", 
         "@cuser/client", 
         "@cuser/cli", 
@@ -44,10 +45,6 @@
         "@cuser/react"
       ]
     }
-  },
-  "dependencies": {
-    "ipfs": "^0.52.1",
-    "ipfs-api": "^26.1.2"
   },
   "devDependencies": {
     "codecov": "^3.8.1",
