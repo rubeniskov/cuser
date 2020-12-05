@@ -2,7 +2,7 @@
   "name": "@cuser/auth",
   "version": "0.0.1",
   "description": "auth core utility",
-  "main": "index.js",
+  "main": "auth.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "branca": "^0.3.0",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
@@ -19,7 +20,7 @@
     "nyc": "^15.1.0"
   },
   "peerDependencies": {
-    "@cuser/validator": "^0.0.1",
-    "@cuser/proto": "^0.0.1"
+    "@cuser/proto": "^0.0.1",
+    "@cuser/validator": "^0.0.1"
   }
 }

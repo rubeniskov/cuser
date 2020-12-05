@@ -9,7 +9,7 @@
     "postcoverage": "codecov -F client",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
     "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
-    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
+    "types": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
   "author": "",
   "license": "ISC",
@@ -22,19 +22,23 @@
     "sinon": "^9.2.1",
     "typedoc": "^0.19.2",
     "typedoc-plugin-markdown": "^3.0.11",
-    "typescript": "4.0.5"
+    "typescript": "4.1.2"
   },
   "dependencies": {
     "@cuser/core": "^0.0.1",
+    "@cuser/reader": "v0.0.1",
     "async-iterator-to-array": "^0.0.1",
     "cbor": "^5.1.0",
     "ipfs-pubsub-room": "^2.0.1",
+    "multiaddr": "^8.1.1",
     "node-fetch": "^2.6.1"
   },
   "peerDependencies": {
     "ipfs-core": "^0.3.0"
   },
   "nyc": {
-    "exclude": ["testing"]
+    "exclude": [
+      "testing"
+    ]
   }
 }

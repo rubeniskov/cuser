@@ -17,15 +17,15 @@
     "@cuser/express-middleware-graphql": "^0.0.1",
     "@cuser/express-middleware-rest": "^0.0.1",
     "@cuser/server": "^0.0.1",
-    "@cuser/core": "^0.0.1",
     "@cuser/publisher": "^0.0.1",
     "@cuser/client": "^0.0.1",
-    "yargs": "^16.1.1"
+    "yargs": "^16.1.1",
+    "ipfs": "^0.52.2"
   },
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "execa": "^4.1.0",
+    "execa": "^5.0.0",
     "nyc": "^15.1.0"
   }
 }

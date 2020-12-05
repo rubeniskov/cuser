@@ -9,7 +9,7 @@
     "postcoverage": "codecov -F utils",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --namedAnchors --hideProjectName --publicPath docs/ --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
     "postdocs": "cat HEADER.md docs/globals.md > README.md",
-    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
+    "types": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
   "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
   "license": "MIT",

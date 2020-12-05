@@ -9,12 +9,13 @@
     "postcoverage": "codecov -F publisher",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
     "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
-    "prepare": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
+    "types": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cuser/store": "^0.0.1"
+    "@cuser/store": "^0.0.1",
+    "@cuser/core": "^0.0.1"
   },
   "devDependencies": {
     "ava": "^3.13.0",
@@ -22,6 +23,9 @@
     "nyc": "^15.1.0",
     "typedoc": "^0.19.2",
     "typedoc-plugin-markdown": "^3.0.11",
-    "typescript": "4.0.5"
+    "typescript": "4.1.2"
+  },
+  "peerDependencies": {
+    "ipfs-core": "^0.3.0"
   }
 }
