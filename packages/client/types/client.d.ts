@@ -110,19 +110,16 @@ type CuserClientOptions = {
  */
 declare class CuserClient {
     /**
-     * @param {Node} node
+     * @param {Node|Promise<Node>} node
      * @param {String} cuserId
      * @param {CuserClientOptions} [opts]
      */
-    constructor(node: Node, cuserId: string, opts?: CuserClientOptions);
+    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions);
     _cuserId: string;
     _url: string;
     _core: any;
     _fetch: Function;
-    _pubsub: {
-        broadcast: (topicId: string, payload: any) => void;
-        subscribe: (topicId: any, subscriber: any) => () => any;
-    };
+    _pubsub: any;
     _routes: {
         publisher: string;
         auth: string;
@@ -141,13 +138,12 @@ declare class CuserClient {
      * ### Iterator
      * ```javascript
      * const messages = client.getMessages('custom_topic_id', {
-     *   iter: true,
+     *   iterator: true,
      * });
      * for await (let value of messages) {
      *   console.log(value);
      * }
      * ```
-     *
      */
     getMessages(topicId: string, opts: CuserClientMessagesIteratorOptions): Promise<CuserClientMessageIteratorResult[]>;
     /**
@@ -219,7 +215,7 @@ declare class CuserClient {
      * @param {String} topicId topic identifier
      * @param {CuserClientSubscriber} subscriber function event subscriber
      */
-    subscribe(topicId: string, subscriber: CuserClientSubscriber): () => any;
+    subscribe(topicId: string, subscriber: CuserClientSubscriber): any;
 }
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
 type CuserClientMessageIteratorResult = {

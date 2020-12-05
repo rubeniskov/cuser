@@ -9,7 +9,20 @@ const {
   genObjectMessages
 } = require('./testing');
 
+const subscribeEvent = (client, topicId) => new Promise((resolve) => {
+  const unsubscribe = client.subscribe(topicId, (evt) => {
+    resolve(evt);
+    unsubscribe();
+  });
+});
+
 test.beforeEach((t) => {
+  const parseCid = sinon.spy(a => a);
+  const fetch = sinon.spy(() => Promise.resolve({
+    messageCid: 'custom_message_id'
+  }));
+  t.context.opts = { parseCid, fetch };
+
   const cache = t.context.cache = genObjectMessages(100);
   let id;
   const topicId = t.context.topicId = 'custom_topic_id';
@@ -52,7 +65,7 @@ test('should raise an error when cuserId not defined', (t) => {
 });
 
 test('should raise an error when topic has not message property', async (t) => {
-  const { node, cache } = t.context;
+  const { node, cache, opts } = t.context;
   const cuserId = 'custom_cuser_id';
   const topicId = 'custom_topic_id';
   cache[cuserId] = {
@@ -60,7 +73,7 @@ test('should raise an error when topic has not message property', async (t) => {
       [topicId]: {}
     }
   }
-  const client = createClient(node, cuserId);
+  const client = createClient(node, cuserId, opts);
   await t.throwsAsync(() => client.getMessages(topicId), {
     message: /CuserClient: error signature topic "custom_topic_id", message is not detected/
   });
@@ -73,14 +86,14 @@ test('should guess url when global.location defined', async (t) => {
   global.location = new URL(`${hostname}/testing?query=test`);
   const client = createClient(node, cuserId);
   t.is(client._url, 'http://localhost:8080');
-  delete global.location
+  delete global.location;
 });
 
 test('should throw an error when topic doesn\'t exists', async (t) => {
-  const { node } = t.context;
+  const { node, opts } = t.context;
   const { id: cuserId } = await node.id();
   const topicId = 'non_exist_topic_id';
-  const client = createClient(node, cuserId);
+  const client = createClient(node, cuserId, opts);
 
 
   await t.throwsAsync(() => {
@@ -91,9 +104,9 @@ test('should throw an error when topic doesn\'t exists', async (t) => {
 });
 
 test('should resolve messages using array', async (t) => {
-  const { node } = t.context;
+  const { node, opts } = t.context;
   const { id: cuserId } = await node.id();
-  const client = createClient(node, cuserId);
+  const client = createClient(node, cuserId, opts);
 
   const messages = await client.getMessages('custom_topic_id');
 
@@ -103,9 +116,9 @@ test('should resolve messages using array', async (t) => {
 });
 
 test('should resolve messages using iterator', async (t) => {
-  const { node } = t.context;
+  const { node, opts } = t.context;
   const { id: cuserId } = await node.id();
-  const client = createClient(node, cuserId);
+  const client = createClient(node, cuserId, opts);
   const messages = client.getMessages('custom_topic_id', {
     iterator: true,
   });
@@ -117,9 +130,9 @@ test('should resolve messages using iterator', async (t) => {
 });
 
 test('should resolve messages after certain id', async (t) => {
-  const { node } = t.context;
+  const { node, opts } = t.context;
   const { id: cuserId } = await node.id();
-  const client = createClient(node, cuserId);
+  const client = createClient(node, cuserId, opts);
 
   const messages = await client.getMessages('custom_topic_id')
     .then((prev) => client.getMessages('custom_topic_id', {
@@ -134,13 +147,11 @@ test('should resolve messages after certain id', async (t) => {
 });
 
 test('should raise an error when url can be resolved and is not provided at options when publishMessage', async (t) => {
-  const { node, topicId } = t.context;
+  const { node, topicId, opts } = t.context;
+  const { fetch } = opts;
   const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken'
-  const fetch = sinon.spy();
-  const client = createClient(node, cuserId, {
-    fetch: fetch
-  });
+  const client = createClient(node, cuserId, opts);
 
   await t.throwsAsync(() => {
     return client.publishMessage(topicId, accessToken, 'this is a test message');
@@ -152,17 +163,26 @@ test('should raise an error when url can be resolved and is not provided at opti
 });
 
 test('should send POST request when using publishMessage', async (t) => {
-  const { node, topicId } = t.context;
+  const { node, topicId, opts } = t.context;
+  const { fetch } = opts;
   const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken';
   const content = 'this is a test message';
-  const fetch = sinon.spy();
   const client = createClient(node, cuserId, {
-    url: 'http://example.com',
-    fetch: fetch
+    ...opts,
+    url: 'http://example.com'
   });
 
-  await client.publishMessage(topicId, accessToken, 'this is a test message')
+  const [evt] = await Promise.all([
+    subscribeEvent(client, topicId),
+    client.publishMessage(topicId, accessToken, 'this is a test message'),
+  ]);
+
+  t.deepEqual(evt, {
+    type: 'created',
+    topicId: 'custom_topic_id',
+    messageCid: 'custom_message_id'
+  });
 
   t.deepEqual(fetch.args[0], [
     'http://example.com/v1/message',{
@@ -174,17 +194,26 @@ test('should send POST request when using publishMessage', async (t) => {
 });
 
 test('should send PATCH request when using updateMessage', async (t) => {
-  const { node, topicId } = t.context;
+  const { node, topicId, opts } = t.context;
+  const { fetch } = opts;
   const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken';
   const messageId = 'message_id';
-  const fetch = sinon.spy();
   const client = createClient(node, cuserId, {
-    url: 'http://example.com',
-    fetch: fetch
+    ...opts,
+    url: 'http://example.com'
   });
 
-  await client.updateMessage(topicId, accessToken, messageId)
+  const [evt] = await Promise.all([
+    subscribeEvent(client, topicId),
+    client.updateMessage(topicId, accessToken, messageId),
+  ]);
+
+  t.deepEqual(evt, {
+    type: 'updated',
+    topicId: 'custom_topic_id',
+    messageCid: 'custom_message_id'
+  });
 
   t.deepEqual(fetch.args[0], [
     'http://example.com/v1/message',{
@@ -196,17 +225,26 @@ test('should send PATCH request when using updateMessage', async (t) => {
 });
 
 test('should send DELETE request when using deleteMessage', async (t) => {
-  const { node, topicId } = t.context;
+  const { node, topicId, opts } = t.context;
+  const { fetch } = opts;
   const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken';
   const messageId = 'message_id';
-  const fetch = sinon.spy();
   const client = createClient(node, cuserId, {
-    url: 'http://example.com',
-    fetch: fetch
+    ...opts,
+    url: 'http://example.com'
   });
 
-  await client.deleteMessage(topicId, accessToken, messageId)
+  const [evt] = await Promise.all([
+    subscribeEvent(client, topicId),
+    client.deleteMessage(topicId, accessToken, messageId),
+  ]);
+
+  t.deepEqual(evt, {
+    type: 'deleted',
+    topicId: 'custom_topic_id',
+    messageCid: 'custom_message_id'
+  });
 
   t.deepEqual(fetch.args[0], [
     'http://example.com/v1/message',{
@@ -218,14 +256,14 @@ test('should send DELETE request when using deleteMessage', async (t) => {
 });
 
 test('should send POST request when using authenticate', async (t) => {
-  const { node } = t.context;
+  const { node, opts } = t.context;
+  const { fetch } = opts;
   const { id: cuserId } = await node.id();
   const username = 'bob';
   const avatar = 'http://example.com/avatar';
-  const fetch = sinon.spy();
   const client = createClient(node, cuserId, {
-    url: 'http://example.com',
-    fetch: fetch
+    ...opts,
+    url: 'http://example.com'
   });
 
   await client.authenticate(username, avatar)
@@ -239,19 +277,20 @@ test('should send POST request when using authenticate', async (t) => {
 });
 
 test.cb('should subscribe to events', (t) => {
-  const { node } = t.context;
-  const fetch = sinon.spy();
-  const evt = { type: 'updated' };
+  const { node, opts } = t.context;
   const topicId = 'custom_topic_id';
-  const client = createClient(node, 'custom_cuser_id', {
-    fetch: fetch
-  });
+  const payload = { topicId, type: 'updated', foo: 'bar' };
+  const client = createClient(node, 'custom_cuser_id', opts);
 
-  t.plan(1);
-  client.subscribe(topicId, (evt) => {
-    t.pass();
+  t.plan(3);
+  const unsubcribe = client.subscribe(topicId, (evt) => {
+    t.is(payload.type, evt.type);
+    t.is(payload.topicId, evt.topicId);
+    t.is(payload.foo, evt.foo);
+    unsubcribe();
     t.end();
   });
 
-  client._pubsub.broadcast(topicId, evt);
+  client._pubsub.broadcast({});
+  client._pubsub.broadcast(payload);
 });

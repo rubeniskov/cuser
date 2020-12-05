@@ -1,10 +1,11 @@
 // @ts-check
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
+/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
+/** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
 const createCore = require('@cuser/core');
 const toArray = require('async-iterator-to-array');
 const fetch = require('./fetch');
-const createPubSub = require('./pubsub');
 const createMessageIterator = require('./messageIterator');
 const { parseUrl, noPublisher } = require('./utils');
 
@@ -69,9 +70,9 @@ const { parseUrl, noPublisher } = require('./utils');
  */
 class CuserClient {
   /**
-   * @param {Node} node
+   * @param {Node|Promise<Node>} node
    * @param {String} cuserId
-   * @param {CuserClientOptions} [opts]
+   * @param {CuserClientOptions & CuserCoreOptions} [opts]
    */
   constructor(node, cuserId, opts = {}) {
     if (!node) {
@@ -84,9 +85,10 @@ class CuserClient {
 
     this._cuserId = cuserId;
     this._url = parseUrl(opts.url);
-    this._core = createCore(node);
+    /** @type {CuserCore} */
+    this._core = createCore(node, opts);
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
-    this._pubsub = createPubSub(node, {
+    this._pubsub = this._core.pubsub({
       channel: cuserId
     });
     this._routes = {
@@ -194,6 +196,10 @@ class CuserClient {
       headers: {
         'Authentication': accessToken
       },
+    })
+    .then((res) => {
+      this._pubsub.broadcast({ topicId, type: 'created', ...res });
+      return res;
     });
   }
 
@@ -213,6 +219,10 @@ class CuserClient {
       headers: {
         'Authentication': accessToken
       },
+    })
+    .then((res) => {
+      this._pubsub.broadcast({ topicId, type: 'updated', ...res });
+      return res;
     });
   }
 
@@ -231,6 +241,10 @@ class CuserClient {
       headers: {
         'Authentication': accessToken
       },
+    })
+    .then((res) => {
+      this._pubsub.broadcast({ topicId, type: 'deleted', ...res });
+      return res;
     });
   }
 
@@ -263,7 +277,16 @@ class CuserClient {
    * @param {CuserClientSubscriber} subscriber function event subscriber
    */
   subscribe(topicId, subscriber) {
-    return this._pubsub.subscribe(topicId, subscriber);
+    return this._pubsub.subscribe((payload) => {
+      const { type, topicId: recivedTopicId, ...restData } = payload.data;
+      if (type && topicId === recivedTopicId) {
+        subscriber({
+          type,
+          topicId,
+          ...restData
+        });
+      }
+    });
   }
 }
 
