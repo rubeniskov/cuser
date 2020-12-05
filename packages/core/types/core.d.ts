@@ -1,12 +1,11 @@
 export = createCore;
 /**
- *
  * @param {Node} node
  * @param {CuserCoreOptions} [opts]
  */
 declare function createCore(node: Node, opts?: CuserCoreOptions): CuserCore;
 declare namespace createCore {
-    export { CuserCore, PublishResult, Node, PutOptions, AbortOptions, CuserCoreOptions };
+    export { CuserCore, PublishResult, Node, PutOptions, AbortOptions, CuserClientPubSubOptions, CuserCoreOptions };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -41,17 +40,19 @@ type Node = {
     stop: import("ipfs-core/src/components").Stop;
 };
 type CuserCoreOptions = {
+    key?: string;
     format?: string;
     hashAlg?: string;
-    timeout?: string;
-    allowOffline?: string;
+    timeout?: number;
+    allowOffline?: boolean;
 };
 /**
  * @typedef {Object} CuserCoreOptions
+ * @prop {String} [key='self']
  * @prop {String} [format='dag-cbor']
  * @prop {String} [hashAlg='sha3-512']
- * @prop {String} [timeout=30000]
- * @prop {String} [allowOffline=true]
+ * @prop {Number} [timeout=30000]
+ * @prop {Boolean} [allowOffline=true]
  */
 /**
  * Core logic to manage the dag tree and specify the dag format, this will wraps
@@ -59,17 +60,18 @@ type CuserCoreOptions = {
  */
 declare class CuserCore {
     /**
-     * @param {Node} node
+     * @param {Node|Promise<Node>} node
      * @param {CuserCoreOptions} [opts]
      */
-    constructor(node: Node, opts?: CuserCoreOptions);
+    constructor(node: Node | Promise<Node>, opts?: CuserCoreOptions);
     _options: {
+        key: string;
         format: string;
         hashAlg: string;
-        timeout: string | number;
-        allowOffline: string | boolean;
+        timeout: number;
+        allowOffline: boolean;
     };
-    _node: import("ipfs-core/src/components").IPFSAPI;
+    _node: import("ipfs-core/src/components").IPFSAPI | Promise<import("ipfs-core/src/components").IPFSAPI>;
     /**
      * Publish using ipns to link the current cid to a fixed entry
      * @param {String} cid
@@ -79,10 +81,10 @@ declare class CuserCore {
     publish(cid: string, opts?: AbortOptions): Promise<PublishResult>;
     /**
      * @param {Object} value
-     * @param {AbortOptions} [opts]
+     * @param {AbortOptions & PutOptions} [opts]
      * @returns {Promise<String>}
      */
-    put(value: any, opts?: AbortOptions): Promise<string>;
+    put(value: any, opts?: AbortOptions & PutOptions): Promise<string>;
     /**
      *
      * @param {String} cid
@@ -100,13 +102,17 @@ declare class CuserCore {
      * Gets the node peerId
      */
     peerId(): Promise<string>;
+    /**
+     * @param {CuserClientPubSubOptions} [opts]
+     */
+    pubsub(opts?: CuserClientPubSubOptions): createPubSub.ClientCorePubSub;
 }
 type PublishResult = {
     name: string;
     value: string;
 };
 type PutOptions = {
-    cid?: import("cids");
+    cid?: CID;
     format?: string;
     mhtype?: string;
     mhlen?: number;
@@ -118,3 +124,16 @@ type AbortOptions = {
     timeout?: number;
     signal?: AbortSignal;
 };
+type CuserClientPubSubOptions = {
+    /**
+     * Encoder function to serialize event object
+     */
+    encode?: (data: any) => Buffer;
+    /**
+     * Decoder function to unserialize event object
+     */
+    decode?: (buf: Buffer) => any;
+    channel?: string;
+};
+import createPubSub = require("./pubsub");
+import CID = require("cids");

@@ -21,21 +21,21 @@ ipfs.dag in order to normalize the mainly used methods and allows future replace
 
 ### Constructors
 
-* [constructor](cusercore.md#constructor)
+* [constructor](docs/classes/cusercore.md#constructor)
 
 ### Methods
 
-* [get](cusercore.md#get)
-* [peerId](cusercore.md#peerid)
-* [publish](cusercore.md#publish)
-* [put](cusercore.md#put)
-* [resolve](cusercore.md#resolve)
+* [get](docs/classes/cusercore.md#get)
+* [peerId](docs/classes/cusercore.md#peerid)
+* [publish](docs/classes/cusercore.md#publish)
+* [put](docs/classes/cusercore.md#put)
+* [resolve](docs/classes/cusercore.md#resolve)
 
 ## Constructors
 
 ### constructor
 
-\+ **new CuserCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](cusercore.md)
+\+ **new CuserCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
 *Defined in [core.js:21](https://github.com/rubeniskov/cuser/blob/fa2d2ee/packages/core/core.js#L21)*
 
@@ -46,7 +46,7 @@ Name | Type |
 `node` | IPFSAPI |
 `opts` | CuserCoreOptions |
 
-**Returns:** [CuserCore](cusercore.md)
+**Returns:** [CuserCore](docs/classes/cusercore.md)
 
 ## Methods
 
