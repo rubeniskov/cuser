@@ -1,0 +1,5 @@
+# Class: CuserCryptoCypher
+
+## Hierarchy
+
+* **CuserCryptoCypher**
