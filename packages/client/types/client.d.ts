@@ -6,7 +6,7 @@ export = createClient;
  */
 declare function createClient(node: Node, cuserId: string, opts?: CuserClientOptions): CuserClient;
 declare namespace createClient {
-    export { CuserClient, Node, GraphMessage, CuserClientMessageIteratorResult, CuserClientMessagesIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
+    export { CuserClient, Node, GraphMessage, CuserCore, CuserCoreOptions, CuserClientMessageIteratorResult, CuserClientMessagesIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -112,14 +112,15 @@ declare class CuserClient {
     /**
      * @param {Node|Promise<Node>} node
      * @param {String} cuserId
-     * @param {CuserClientOptions} [opts]
+     * @param {CuserClientOptions & CuserCoreOptions} [opts]
      */
-    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions);
+    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions & CuserCoreOptions);
     _cuserId: string;
     _url: string;
-    _core: any;
+    /** @type {CuserCore} */
+    _core: CuserCore;
     _fetch: Function;
-    _pubsub: any;
+    _pubsub: import("@cuser/core/types/pubsub").ClientCorePubSub;
     _routes: {
         publisher: string;
         auth: string;
@@ -215,9 +216,18 @@ declare class CuserClient {
      * @param {String} topicId topic identifier
      * @param {CuserClientSubscriber} subscriber function event subscriber
      */
-    subscribe(topicId: string, subscriber: CuserClientSubscriber): any;
+    subscribe(topicId: string, subscriber: CuserClientSubscriber): () => Promise<any>;
 }
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
+type CuserCore = import("@cuser/core/types/core").CuserCore;
+type CuserCoreOptions = {
+    key?: string;
+    format?: string;
+    hashAlg?: string;
+    timeout?: number;
+    allowOffline?: boolean;
+    parseCid?: Function;
+};
 type CuserClientMessageIteratorResult = {
     node: GraphMessage;
     cursor: string;
