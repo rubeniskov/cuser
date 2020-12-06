@@ -1,105 +1,95 @@
 const test = require('ava');
 const sinon = require('sinon');
 const crypto = require('crypto');
+const os = require('os');
+const path = require('path');
+const ipfs = require('ipfs');
+const createAuth = require('@cuser/auth');
+const createReader = require('@cuser/reader');
 const createPublisher = require('./publisher');
 
-const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
-
-test.beforeEach((t) => {
-  const id = md5('test');
-  const cache = t.context.cache = {};
-  let cursor = id;
-  t.context.core = {
-    resolve: sinon.spy(() => Promise.resolve(cursor)),
-    get: sinon.spy((hash) => Promise.resolve(cache[hash])),
-    put: sinon.spy((data) => {
-      const hash = md5(data);
-      cache[hash] = data;
-      return Promise.resolve(hash);
-    }),
-    publish: sinon.spy((cid) => {
-      cursor = cid;
-      return Promise.resolve({ name: id, value: cid });
-    })
-  };
-});
-
-test('should raise an error when node is not defined', (t) => {
-  t.throws(() => {
-    createPublisher();
-  }, {
-    message: /CuserPublisher: core must be defined/
+test.before(async (t) => {
+  const secret = t.context.secret = 'custom_secret_phrase';
+  const node = t.context.node = await ipfs.create({
+    repo: path.resolve(os.tmpdir(), 'cuser_publishet_testing'),
+    EXPERIMENTAL: {
+      ipnsPubsub: true
+    }
+  });
+  const auth = createAuth(node, secret);
+  const { id } = await node.id();
+  const peerId = t.context.peerId = id;
+  t.context.reader = createReader(node, peerId);
+  t.context.accessToken = await auth.authenticate({
+    peerId: 'custom_peer_id',
+    username: 'bob',
+    avatar: 'http://www.exmaple.com/bob_avatar.png',
   });
 });
 
 test('should create an instance of CuserPublisher', (t) => {
-  const { core } = t.context;
-  t.true(createPublisher(core) instanceof createPublisher.CuserPublisher);
+  const { node, secret } = t.context;
+  const publisher = createPublisher(node, secret);
+  t.true(publisher instanceof createPublisher.CuserPublisher);
 });
 
-test('should publish message', async (t) => {
-  const { core } = t.context;
-  const publisher = createPublisher(core);
-  const topicId = 'custom_topic_id';
-
-  await publisher.publish({
-    topicId,
-    content: {
-      data: 'test'
-    },
-    user: {
-      username: 'pepe',
-      avatar: 'juas',
-      peerId: 'asdasdasd'
-    },
+test('should publish a message', async (t) => {
+  const { node, reader, secret, accessToken } = t.context;
+  const topicId = 'custom_topic_id_publish';
+  const data = `unique message for publish ${new Date().getTime()}`;
+  const publisher = createPublisher(node, secret, {
+    preloadedState: null
   });
 
-  t.is(core.put.callCount, 5);
-  t.true(core.publish.calledOnce);
+  await publisher.publishMessage(topicId, accessToken, data);
+
+  const messages = await reader.getMessages(topicId);
+  t.is(messages.length, 1);
+  t.is(messages[0].node.content.data, data)
 });
 
-test('should delete message', async (t) => {
-  const { core, cache } = t.context;
-  const publisher = createPublisher(core);
-  const topicId = 'custom_topic_id';
-
-  const publishResult = await publisher.publish({
-    topicId,
-    content: {
-      data: 'test'
-    },
-    user: {
-      username: 'pepe',
-      avatar: 'juas',
-      peerId: 'asdasdasd'
-    },
+test('should update a message', async (t) => {
+  const { node, reader, secret, accessToken } = t.context;
+  const topicId = 'custom_topic_id_update';
+  const data = `unique message for update ${new Date().getTime()}`;
+  const modified = `modified ${data}`;
+  const publisher = createPublisher(node, secret, {
+    preloadedState: null
   });
 
-  let root = await core.get(publishResult.value);
-  let topic = await core.get(root.topics[topicId]);
-  let message = await core.get(topic.message);
+  await publisher.publishMessage(topicId, accessToken, data);
 
-  const deleteResult = await publisher.delete({
-    topicId: 'asdasdasdasd',
-    messageId: message.id,
-    user: {
-      username: 'pepe',
-      avatar: 'juas',
-      peerId: 'asdasdasd'
-    },
-  });
+  let messages = await reader.getMessages(topicId);
+  t.is(messages.length, 1);
+  t.is(messages[0].node.content.data, data);
 
-  console.log(cache);
+  await publisher.updateMessage(topicId, accessToken, messages[0].node.id, modified);
 
-  root = await core.get(deleteResult.value);
-  console.log(root);
-  topic = await core.get(root.topics[topicId]);
-  console.log(root, topic);
-  // message = await core.get(topic.message);
+  messages = await reader.getMessages(topicId);
+  t.is(messages.length, 1);
+  t.is(messages[0].node.content.data, modified);
 
-  console.log(message);
-  t.pass();
-
-  // t.is(core.put.callCount, 5);
-  // t.true(core.publish.calledOnce);
+  // console.log(JSON.stringify(messages, null, 2));
 });
+
+// test('should update a delete', async (t) => {
+//   const { node, reader, secret, accessToken } = t.context;
+//   const topicId = 'custom_topic_id_delete';
+//   const data = `unique message for delete ${new Date().getTime()}`;
+//   const publisher = createPublisher(node, secret, {
+//     preloadedState: null
+//   });
+
+//   await publisher.publishMessage(topicId, accessToken, data);
+
+//   let messages = await reader.getMessages(topicId);
+//   t.is(messages.length, 1);
+//   t.is(messages[0].node.content.data, data);
+
+//   await publisher.deleteMessage(topicId, accessToken, messages[0].node.id);
+
+//   messages = await reader.getMessages(topicId);
+//   t.is(messages.length, 0);
+
+//   console.log(JSON.stringify(messages, null, 2));
+// });

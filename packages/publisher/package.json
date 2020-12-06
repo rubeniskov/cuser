@@ -1,10 +1,10 @@
 {
   "name": "@cuser/publisher",
   "version": "0.0.1",
-  "description": "publisher functionality",
+  "description": "backend publisher logic",
   "main": "publisher.js",
   "scripts": {
-    "test": "nyc ava -v",
+    "test": "nyc ava -v --serial",
     "coverage": "nyc report --reporter=lcov",
     "postcoverage": "codecov -F publisher",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
@@ -15,9 +15,11 @@
   "license": "ISC",
   "dependencies": {
     "@cuser/store": "^0.0.1",
-    "@cuser/core": "^0.0.1"
+    "@cuser/core": "^0.0.1",
+    "@cuser/auth": "^0.0.1"
   },
   "devDependencies": {
+    "@cuser/reader": "^0.0.1",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "nyc": "^15.1.0",

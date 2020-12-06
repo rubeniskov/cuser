@@ -22,66 +22,75 @@
 
 ### Methods
 
-* [delete](cuserpublisher.md#delete)
-* [publish](cuserpublisher.md#publish)
-* [update](cuserpublisher.md#update)
+* [deleteMessage](cuserpublisher.md#deletemessage)
+* [publishMessage](cuserpublisher.md#publishmessage)
+* [updateMessage](cuserpublisher.md#updatemessage)
 
 ## Constructors
 
 ### constructor
 
-\+ **new CuserPublisher**(`core`: CuserCore, `opts`: CuserStoreOptions): [CuserPublisher](cuserpublisher.md)
+\+ **new CuserPublisher**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserStoreOptions & CuserCoreOptions & CuserAuthOptions): [CuserPublisher](cuserpublisher.md)
 
-*Defined in publisher/publisher.js:23*
+*Defined in [publisher/publisher.js:30](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L30)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`core` | CuserCore |
-`opts` | CuserStoreOptions |
+`node` | IPFSAPI \| Promise\<IPFSAPI> |
+`secret` | string |
+`opts` | CuserStoreOptions & CuserCoreOptions & CuserAuthOptions |
 
 **Returns:** [CuserPublisher](cuserpublisher.md)
 
 ## Methods
 
-### delete
+### deleteMessage
 
-▸ **delete**(`payload`: PayloadDeleteMessage): Promise\<PublishResult>
+▸ **deleteMessage**(`topicId`: string, `accessToken`: string, `messageId`: string): Promise\<PublishResult>
 
-*Defined in publisher/publisher.js:74*
+*Defined in [publisher/publisher.js:95](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L95)*
 
-#### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`payload` | PayloadDeleteMessage |   |
-
-**Returns:** Promise\<PublishResult>
-
-___
-
-### publish
-
-▸ **publish**(`payload`: PayloadPublishMessage): Promise\<PublishResult>
-
-*Defined in publisher/publisher.js:52*
+Delete message and gets the computed cid
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`payload` | PayloadPublishMessage |   |
+`topicId` | string |  |
+`accessToken` | string |  |
+`messageId` | string |   |
 
 **Returns:** Promise\<PublishResult>
 
 ___
 
-### update
+### publishMessage
 
-▸ **update**(`payload`: PayloadUpdateMessage): Promise\<PublishResult>
+▸ **publishMessage**(`topicId`: string, `accessToken`: string, `data`: string): Promise\<PublishResult>
 
-*Defined in publisher/publisher.js:63*
+*Defined in [publisher/publisher.js:62](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L62)*
+
+Publish message and gets the computed cid
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`topicId` | string |  |
+`accessToken` | string |  |
+`data` | string |   |
+
+**Returns:** Promise\<PublishResult>
+
+___
+
+### updateMessage
+
+▸ **updateMessage**(`topicId`: string, `accessToken`: string, `messageId`: string, `data`: string): Promise\<PublishResult>
+
+*Defined in [publisher/publisher.js:79](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L79)*
 
 Update message and gets computed cid
 
@@ -89,6 +98,9 @@ Update message and gets computed cid
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`payload` | PayloadUpdateMessage |   |
+`topicId` | string |  |
+`accessToken` | string |  |
+`messageId` | string |  |
+`data` | string |   |
 
 **Returns:** Promise\<PublishResult>
