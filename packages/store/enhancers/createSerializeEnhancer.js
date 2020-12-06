@@ -2,7 +2,7 @@
 /** @typedef {import('redux').Reducer} Reducer */
 /** @typedef {import('redux').Action} Action */
 const mutateJson = require('mutant-json');
-const isPromise = require('is-promise');
+const isPromise = require('is-promise').default;
 const debug = require('debug')('cuser:store-serializer');
 const {
   TYPE_ACTION_RESOLVED,
@@ -23,12 +23,33 @@ const phases = {
 }
 
 /**
+ * @callback CuserSerializeCheck
+ * @param {any} state
+ * @returns {Boolean}
+ */
+
+/**
+ * @callback CuserSerializeProcessMap
+ * @param {String} pointer
+ * @param {Object} action
+ * @returns {String}
+ */
+
+/**
+ * @typedef {Record<string, string>} CuserSerializeMapping
+ */
+
+/**
+ * @typedef {Record<string, Reducer>} CuserSerializeAliases
+ */
+
+/**
  * @typedef {Object} CuserSerializeEnhancerOptions
- * @prop {() => Boolean} [isSerializable]
- * @prop {() => Boolean} [isDeserializable]
- * @prop {Record<string, string>} [mapping]
- * @prop {Record<string, Reducer>} [aliases]
- * @prop {(pointer: String, action: any) => String} [processMap]
+ * @prop {CuserSerializeCheck} [isSerializable]
+ * @prop {CuserSerializeCheck} [isDeserializable]
+ * @prop {CuserSerializeMapping} [mapping]
+ * @prop {CuserSerializeAliases} [aliases]
+ * @prop {CuserSerializeProcessMap} [processMap]
  */
 
  /**
@@ -45,7 +66,7 @@ const createSerializeEnhancer = (opts) => {
     initialState,
     enhancer,
   ) => {
-    let store, phase;
+    let store, phase, actionResult;
 
     const deferred = {
       resolve: (resolved) => {}, reject: (err) => {}

@@ -17,7 +17,7 @@ let users;
 
 test.before((t) => {
   users = createUsers(5);
-  t.log('user created', users);
+  t.log('users created', users);
 });
 
 test.beforeEach((t) => {

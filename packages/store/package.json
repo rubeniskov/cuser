@@ -14,6 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "is-promise": "^4.0.0",
     "mutant-json": "0.6.0",
     "redux": "^4.0.5"
   },
@@ -21,15 +22,15 @@
     "@cuser/proto": "^0.0.1",
     "@cuser/utils": "^0.0.1",
     "@cuser/validator": "^0.0.1",
-    "faker": "^5.1.0",
-    "lorem-ipsum": "^2.0.3",
-    "traverse-json": "^0.5.1",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
+    "faker": "^5.1.0",
+    "lorem-ipsum": "^2.0.3",
     "nyc": "^15.1.0",
+    "traverse-json": "^0.5.1",
     "typedoc": "^0.19.2",
     "typedoc-plugin-markdown": "^3.0.11",
-    "typescript": "4.0.5"
+    "typescript": "4.1.2"
   },
   "peerDependencies": {
     "@cuser/proto": "^0.0.1",
