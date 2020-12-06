@@ -6,18 +6,34 @@
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
-    "postcoverage": "codecov -F auth"
+    "postcoverage": "codecov -F auth",
+    "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
+    "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
+    "types": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rubeniskov/cuser/issues"
+  },
+  "homepage": "https://github.com/rubeniskov/cuser#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubeniskov/cuser.git"
+  },
   "dependencies": {
-    "branca": "^0.3.0",
-    "jsonwebtoken": "^8.5.1"
+    "@cuser/crypto": "^0.0.1",
+    "node-forge": "^0.10.0"
   },
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "nyc": "^15.1.0"
+    "ipfs": "^0.52.2",
+    "jsdoc": "^3.6.6",
+    "nyc": "^15.1.0",
+    "typedoc": "^0.19.2",
+    "typedoc-plugin-markdown": "^3.0.11",
+    "typescript": "4.1.2"
   },
   "peerDependencies": {
     "@cuser/proto": "^0.0.1",
