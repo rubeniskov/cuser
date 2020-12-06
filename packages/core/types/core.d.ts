@@ -1,9 +1,9 @@
 export = createCore;
 /**
- * @param {Node} node
+ * @param {Node|Promise<Node>} node
  * @param {CuserCoreOptions} [opts]
  */
-declare function createCore(node: Node, opts?: CuserCoreOptions): CuserCore;
+declare function createCore(node: Node | Promise<Node>, opts?: CuserCoreOptions): CuserCore;
 declare namespace createCore {
     export { CuserCore, PublishResult, Node, PutOptions, AbortOptions, CuserClientPubSubOptions, CuserCoreOptions };
 }
