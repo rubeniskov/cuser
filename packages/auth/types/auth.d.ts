@@ -7,7 +7,7 @@ export = createAuth;
  */
 declare function createAuth(node: Node | Promise<Node>, secret: string, opts?: CuserAuthOptions): CuserAuth;
 declare namespace createAuth {
-    export { CuserAuth, Node, CuserAuthOptions };
+    export { CuserAuth, Node, PayloadUser, CuserAuthOptions, CuserAuthAccessToken };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -49,6 +49,9 @@ type CuserAuthOptions = {
  * @prop {String} [key='self']
  */
 /**
+ * @typedef {String} CuserAuthAccessToken
+ */
+/**
  * Auth controller
  */
 declare class CuserAuth {
@@ -61,10 +64,14 @@ declare class CuserAuth {
     _bearer: Promise<any>;
     /**
      * @param {Object} payload
+     * @returns {Promise<CuserAuthAccessToken>}
      */
-    authenticate(payload: any): Promise<any>;
+    authenticate(payload: any): Promise<CuserAuthAccessToken>;
     /**
      * @param {String} accessToken
+     * @returns {Promise<PayloadUser>}
      */
-    decode(accessToken: string): Promise<any>;
+    decode(accessToken: string): Promise<PayloadUser>;
 }
+type PayloadUser = import("@cuser/proto/payloads").PayloadUser;
+type CuserAuthAccessToken = string;

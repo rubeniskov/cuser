@@ -1,5 +1,6 @@
 // @ts-check
 /** @typedef {import("ipfs-core/src/components").IPFSAPI} Node */
+/** @typedef {import('@cuser/proto/types/payloads').PayloadUser} PayloadUser */
 const { createBearer, createHash } = require('@cuser/crypto');
 const userSchema = require('@cuser/proto/schemas/PayloadUser.json');
 const validate = require('@cuser/validator')(userSchema);
@@ -27,6 +28,9 @@ const getKeysFromNode = (node, secret, keyName) => {
  * @prop {String} [key='self']
  */
 
+/**
+ * @typedef {String} CuserAuthAccessToken
+ */
 
 /**
  * Auth controller
@@ -48,6 +52,7 @@ class CuserAuth {
 
   /**
    * @param {Object} payload
+   * @returns {Promise<CuserAuthAccessToken>}
    */
   async authenticate(payload) {
     validate(payload);
@@ -57,6 +62,7 @@ class CuserAuth {
 
   /**
    * @param {String} accessToken
+   * @returns {Promise<PayloadUser>}
    */
   async decode(accessToken) {
     const bearer = await this._bearer;
