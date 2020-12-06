@@ -66,6 +66,7 @@ type CuserCoreOptions = {
  */
 /**
  * @typedef {Object} CuserReaderOptions
+ * @param {(message: GraphMessage) => Promise<Object>} mapper
  */
 /**
  */
@@ -79,11 +80,14 @@ declare class CuserReader {
     /** @type {CuserCore} */
     _core: CuserCore;
     _peerId: string;
+    _mapper: any;
+    /** @type {(message: Object, cursor: String) => Promise<CuserReaderMessageIteratorResult>} */
+    _process: (message: any, cursor: string) => Promise<CuserReaderMessageIteratorResult>;
     /**
      * Gets messages from `ipfs` layer
      * @param {String} topicId
      * @param {CuserReaderMessagesIteratorOptions} opts
-     * @returns {Promise<CuserReaderMessageIteratorResult[]>}
+     * @returns {Promise<CuserReaderMessageIteratorResult[]>|AsyncIterable<CuserReaderMessageIteratorResult>}
      * @example
      * ### Array
      * ```javascript
@@ -100,13 +104,19 @@ declare class CuserReader {
      * }
      * ```
      */
-    getMessages(topicId: string, opts: CuserReaderMessagesIteratorOptions): Promise<CuserReaderMessageIteratorResult[]>;
+    getMessages(topicId: string, opts: CuserReaderMessagesIteratorOptions): Promise<CuserReaderMessageIteratorResult[]> | AsyncIterable<CuserReaderMessageIteratorResult>;
     /**
      * Gets the message from ipfs using the CID given by parameter
      * @param {String} cid
      * @returns {Promise<GraphMessage>}
      */
     getMessage(cid: string): Promise<GraphMessage>;
+    /**
+     * Get the root message for a certain topicId
+     * @private
+     * @param {String} topicId
+     */
+    private _resolveRootMessage;
 }
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
 type CuserCore = import("@cuser/core/types/core").CuserCore;

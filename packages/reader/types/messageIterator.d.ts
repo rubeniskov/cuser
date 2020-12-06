@@ -1,17 +1,18 @@
 export = messageIterator;
-declare function messageIterator(resolve: any, root: any, { limit, key, skip, map }?: {
-    limit?: number;
+/**
+ * Create message iterator which traverse resolving root and itertating by the key define by options
+ * @param {(cursor: any) => Promise<any>} resolve
+ * @param {any|Promise<any>} root
+ * @param {CuserMessageIteratorOptions} [opts]
+ * @returns {AsyncIterable<any>}
+ */
+declare function messageIterator(resolve: (cursor: any) => Promise<any>, root: any | Promise<any>, opts?: CuserMessageIteratorOptions): AsyncIterable<any>;
+declare namespace messageIterator {
+    export { CuserMessageIteratorOptions };
+}
+type CuserMessageIteratorOptions = {
     key?: string;
+    limit?: number;
     skip?: number;
-    map?: (v: any, k: any) => any;
-}): {
-    [Symbol.asyncIterator](): {
-        next(): Promise<{
-            done: boolean;
-            value: any;
-        } | {
-            done: boolean;
-            value?: undefined;
-        }>;
-    };
+    process?: (value: any, cursor: any) => any;
 };

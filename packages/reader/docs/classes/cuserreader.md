@@ -12,6 +12,7 @@
 
 ### Methods
 
+* [\_resolveRootMessage](cuserreader.md#_resolverootmessage)
 * [getMessage](cuserreader.md#getmessage)
 * [getMessages](cuserreader.md#getmessages)
 
@@ -19,27 +20,45 @@
 
 ### constructor
 
-\+ **new CuserReader**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `peerId`: string, `opts`: any): [CuserReader](cuserreader.md)
+\+ **new CuserReader**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `peerId`: string, `opts?`: any): [CuserReader](cuserreader.md)
 
-*Defined in reader/reader.js:33*
+*Defined in [reader/reader.js:35](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L35)*
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`node` | IPFSAPI \| Promise\<IPFSAPI> |
-`peerId` | string |
-`opts` | any |
+Name | Type | Default value |
+------ | ------ | ------ |
+`node` | IPFSAPI \| Promise\<IPFSAPI> | - |
+`peerId` | string | - |
+`opts` | any | {} |
 
 **Returns:** [CuserReader](cuserreader.md)
 
 ## Methods
 
+### \_resolveRootMessage
+
+▸ `Private`**_resolveRootMessage**(`topicId`: string): Promise\<string>
+
+*Defined in [reader/reader.js:120](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L120)*
+
+Get the root message for a certain topicId
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`topicId` | string |   |
+
+**Returns:** Promise\<string>
+
+___
+
 ### getMessage
 
 ▸ **getMessage**(`cid`: string): Promise\<GraphMessage>
 
-*Defined in reader/reader.js:117*
+*Defined in [reader/reader.js:111](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L111)*
 
 Gets the message from ipfs using the CID given by parameter
 
@@ -55,9 +74,9 @@ ___
 
 ### getMessages
 
-▸ **getMessages**(`topicId`: string, `opts`: CuserReaderMessagesIteratorOptions): Promise\<CuserReaderMessageIteratorResult[]>
+▸ **getMessages**(`topicId`: string, `opts`: CuserReaderMessagesIteratorOptions): Promise\<CuserReaderMessageIteratorResult[]> \| AsyncIterable\<CuserReaderMessageIteratorResult>
 
-*Defined in reader/reader.js:74*
+*Defined in [reader/reader.js:79](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L79)*
 
 Gets messages from `ipfs` layer
 
@@ -84,4 +103,4 @@ Name | Type |
 `topicId` | string |
 `opts` | CuserReaderMessagesIteratorOptions |
 
-**Returns:** Promise\<CuserReaderMessageIteratorResult[]>
+**Returns:** Promise\<CuserReaderMessageIteratorResult[]> \| AsyncIterable\<CuserReaderMessageIteratorResult>

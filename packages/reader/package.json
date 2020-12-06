@@ -24,7 +24,6 @@
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
-    "ipfs": "^0.52.2",
     "jsdoc": "^3.6.6",
     "nyc": "^15.1.0",
     "sinon": "^9.2.1",
@@ -36,7 +35,7 @@
   },
   "dependencies": {
     "@cuser/core": "v0.0.1",
-    "async-iterator-to-array": "^0.0.1"
+    "it-all": "^1.0.4"
   },
   "peerDependencies": {
     "@cuser/proto": "v0.0.1",

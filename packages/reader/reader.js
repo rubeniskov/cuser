@@ -3,9 +3,10 @@
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
 /** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
 /** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
-const toArray = require('async-iterator-to-array');
+const itAll = require('it-all');
 const createCore = require('@cuser/core');
 const createMessageIterator = require('./messageIterator');
+const createMessageMapper = require('./mapper');
 
 /**
  * @typedef {Object} CuserReaderMessageIteratorResult
@@ -26,6 +27,7 @@ const createMessageIterator = require('./messageIterator');
 
 /**
  * @typedef {Object} CuserReaderOptions
+ * @param {(message: GraphMessage) => Promise<Object>} mapper
  */
 
 /**
@@ -36,7 +38,7 @@ class CuserReader {
    * @param {String} peerId
    * @param {CuserReaderOptions & CuserCoreOptions} [opts]
    */
-  constructor(node, peerId, opts) {
+  constructor(node, peerId, opts = {}) {
       if (!node) {
         throw new Error(`CuserReader: node must be defined an be an instance of IPFS`);
       }
@@ -48,13 +50,16 @@ class CuserReader {
       /** @type {CuserCore} */
       this._core = createCore(node, opts);
       this._peerId = peerId;
+      this._mapper = opts.mapper || createMessageMapper(this._core.get.bind(this._core));
+      /** @type {(message: Object, cursor: String) => Promise<CuserReaderMessageIteratorResult>} */
+      this._process = async (message, cursor) => ({ node: await this._mapper(message), cursor });
   }
 
   /**
    * Gets messages from `ipfs` layer
    * @param {String} topicId
    * @param {CuserReaderMessagesIteratorOptions} opts
-   * @returns {Promise<CuserReaderMessageIteratorResult[]>}
+   * @returns {Promise<CuserReaderMessageIteratorResult[]>|AsyncIterable<CuserReaderMessageIteratorResult>}
    * @example
    * ### Array
    * ```javascript
@@ -77,36 +82,25 @@ class CuserReader {
       first: 10,
       offset: 0,
       iterator: false,
-      map: (node, cursor) => ({ node, cursor }),
       ...opts
     }
 
-    const message = iopts.after ? Promise.resolve(iopts.after) : this._core.get(this._peerId)
-      .then(({ topics }) => {
-        if (!topics[topicId]) {
-          throw new Error(`CuserReader: topicId "${topicId}" doesn't exists`);
-        }
-        const { message } = topics[topicId];
+    const message = iopts.after
+      ? Promise.resolve(iopts.after)
+      : this._resolveRootMessage(topicId);
 
-        if (!message) {
-          throw new Error(`CuserReader: error signature topic "${topicId}", message is not detected`);
-        }
-        return message;
-      });
-
-
-    const messageIterator = createMessageIterator(this.getMessage.bind(this), message, {
+    /** @type {AsyncIterable<CuserReaderMessageIteratorResult>} */
+    const messageIterator = createMessageIterator((cid) => cid ? this.getMessage(cid) : null, message, {
       limit: iopts.first,
       skip: (iopts.offset + iopts.after ? 1 : 0),
-      map: iopts.map,
+      process: this._process,
     });
 
     if (iopts.iterator) {
-      // @ts-ignore
       return messageIterator
     }
 
-    return toArray(messageIterator);
+    return itAll(messageIterator);
   }
 
   /**
@@ -116,6 +110,39 @@ class CuserReader {
    */
   async getMessage(cid) {
     return this._core.get(cid);
+  }
+
+  /**
+   * Get the root message for a certain topicId
+   * @private
+   * @param {String} topicId
+   */
+  async _resolveRootMessage(topicId) {
+    return this._core
+      .resolve(this._peerId)
+      .then((cid) => this._core.get(cid))
+      .then(async ({ topics }) => {
+        let topic = topics[topicId];
+
+        if (!topic) {
+          throw new Error(`CuserReader: topicId "${topicId}" doesn't exists`);
+        }
+
+        if (typeof topic !== 'string') {
+          throw new Error(`CuserReader: error bad topic signature "${topicId}"`);
+        }
+
+        const { message: messageCid } = await this._core.get(topic);
+
+        if (!messageCid) {
+          throw new Error(`CuserReader: error message signature for topic "${topicId}", message is not detected`);
+        }
+
+        if (typeof messageCid !== 'string') {
+          throw new Error(`CuserReader: error message signature for topic "${topicId}", message has not the right format`);
+        }
+        return messageCid;
+      });
   }
 }
 
