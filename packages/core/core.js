@@ -1,11 +1,11 @@
 // @ts-check
-/** @typedef {import("ipfs-core/src/components/name/publish").PublishResult} PublishResult */
 /** @typedef {import("ipfs-core/src/components").IPFSAPI} Node */
+/** @typedef {import("ipfs-core/src/components/name/publish").PublishResult} PublishResult */
 /** @typedef {import("ipfs-core/src/components/block/put").PutOptions} PutOptions */
 /** @typedef {import("ipfs-core/src/utils").AbortOptions} AbortOptions */
 /** @typedef {import("./pubsub").CuserClientPubSubOptions} CuserClientPubSubOptions */
 
-const all = require("it-all");
+const itAll = require("it-all");
 const CID = require("cids");
 const createPubSub = require("./pubsub");
 const debug = require("debug")('cuser:core');
@@ -107,7 +107,7 @@ class CuserCore {
     const node = await this._node;
     const id = await (cid || this.peerId());
     debug(`resolving "${id}"`);
-    const [resolved] = await all(node.name.resolve(id))
+    const [resolved] = await itAll(node.name.resolve(id))
     return resolved.replace(/^\/ipfs\//, '');
   }
 
@@ -129,7 +129,7 @@ class CuserCore {
 }
 
 /**
- * @param {Node} node
+ * @param {Node|Promise<Node>} node
  * @param {CuserCoreOptions} [opts]
  */
 const createCore = (node, opts) => new CuserCore(node, opts);
