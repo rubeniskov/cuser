@@ -29,8 +29,7 @@ test('should encode and decode payload', (t) => {
     foo: 'bar',
   }
 
-  const bearer = createBearer({
-    secret,
+  const bearer = createBearer(secret, {
     privateKey,
     publicKey,
   });

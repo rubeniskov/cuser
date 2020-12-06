@@ -22,8 +22,6 @@
     "supertest": "^6.0.1"
   },
   "peerDependencies": {
-    "@cuser/core": "^0.0.1",
-    "@cuser/proto": "^0.0.1",
     "@cuser/auth": "^0.0.1"
   }
 }

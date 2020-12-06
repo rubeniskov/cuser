@@ -2,18 +2,19 @@
   "name": "@cuser/server",
   "version": "0.0.1",
   "description": "http server with express",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
     "postcoverage": "codecov -F server",
-    "start": "nodemon index.js"
+    "start": "nodemon server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@cuser/express-middleware-auth": "^0.0.1",
@@ -28,6 +29,7 @@
   "peerDependencies": {
     "@cuser/express-middleware-auth": "^0.0.1",
     "@cuser/express-middleware-graphql": "^0.0.1",
-    "@cuser/express-middleware-rest": "^0.0.1"
+    "@cuser/express-middleware-rest": "^0.0.1",
+    "ipfs-core": "^0.3.0"
   }
 }

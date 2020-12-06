@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@cuser/reader": "^0.0.1",
+    "@cuser/core": "^0.0.1",
     "async-iterator-to-array": "^0.0.1",
     "cbor": "^5.1.0",
     "ipfs-pubsub-room": "^2.0.1",

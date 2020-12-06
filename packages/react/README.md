@@ -59,6 +59,12 @@ const createClient = require('@cuser/client');
 const Cuser = require('@cuser/react');
 const CuserProvider = require('@cuser/react/Provider');
 
+const node = ipfs.create({
+  repo: "/tmp/testing"
+});
+
+const client = createClient(node);
+
 ReactDOM.render(
   <CuserProvider client={client} >
     <Cuser {...data} topicId={"CUSTOM_TOPIC_ID"}/>
@@ -67,7 +73,7 @@ ReactDOM.render(
 );
 ```
 
-<img src="./docs/demo_reel.gif" />
+<img src="https://github.com/rubeniskov/cuser/raw/master/docs/demo_reel.gif" />
 
 ## References
 - https://uiwjs.github.io/react-md-editor/

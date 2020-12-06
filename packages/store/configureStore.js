@@ -27,7 +27,7 @@ const configureStore = (rootReducer, {
 
   const middlewares = [loggerMiddleware];
   const middlewareEnhancer = applyMiddleware(...middlewares);
-  const enhancers = [enhancer, middlewareEnhancer, monitorReducerEnhancer].filter(Boolean);
+  const enhancers = [middlewareEnhancer, monitorReducerEnhancer, enhancer].filter(Boolean);
   const composedEnhancers = compose(...enhancers);
   const resolveReducer = createResolveReducer(rootReducer, restOpts);
   return createStore(resolveReducer, preloadedState, composedEnhancers);

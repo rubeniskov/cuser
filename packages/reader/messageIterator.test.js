@@ -1,5 +1,5 @@
 const test = require('ava');
-const toArray = require('async-iterator-to-array');
+const itAll = require('it-all');
 const messageIterator = require('./messageIterator');
 
 const {
@@ -23,13 +23,13 @@ test('should works in a foor loop with default limit=10', async (t) => {
 
 test('should return a iterator with default limit=10', async (t) => {
   const [start] = getMesageEntryFromCache(cache, 99);
-  const actual = await toArray(messageIterator(resolve, start));
+  const actual = await itAll(messageIterator(resolve, start));
   t.deepEqual(actual, genArrayMessages(cache, 99, 10));
 });
 
 test('should return a iterator with custom limit', async (t) => {
   const [start] = getMesageEntryFromCache(cache, 99);
-  const actual = await toArray(messageIterator(resolve, start, {
+  const actual = await itAll(messageIterator(resolve, start, {
     limit: 2
   }));
   t.deepEqual(actual, genArrayMessages(cache, 99, 2));
@@ -37,7 +37,7 @@ test('should return a iterator with custom limit', async (t) => {
 
 test('should return a iterator skipping 1 item', async (t) => {
   const [start] = getMesageEntryFromCache(cache, 99);
-  const actual = await toArray(messageIterator(resolve, start, {
+  const actual = await itAll(messageIterator(resolve, start, {
     limit: 2,
     skip: 1
   }));
@@ -47,7 +47,7 @@ test('should return a iterator skipping 1 item', async (t) => {
 
 test('should return a iterator returning last 6 items', async (t) => {
   const [start] = getMesageEntryFromCache(cache, 5);
-  const actual = await toArray(messageIterator(resolve, start, {
+  const actual = await itAll(messageIterator(resolve, start, {
     limit: 10,
   }));
   t.deepEqual(actual, genArrayMessages(cache, 5, 6));
@@ -56,7 +56,7 @@ test('should return a iterator returning last 6 items', async (t) => {
 
 test('should return a iterator returning last 5 items', async (t) => {
   const [start] = getMesageEntryFromCache(cache, 5);
-  const actual = await toArray(messageIterator(resolve, start, {
+  const actual = await itAll(messageIterator(resolve, start, {
     limit: 10,
     skip: 1
   }));
@@ -66,10 +66,17 @@ test('should return a iterator returning last 5 items', async (t) => {
 
 test('should return a iterator returning last 4 items', async (t) => {
   const [start] = getMesageEntryFromCache(cache, 5);
-  const actual = await toArray(messageIterator(resolve, start, {
+  const actual = await itAll(messageIterator(resolve, start, {
     limit: 10,
     skip: 2
   }));
   t.deepEqual(actual, genArrayMessages(cache, 3, 5));
   t.is(actual.length, 4);
+});
+
+test('should return empty array when root null or undefined', async (t) => {
+  t.deepEqual(await itAll(messageIterator(resolve, Promise.resolve(null))), []);
+  t.deepEqual(await itAll(messageIterator(resolve, null)), []);
+  t.deepEqual(await itAll(messageIterator(resolve, Promise.resolve(undefined))), []);
+  t.deepEqual(await itAll(messageIterator(resolve, undefined)), []);
 });

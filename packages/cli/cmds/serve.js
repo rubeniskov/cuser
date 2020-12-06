@@ -1,3 +1,4 @@
+// @ts-check
 const os = require('os')
 const path = require('path')
 
@@ -5,7 +6,6 @@ const { create } = require('ipfs');
 const restMiddleware = require('@cuser/express-middleware-rest');
 const graphqlMiddleware = require('@cuser/express-middleware-graphql');
 const createServer = require('@cuser/server');
-const createCore = require('@cuser/core');
 const parseOptions = require('../parseOptions');
 const createOptions = require('../createOptions');
 const addOptions = require('../addOptions');
@@ -24,20 +24,25 @@ module.exports = {
         type: 'boolean',
         description: 'Run with verbose logging'
       },
+      secret: {
+        alias: 's',
+        type: 'string',
+        description: 'Secret word'
+      },
       mount: {
         alias: 'm',
         type: 'string',
-        description: 'Enpoint mount'
+        description: 'Path enpoint mount'
       },
       port: {
         alias: 'p',
         type: 'number',
-        description: 'Run server with custom port'
+        description: 'Listening port, default gets from PORT environment var'
       },
       host: {
         alias: 'h',
         type: 'string',
-        description: 'Run server with custom host',
+        description: 'Listening host, default gets from PORT environment var',
       },
       cors: {
         alias: 'c',
@@ -49,45 +54,45 @@ module.exports = {
         description: 'Enable the api rest',
       },
       ...createOptions({
+        mount: {
+          type: 'string',
+          description: 'Path enpoint mount'
+        },
         ui: {
           type: 'boolean',
           description: 'Enable swagger-ui'
         },
         reader: {
           type: 'boolean',
-          description: 'Enable reader'
+          description: 'Enable reading messages from api rest'
         },
         publisher: {
           type: 'boolean',
-          description: 'Enable publisher'
+          description: 'Enable publishing messages from api rest'
         },
-        mount: {
-          type: 'string',
-          description: 'Endpoint mount'
-        }
       }, { defaults: restMiddleware.defaults, prefix: 'rest-' }),
       graphql: {
         type: 'boolean',
         description: 'Enable the api graphql',
       },
       ...createOptions({
+        mount: {
+          type: 'string',
+          description: 'Path enpoint mount'
+        },
         ui: {
           type: 'boolean',
           description: 'Enable graphiql'
         },
         reader: {
           type: 'boolean',
-          description: 'Enable reader'
+          description: 'Enable reading messages from api graphql'
         },
         publisher: {
           type: 'boolean',
-          description: 'Enable publisher'
+          description: 'Enable publishing messages from api graphql'
         },
-        mount: {
-          type: 'string',
-          description: 'Endpoint mount'
-        }
-      }, { defaults: graphqlMiddleware.defaults, prefix: 'graphql-' }),
+      }, { defaults: graphqlMiddleware.defaults, prefix: 'gql-' }),
       ...createOptions({
         repo: {
           type: 'string',
@@ -101,13 +106,13 @@ module.exports = {
       .wrap(null)
   },
   handler: async (argv) => {
-    const { core, ipfs, ...restOptions } = parseOptions({ ...argv, ipfs: true });
+    const { ipfs, ...restOptions } = parseOptions({ ...argv, ipfs: true });
     const node = await create({
       ...ipfs,
       EXPERIMENTAL: {
         ipnsPubsub: true,
       },
     });
-    createServer(createCore(node, core), restOptions);
+    createServer(node, restOptions);
   }
 }

@@ -5,7 +5,7 @@ export = createCore;
  */
 declare function createCore(node: Node | Promise<Node>, opts?: CuserCoreOptions): CuserCore;
 declare namespace createCore {
-    export { CuserCore, PublishResult, Node, PutOptions, AbortOptions, CuserClientPubSubOptions, CuserCoreOptions };
+    export { CuserCore, Node, PublishResult, PutOptions, AbortOptions, CuserClientPubSubOptions, CuserCoreOptions };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -97,10 +97,10 @@ declare class CuserCore {
     get(cid: string, opts?: AbortOptions): Promise<any>;
     /**
      * Resolve the linked dag cid
-     * @param {String} [cid]
+     * @param {String|Promise<String>} [cid]
      * @returns {Promise<String>}
      */
-    resolve(cid?: string): Promise<string>;
+    resolve(cid?: string | Promise<string>): Promise<string>;
     /**
      * Gets the node peerId
      */

@@ -3,6 +3,9 @@ declare function createCypher(opts: any): CuserCryptoCypher;
 declare namespace createCypher {
     export { CuserCryptoCypher };
 }
+/**
+ *
+ */
 declare class CuserCryptoCypher {
     constructor(secret: any);
     _cypher: any;

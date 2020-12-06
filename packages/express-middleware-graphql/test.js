@@ -11,5 +11,5 @@ test('should responses with version', async (t) => {
         .get("/")
         .send();
 
-  t.is(res.status, 400);
+  t.is(res.status, 404);
 });

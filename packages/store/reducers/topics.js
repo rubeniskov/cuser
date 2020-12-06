@@ -10,7 +10,8 @@ const assert = require('@cuser/utils/assert');
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
-  TYPE_ACTION_DELETE_MESSAGE
+  TYPE_ACTION_DELETE_MESSAGE,
+  TYPE_ACTION_DEFAULT,
 } = require('../rtypes/actions');
 const {
   TYPE_ERROR_MISSING_RESOURCE_ID,

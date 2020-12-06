@@ -1,53 +1,15 @@
 export = createReader;
 /**
- * @param {Node|Promise<Node>} node
- * @param {String} peerId
- * @param {CuserReaderOptions & CuserCoreOptions} [opts]
+ * @param {CuserCore} core
+ * @param {String|Promise<String>} peerId
+ * @param {CuserReaderOptions} [opts]
  */
-declare function createReader(node: Node | Promise<Node>, peerId: string, opts?: CuserReaderOptions & CuserCoreOptions): CuserReader;
+declare function createReader(core: any, peerId: string | Promise<string>, opts?: CuserReaderOptions): CuserReader;
 declare namespace createReader {
-    export { CuserReader, Node, GraphMessage, CuserCore, CuserCoreOptions, CuserReaderMessageIteratorResult, CuserReaderMessagesIteratorOptions, CuserReaderOptions };
+    export { CuserReader, GraphMessage, CuserCore, CuserReaderMessageIteratorResult, CuserReaderMessagesIteratorOptions, CuserReaderOptions };
 }
-type Node = {
-    add: import("ipfs-core/src/components").Add;
-    bitswap: import("ipfs-core/src/components").BitSwap;
-    block: import("ipfs-core/src/components").Block;
-    bootstrap: import("ipfs-core/src/components").Bootstrap;
-    cat: import("ipfs-core/src/components").Cat;
-    config: import("ipfs-core/src/components").Config;
-    dag: import("ipfs-core/src/components").DAG;
-    dht: import("ipfs-core/src/components").DHT;
-    dns: import("ipfs-core/src/components").DNS;
-    files: import("ipfs-core/src/components").Files;
-    get: import("ipfs-core/src/components").Get;
-    id: import("ipfs-core/src/components").ID;
-    isOnline: import("ipfs-core/src/components").IsOnline;
-    key: import("ipfs-core/src/components").Key;
-    libp2p: any;
-    ls: import("ipfs-core/src/components").LS;
-    name: import("ipfs-core/src/components").Name;
-    object: import("ipfs-core/src/components").ObjectAPI;
-    pin: import("ipfs-core/src/components").Pin;
-    ping: import("ipfs-core/src/components").Ping;
-    pubsub: import("ipfs-core/src/components").PubSub;
-    refs: import("ipfs-core/src/components").Refs;
-    repo: import("ipfs-core/src/components").Repo;
-    resolve: import("ipfs-core/src/components").Resolve;
-    stats: import("ipfs-core/src/components").Stats;
-    swarm: import("ipfs-core/src/components").Swarm;
-    version: import("ipfs-core/src/components").Version;
-    init: import("ipfs-core/src/components").Init;
-    start: import("ipfs-core/src/components").Start;
-    stop: import("ipfs-core/src/components").Stop;
-};
-type CuserReaderOptions = any;
-type CuserCoreOptions = {
-    key?: string;
-    format?: string;
-    hashAlg?: string;
-    timeout?: number;
-    allowOffline?: boolean;
-    parseCid?: Function;
+type CuserReaderOptions = {
+    mapper?: (message: GraphMessage) => Promise<any>;
 };
 /**
  * @typedef {Object} CuserReaderMessageIteratorResult
@@ -66,21 +28,21 @@ type CuserCoreOptions = {
  */
 /**
  * @typedef {Object} CuserReaderOptions
- * @param {(message: GraphMessage) => Promise<Object>} mapper
+ * @prop {(message: GraphMessage) => Promise<Object>} [mapper]
  */
 /**
  */
 declare class CuserReader {
     /**
-     * @param {Node|Promise<Node>} node
-     * @param {String} peerId
-     * @param {CuserReaderOptions & CuserCoreOptions} [opts]
+     * @param {CuserCore} core
+     * @param {String|Promise<String>} peerId
+     * @param {CuserReaderOptions} [opts]
      */
-    constructor(node: Node | Promise<Node>, peerId: string, opts?: CuserReaderOptions & CuserCoreOptions);
+    constructor(core: any, peerId: string | Promise<string>, opts?: CuserReaderOptions);
     /** @type {CuserCore} */
-    _core: CuserCore;
-    _peerId: string;
-    _mapper: any;
+    _core: any;
+    _peerId: string | Promise<string>;
+    _mapper: (message: GraphMessage) => Promise<any>;
     /** @type {(message: Object, cursor: String) => Promise<CuserReaderMessageIteratorResult>} */
     _process: (message: any, cursor: string) => Promise<CuserReaderMessageIteratorResult>;
     /**

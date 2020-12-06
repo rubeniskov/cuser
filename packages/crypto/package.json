@@ -24,14 +24,20 @@
   "dependencies": {
     "branca": "^0.3.0",
     "jsonwebtoken": "^8.5.1",
-    "msgpack5": "^4.2.1"
+    "msgpack5": "^4.2.1",
+    "node-forge": "^0.10.0"
   },
   "devDependencies": {
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
+    "ipfs": "^0.52.2",
     "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
     "typedoc": "^0.19.2",
     "typedoc-plugin-markdown": "^3.0.11",
     "typescript": "4.1.2"
+  },
+  "peerDependencies": {
+    "ipfs-core": "^0.3.0"
   }
 }

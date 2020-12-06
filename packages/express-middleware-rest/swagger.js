@@ -1,6 +1,9 @@
 const Router = require('router');
 
-const swaggerRouter = () => {
+/**
+ * @param {Object} [opts]
+ */
+const swaggerRouter = (opts) => {
   const swaggerJson = require('@cuser/proto/swagger/services.json');
   const swaggerUi = require('swagger-ui-express');
 

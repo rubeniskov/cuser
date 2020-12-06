@@ -1,13 +1,23 @@
 const test = require('ava');
 const os = require('os');
 const path = require('path');
+const { promisify } = require('util');
+const rimraf = promisify(require('rimraf'));
 const { create } = require('ipfs');
 const createPubsub = require('./pubsub');
 
 test.before(async (t) => {
+  const repo = path.join(os.tmpdir(), 'pubsub-testing-repo');
+  await rimraf(repo);
   t.context.node = await create({
-    repo: path.join(os.tmpdir(), 'pubsub-testing-repo'),
+    repo,
   });
+  t.log(`starting ipfs node using repo ${repo}`);
+});
+
+test.after(async (t) => {
+  t.log(`stoping ipfs`);
+  await t.context.node.stop();
 });
 
 const testSubscription = (t, pubsub) => {

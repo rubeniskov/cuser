@@ -76,7 +76,7 @@ prepare:
 		go get -v github.com/chrusty/protoc-gen-jsonschema/cmd/protoc-gen-jsonschema;
 
 clean:
-	rm -rf $(SWAGGER_OUTPUT) $(GRAPHQL_OUTPUT) $(JSONSCHEMAS_OUTPUT) $(TYPESCRIPT_TYPES) *.{js,ts}
+	rm -rf $(SWAGGER_OUTPUT) $(GRAPHQL_OUTPUT) $(JSONSCHEMAS_OUTPUT) $(TYPESCRIPT_TYPES) {graphs,actions,payload}.{js,ts}
 
 
 .PHONY: prepare $(JSONSCHEMAS_OUTPUT)/%.json 

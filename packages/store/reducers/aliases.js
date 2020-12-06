@@ -11,11 +11,10 @@ const graphTopicSchema = require('@cuser/proto/schemas/GraphTopic.json');
 // Utils
 const wrapValidatorStateReducer = require('../utils/wrapValidatorStateReducer');
 
-
 const aliases = {
   '@topics': require('./topics'),
   '@topic': wrapValidatorStateReducer(graphTopicSchema, require('./topic')),
-  '@message': wrapValidatorStateReducer(graphMessageSchema, require('./message')),
+  '@message': wrapValidatorStateReducer({"anyOf": [graphMessageSchema, {"type": "null"}]}, require('./message')),
   '@user': wrapValidatorStateReducer(graphUserSchema, require('./user')),
   '@content': wrapValidatorStateReducer(graphContentSchema, require('./content')),
   '@data': require('./data'),

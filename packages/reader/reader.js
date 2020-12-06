@@ -1,10 +1,8 @@
 // @ts-check
-/** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
 /** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
-/** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
 const itAll = require('it-all');
-const createCore = require('@cuser/core');
+const { CuserCore } = require('@cuser/core');
 const createMessageIterator = require('./messageIterator');
 const createMessageMapper = require('./mapper');
 
@@ -27,20 +25,20 @@ const createMessageMapper = require('./mapper');
 
 /**
  * @typedef {Object} CuserReaderOptions
- * @param {(message: GraphMessage) => Promise<Object>} mapper
+ * @prop {(message: GraphMessage) => Promise<Object>} [mapper]
  */
 
 /**
  */
 class CuserReader {
   /**
-   * @param {Node|Promise<Node>} node
-   * @param {String} peerId
-   * @param {CuserReaderOptions & CuserCoreOptions} [opts]
+   * @param {CuserCore} core
+   * @param {String|Promise<String>} peerId
+   * @param {CuserReaderOptions} [opts]
    */
-  constructor(node, peerId, opts = {}) {
-      if (!node) {
-        throw new Error(`CuserReader: node must be defined an be an instance of IPFS`);
+  constructor(core, peerId, opts = {}) {
+      if (!(core instanceof CuserCore)) {
+        throw new Error('CuserPublisher: core must be defined and be an instance of CuserCore')
       }
 
       if (!peerId) {
@@ -48,7 +46,7 @@ class CuserReader {
       }
 
       /** @type {CuserCore} */
-      this._core = createCore(node, opts);
+      this._core = core;
       this._peerId = peerId;
       this._mapper = opts.mapper || createMessageMapper(this._core.get.bind(this._core));
       /** @type {(message: Object, cursor: String) => Promise<CuserReaderMessageIteratorResult>} */
@@ -116,6 +114,7 @@ class CuserReader {
    * Get the root message for a certain topicId
    * @private
    * @param {String} topicId
+   * @returns {Promise<string|null>}
    */
   async _resolveRootMessage(topicId) {
     return this._core
@@ -134,6 +133,10 @@ class CuserReader {
 
         const { message: messageCid } = await this._core.get(topic);
 
+        if (messageCid === null) {
+          return null;
+        }
+
         if (!messageCid) {
           throw new Error(`CuserReader: error message signature for topic "${topicId}", message is not detected`);
         }
@@ -147,11 +150,11 @@ class CuserReader {
 }
 
 /**
- * @param {Node|Promise<Node>} node
- * @param {String} peerId
- * @param {CuserReaderOptions & CuserCoreOptions} [opts]
+ * @param {CuserCore} core
+ * @param {String|Promise<String>} peerId
+ * @param {CuserReaderOptions} [opts]
  */
-const createReader = (node, peerId, opts) => new CuserReader(node, peerId, opts);
+const createReader = (core, peerId, opts) => new CuserReader(core, peerId, opts);
 
 module.exports = createReader;
 module.exports.CuserReader = CuserReader;

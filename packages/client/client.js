@@ -3,7 +3,9 @@
 /** @typedef {import('@cuser/proto/types/graphs').GraphMessage} GraphMessage */
 /** @typedef {import('@cuser/reader/types').CuserReader} CuserReader */
 /** @typedef {import('@cuser/reader/types').CuserReaderOptions} CuserReaderOptions */
+/** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
 const CuserReader = require('@cuser/reader').CuserReader;
+const createCore = require('@cuser/core');
 const fetch = require('./fetch');
 const { parseUrl, noPublisher } = require('./utils');
 
@@ -53,10 +55,10 @@ class CuserClient extends CuserReader {
   /**
    * @param {Node|Promise<Node>} node
    * @param {String} cuserId
-   * @param {CuserClientOptions & CuserReaderOptions} [opts]
+   * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
    */
   constructor(node, cuserId, opts = {}) {
-    super(node, cuserId, opts);
+    super(createCore(node, opts), cuserId, opts);
     this._cuserId = cuserId;
     this._url = parseUrl(opts.url);
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
@@ -195,9 +197,9 @@ class CuserClient extends CuserReader {
 }
 
 /**
- * @param {Node} node
+ * @param {Node|Promise<Node>} node
  * @param {String} cuserId
- * @param {CuserClientOptions} [opts]
+ * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
  */
 const createClient = (node, cuserId, opts) => {
   return new CuserClient(node, cuserId, opts);

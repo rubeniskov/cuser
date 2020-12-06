@@ -3,7 +3,7 @@
 /** @typedef {import('redux').Action} Action */
 const mutateJson = require('mutant-json');
 const isPromise = require('is-promise').default;
-const debug = require('debug')('cuser:store-serializer');
+const debug = require('debug')('cuser:store:serializer');
 const {
   TYPE_ACTION_RESOLVED,
   TYPE_ACTION_REHYDRATE,
@@ -21,12 +21,51 @@ const phases = {
   SEALING: 1,
   REHYDRATING: 2
 }
-
 /**
  * @callback CuserSerializeCheck
  * @param {any} state
  * @returns {Boolean}
  */
+
+/**
+ * @typedef {Object} CuserSerializeOptions
+ * @prop {CuserSerializeCheck} isSerializable
+ * @prop {(state: Object) => Promise<String>} serialize
+ */
+
+/**
+ * @typedef {Object} CuserDeserializeOptions
+ * @prop {CuserSerializeCheck} isDeserializable
+ * @prop {(state: String) => Promise<any>} deserialize
+ */
+
+/**
+ *
+ * @param {any} state
+ * @param {Object} action
+ * @param {CuserDeserializeOptions} opts
+ */
+const rehydrateReducer = (state, { type }, { deserialize, isDeserializable }) => {
+  if (deserialize && type === TYPE_ACTION_REHYDRATE && isDeserializable(state)) {
+    return Promise.resolve(deserialize).then(deserialize => deserialize(state));
+  }
+  return state;
+}
+
+/**
+ *
+ * @param {any} state
+ * @param {Object} action
+ * @param {CuserSerializeOptions} opts
+ */
+const sealReducer = (state, { type }, { serialize, isSerializable }) => {
+  if (serialize && type === TYPE_ACTION_SEAL && isSerializable(state)) {
+    return Promise.resolve(serialize).then(serialize => serialize(state));
+  }
+  return state;
+}
+
+
 
 /**
  * @callback CuserSerializeProcessMap
@@ -45,28 +84,29 @@ const phases = {
 
 /**
  * @typedef {Object} CuserSerializeEnhancerOptions
- * @prop {CuserSerializeCheck} [isSerializable]
- * @prop {CuserSerializeCheck} [isDeserializable]
  * @prop {CuserSerializeMapping} [mapping]
  * @prop {CuserSerializeAliases} [aliases]
  * @prop {CuserSerializeProcessMap} [processMap]
  */
 
  /**
-  * @param {CuserSerializeEnhancerOptions} opts
+  * @param {CuserSerializeEnhancerOptions & CuserSerializeOptions & CuserDeserializeOptions} opts
   */
 const createSerializeEnhancer = (opts) => {
   const {
     mapping,
     aliases,
-    processMap = p => p
-  } = { ...opts }
+    processMap = p => p,
+    ...restOpts
+  } = { ...opts };
+
   return createStore => (
-    reducer,
+    rootReducer,
     initialState,
     enhancer,
   ) => {
-    let store, phase, actionResult;
+
+    let store, phase;
 
     const deferred = {
       resolve: (resolved) => {}, reject: (err) => {}
@@ -86,9 +126,10 @@ const createSerializeEnhancer = (opts) => {
         if (!reducer) {
           throw new Error(`Missing reducer for "${alias}"`);
         }
-        const newState = reducer(prevState, action);
+        const newState = sealReducer(reducer(rehydrateReducer(prevState, action, restOpts), action), action, restOpts);
+
         mutate(Promise.resolve(newState).then(value => {
-          debug("reducer %s %s %s %s", action.type, path, JSON.stringify(prevState, null, 2), JSON.stringify(result, null, 2));
+          debug("reducer %s %s %s %s", action.type, path, prevState, result);
           return ({ value })
         }));
       }, { nested: true, promise: true, test: processMap(pattern, action) });
@@ -100,7 +141,7 @@ const createSerializeEnhancer = (opts) => {
           state.then((payload) => store.dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
           return state;
         }
-        return reducer(state, action)
+        return rootReducer(state, action)
       };
 
       switch (action.type) {
@@ -118,15 +159,13 @@ const createSerializeEnhancer = (opts) => {
           phase = phases.SEALING;
           state = applySerializeReducers(deeperMapping, state, action)
             .then((serialized) => {
-              return reducer(serialized, action).then((newState) => {
-                debug("reducer %s %s prev: %o new: %o", TYPE_ACTION_SEAL, '/', serialized, newState);
-                return newState
-              });
+              debug("reducer %s %s %s", TYPE_ACTION_SEAL, '/', serialized);
+              return sealReducer(serialized, action, restOpts);
             });
           break;
         case TYPE_ACTION_REHYDRATE:
           phase = phases.REHYDRATING;
-          state = applySerializeReducers(shallowMapping, reducer(state, action), action);
+          state = applySerializeReducers(shallowMapping, rehydrateReducer(state, action, restOpts), action);
           break;
         default:
           phase = phases.IDLE;
@@ -154,7 +193,13 @@ const createSerializeEnhancer = (opts) => {
         return state;
       }
 
-      return Promise.resolve(reducer(state, action)).then((payload) => {
+      try {
+        state = rootReducer(state, action)
+      } catch (ex) {
+        deferred.reject(ex);
+      }
+
+      return Promise.resolve(state).then((payload) => {
         store.dispatch({ type: TYPE_ACTION_RESOLVED, payload });
       });
     }

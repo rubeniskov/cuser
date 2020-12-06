@@ -30,7 +30,7 @@ const topicReducer = createReducer({
     ...state,
     message: '@message',
   }),
-  [TYPE_ACTION_DELETE_MESSAGE]: (state) => state.count === 1 ? null : ({
+  [TYPE_ACTION_DELETE_MESSAGE]: (state) => ({
     ...state,
     message: '@message',
     count: state.count - 1

@@ -40,7 +40,7 @@ const messageReducer = createReducer({
   }),
   [TYPE_ACTION_UPDATE_MESSAGE]: recursiveReducer((state, { payload }) => {
     const { messageId } = payload;
-    if (state.id === messageId) {
+    if (state && state.id === messageId) {
       assert(payload.user.peerId === state.user.peerId, TYPE_ERROR_USER_MUST_BE_THE_OWNER, 'message')
       return {
         ...state,
@@ -53,7 +53,7 @@ const messageReducer = createReducer({
   }),
   [TYPE_ACTION_DELETE_MESSAGE]: recursiveReducer((state, { payload }) => {
     const { messageId } = payload;
-    if (state.id === messageId) {
+    if (state && state.id === messageId) {
       assert(payload.user.peerId === state.user.peerId, TYPE_ERROR_USER_MUST_BE_THE_OWNER, 'message')
       return state.parent
     } else {

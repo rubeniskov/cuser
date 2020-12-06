@@ -74,6 +74,7 @@ test('should return a decode the accessToken', async (t) => {
   t.is(decoded.peerId, peerId);
   t.is(decoded.username, username);
   t.is(decoded.avatar, avatar);
+  t.is(typeof decoded.iat, 'number');
 });
 
 test('should multiple auth instances allowed to decode the accessToken with the same secret and same node', async (t) => {
@@ -93,11 +94,13 @@ test('should multiple auth instances allowed to decode the accessToken with the 
   const decoded = await Promise.all([auth1, auth2].map((auth) => auth.decode(accessToken)))
 
   t.is(decoded[0].peerId, peerId);
-  t.is(decoded[0].username, username);
   t.is(decoded[0].avatar, avatar);
   t.is(decoded[1].peerId, peerId);
   t.is(decoded[1].username, username);
   t.is(decoded[1].avatar, avatar);
+  t.is(typeof decoded[0].iat, 'number');
+  t.is(typeof decoded[1].iat, 'number');
+  t.is(decoded[0].iat, decoded[1].iat);
 });
 
 test('should multiple auth instances allowed to decode the accessToken with different secrets and same node', async (t) => {
@@ -122,6 +125,9 @@ test('should multiple auth instances allowed to decode the accessToken with diff
   t.is(decoded[1].peerId, peerId);
   t.is(decoded[1].username, username);
   t.is(decoded[1].avatar, avatar);
+  t.is(typeof decoded[0].iat, 'number');
+  t.is(typeof decoded[1].iat, 'number');
+  t.is(decoded[0].iat, decoded[1].iat);
 });
 
 test('should multiple auth instances not allowed to decode the accessToken from different nodes', async (t) => {
@@ -145,6 +151,7 @@ test('should multiple auth instances not allowed to decode the accessToken from 
   t.is(decoded.peerId, peerId);
   t.is(decoded.username, username);
   t.is(decoded.avatar, avatar);
+  t.is(typeof decoded.iat, 'number');
 
   await t.throwsAsync(() => auth2.decode(accessToken), {
     message: /invalid signature/

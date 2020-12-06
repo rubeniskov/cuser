@@ -6,7 +6,8 @@ const createAction = require('./utils/createAction');
 const createUsers = require('./testing/createUsers');
 
 const {
-  TYPE_ACTION_PUBLISH_MESSAGE
+  TYPE_ACTION_PUBLISH_MESSAGE,
+  TYPE_ACTION_DELETE_MESSAGE
 } = require('./rtypes/actions');
 
 const createStore = require('./createStore');
@@ -50,7 +51,6 @@ test('should create the store and serialize data', async (t) => {
 
   const data = loremIpsum();
   const topicId = 'CUSTOM_TOPIC_ID';
-  const getLastTopicMessageFromCache = (cache, topicId, hash) => cache[cache[cache[hash].topics[topicId]].message]
 
   const hash_state1 = await store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
     topicId,
@@ -71,7 +71,7 @@ test('should create the store and serialize data', async (t) => {
   }));
 
   t.is(Object.entries(cache).length, 10);
-  console.log(hash_state1, hash_state2);
+
   t.is(getLastTopicMessageFromCache(cache, topicId, hash_state1).parent, null);
   // TODO hash parent
   // t.is(typeof getMessageFromCache(hash_state2).parent, 'string');
@@ -102,18 +102,20 @@ test('should delete a message', async (t) => {
   }));
 
   t.is(Object.entries(cache).length, 6);
+  const message = getLastTopicMessageFromCache(cache, topicId, hash_state1);
 
-  const hash_state2 = await store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+  const hash_state2 = await store.exec(createAction(TYPE_ACTION_DELETE_MESSAGE, {
     topicId,
     user: users[0],
-    content: {
-      data
-    }
+    messageId: message.id
   }));
 
-  t.is(Object.entries(cache).length, 10);
-  console.log(hash_state1, hash_state2);
-  t.is(getMessageFromCache(hash_state1).parent, null);
+  console.log(cache);
+  console.log(hash_state2);
+  t.pass();
+  // t.is(Object.entries(cache).length, 10);
+  // console.log(hash_state1, hash_state2);
+  // t.is(getMessageFromCache(hash_state1).parent, null);
   // TODO hash parent
   // t.is(typeof getMessageFromCache(hash_state2).parent, 'string');
 });

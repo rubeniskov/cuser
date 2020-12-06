@@ -75,7 +75,7 @@ class CuserCore {
   async put(value, opts) {
     const node = await this._node;
     const { format, hashAlg, timeout } = this._options;
-    debug(`putting ${value.toString()}`);
+    debug(`putting %s`, value);
     return node.dag.put(value, {
       format, hashAlg, timeout,
       ...opts
@@ -100,12 +100,12 @@ class CuserCore {
 
   /**
    * Resolve the linked dag cid
-   * @param {String} [cid]
+   * @param {String|Promise<String>} [cid]
    * @returns {Promise<String>}
    */
   async resolve(cid) {
     const node = await this._node;
-    const id = await (cid || this.peerId());
+    const id = await cid;
     debug(`resolving "${id}"`);
     const [resolved] = await itAll(node.name.resolve(id))
     return resolved.replace(/^\/ipfs\//, '');

@@ -23,17 +23,23 @@
     ],
     "categories": {
       "cuser": [
+        "@cuser/cli", 
         "@cuser/core", 
         "@cuser/publisher",
         "@cuser/reader",
-        "@cuser/crypto", 
-        "@cuser/client", 
-        "@cuser/cli", 
-        "@cuser/server",
-        "@cuser/validator",
-        "@cuser/store",
         "@cuser/auth",
+        "@cuser/store",
+        "@cuser/crypto",  
+        "@cuser/validator",
         "@cuser/utils",
+        "@cuser/client",
+        "@cuser/server"
+      ],
+      "clients": [
+        "@cuser/client-rest",
+        "@cuser/client-grapqhl"
+      ],
+      "types": [
         "@cuser/proto"
       ],
       "middlewares": [

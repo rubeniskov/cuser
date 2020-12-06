@@ -34,12 +34,11 @@
     "@cuser/core": "v0.0.1"
   },
   "dependencies": {
-    "@cuser/core": "v0.0.1",
     "it-all": "^1.0.4"
   },
   "peerDependencies": {
     "@cuser/proto": "v0.0.1",
-    "ipfs-core": "^0.3.0"
+    "@cuser/core": "v0.0.1"
   },
   "nyc": {
     "exclude": [

@@ -1,5 +1,5 @@
 // @ts-check
-const debug = require('debug')('cuser:store-logger');
+const debug = require('debug')('cuser:store:logger');
 
 const loggerMiddleware = (store) => {
   return (next) => {

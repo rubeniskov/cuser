@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "4ea3f2f0-1bde-41ef-bc45-f32efc053043",
+		"name": "cuser",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Messages",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{rest}}/message?topicId={{topicId}}",
+					"host": [
+						"{{rest}}"
+					],
+					"path": [
+						"message"
+					],
+					"query": [
+						{
+							"key": "topicId",
+							"value": "{{topicId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authenticate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f9afaa6a-dbe7-4c0d-aaa1-ba804746c013",
+						"exec": [
+							"var data = pm.response.json();",
+							"pm.environment.set(\"accessToken\", data.accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"peerId\": \"asdfasdfasdf\",\n    \"username\": \"rubeniskov\",\n    \"avatar\": \"https://avatars3.githubusercontent.com/u/6261914?s=460&u=2412cfab92dbef27237a478c0e073a59086762c2&v=4\"\n}"
+				},
+				"url": {
+					"raw": "{{auth}}",
+					"host": [
+						"{{auth}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Publish Message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{accessToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topicId\": \"{{topicId}}\",\n    \"content\": {\n        \"data\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\"\n    }\n}"
+				},
+				"url": {
+					"raw": "{{rest}}/message",
+					"host": [
+						"{{rest}}"
+					],
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Message",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{accessToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"topicId\": \"{{topicId}}\",\t\n  \"messageId\": \"30d4332d-8fd0-4cff-9259-393e4b59e597\",\n  \"content\": {\n    \"data\": \"modified adsfasdfasdf\"\n  }\n}"
+				},
+				"url": {
+					"raw": "{{rest}}/message",
+					"host": [
+						"{{rest}}"
+					],
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Message",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{accessToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"topicId\": \"{{topicId}}\",\t\n  \"messageId\": \"30d4332d-8fd0-4cff-9259-393e4b59e597\"\n}"
+				},
+				"url": {
+					"raw": "{{rest}}/message",
+					"host": [
+						"{{rest}}"
+					],
+					"path": [
+						"message"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

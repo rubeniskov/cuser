@@ -1,3 +1,4 @@
+// @ts-check
 const branca = require("branca");
 const msgpack = require('msgpack5');
 

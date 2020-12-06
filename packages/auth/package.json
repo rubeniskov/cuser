@@ -23,8 +23,7 @@
   },
   "dependencies": {
     "@cuser/crypto": "^0.0.1",
-    "@cuser/validator": "^0.0.1",
-    "node-forge": "^0.10.0"
+    "@cuser/validator": "^0.0.1"
   },
   "devDependencies": {
     "@cuser/proto": "^0.0.1",

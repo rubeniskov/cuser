@@ -15,7 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "is-promise": "^4.0.0",
-    "mutant-json": "0.6.0",
+    "mutant-json": "0.6.1",
     "redux": "^4.0.5"
   },
   "devDependencies": {
