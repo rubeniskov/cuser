@@ -1,30 +1,11 @@
 // @ts-check
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
-/** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
-/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
-/** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
-const createCore = require('@cuser/core');
-const toArray = require('async-iterator-to-array');
+/** @typedef {import('@cuser/proto/types/graphs').GraphMessage} GraphMessage */
+/** @typedef {import('@cuser/reader/types').CuserReader} CuserReader */
+/** @typedef {import('@cuser/reader/types').CuserReaderOptions} CuserReaderOptions */
+const CuserReader = require('@cuser/reader').CuserReader;
 const fetch = require('./fetch');
-const createMessageIterator = require('./messageIterator');
 const { parseUrl, noPublisher } = require('./utils');
-
-/**
- * @typedef {Object} CuserClientMessageIteratorResult
- * @prop {GraphMessage} node
- * @prop {String} cursor
- */
-
-/**
- * Iteration options for traversing messages using pagination
- * interface like [graphql](https://graphql.org/learn/pagination/)
- * @typedef {Object} CuserClientMessagesIteratorOptions
- * @prop {Number} [after=null]
- * @prop {Number} [first=10]
- * @prop {Number} [offset=0]
- * @prop {Boolean} [iterator=false] Return the iterator instead of array
- * @prop {(node: GraphMessage, cursor: String) => CuserClientMessageIteratorResult} [map] The iterator mapper
- */
 
 /**
  * @typedef {Object} CuserClientOptions
@@ -68,25 +49,16 @@ const { parseUrl, noPublisher } = require('./utils');
  * });
  * ```
  */
-class CuserClient {
+class CuserClient extends CuserReader {
   /**
    * @param {Node|Promise<Node>} node
    * @param {String} cuserId
-   * @param {CuserClientOptions & CuserCoreOptions} [opts]
+   * @param {CuserClientOptions & CuserReaderOptions} [opts]
    */
   constructor(node, cuserId, opts = {}) {
-    if (!node) {
-      throw new Error(`CuserClient: node must be defined an be an instance of IPFS`);
-    }
-
-    if (!cuserId) {
-      throw new Error(`CuserClient: cuserId must be defined in order to resolve the resources`);
-    }
-
+    super(node, cuserId, opts);
     this._cuserId = cuserId;
     this._url = parseUrl(opts.url);
-    /** @type {CuserCore} */
-    this._core = createCore(node, opts);
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
     this._pubsub = this._core.pubsub({
       channel: cuserId
@@ -96,74 +68,6 @@ class CuserClient {
       auth: '/auth',
       ...opts.routes
     }
-  }
-
-  /**
-   * Gets messages from `ipfs` layer
-   * @param {String} topicId
-   * @param {CuserClientMessagesIteratorOptions} opts
-   * @returns {Promise<CuserClientMessageIteratorResult[]>}
-   * @example
-   * ### Array
-   * ```javascript
-   * const messages = client.getMessages('custom_topic_id');
-   * console.log(messages);
-   * ```
-   * ### Iterator
-   * ```javascript
-   * const messages = client.getMessages('custom_topic_id', {
-   *   iterator: true,
-   * });
-   * for await (let value of messages) {
-   *   console.log(value);
-   * }
-   * ```
-   */
-  getMessages(topicId, opts) {
-    const iopts = {
-      after: null,
-      first: 10,
-      offset: 0,
-      iterator: false,
-      map: (node, cursor) => ({ node, cursor }),
-      ...opts
-    }
-
-    const message = iopts.after ? Promise.resolve(iopts.after) : this._core.get(this._cuserId)
-      .then(({ topics }) => {
-        if (!topics[topicId]) {
-          throw new Error(`CuserClient: topicId "${topicId}" doesn't exists`);
-        }
-        const { message } = topics[topicId];
-
-        if (!message) {
-          throw new Error(`CuserClient: error signature topic "${topicId}", message is not detected`);
-        }
-        return message;
-      });
-
-
-    const messageIterator = createMessageIterator(this.getMessage.bind(this), message, {
-      limit: iopts.first,
-      skip: (iopts.offset + iopts.after ? 1 : 0),
-      map: iopts.map,
-    });
-
-    if (iopts.iterator) {
-      // @ts-ignore
-      return messageIterator
-    }
-
-    return toArray(messageIterator);
-  }
-
-  /**
-   * Gets the message from ipfs using the CID given by parameter
-   * @param {String} cid
-   * @returns {Promise<GraphMessage>}
-   */
-  async getMessage(cid) {
-    return this._core.get(cid);
   }
 
   /**

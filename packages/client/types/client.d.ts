@@ -6,7 +6,7 @@ export = createClient;
  */
 declare function createClient(node: Node, cuserId: string, opts?: CuserClientOptions): CuserClient;
 declare namespace createClient {
-    export { CuserClient, Node, GraphMessage, CuserCore, CuserCoreOptions, CuserClientMessageIteratorResult, CuserClientMessagesIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
+    export { CuserClient, Node, GraphMessage, CuserReader, CuserReaderOptions, CuserClientMessageIteratorResult, CuserClientMessagesIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -114,45 +114,14 @@ declare class CuserClient {
      * @param {String} cuserId
      * @param {CuserClientOptions & CuserCoreOptions} [opts]
      */
-    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions & CuserCoreOptions);
+    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions & any);
     _cuserId: string;
     _url: string;
     /** @type {CuserCore} */
-    _core: CuserCore;
-    _fetch: Function;
-    _pubsub: import("@cuser/core/types/pubsub").ClientCorePubSub;
-    _routes: {
-        publisher: string;
-        auth: string;
-    };
-    /**
-     * Gets messages from `ipfs` layer
-     * @param {String} topicId
-     * @param {CuserClientMessagesIteratorOptions} opts
-     * @returns {Promise<CuserClientMessageIteratorResult[]>}
-     * @example
-     * ### Array
-     * ```javascript
-     * const messages = client.getMessages('custom_topic_id');
-     * console.log(messages);
-     * ```
-     * ### Iterator
-     * ```javascript
-     * const messages = client.getMessages('custom_topic_id', {
-     *   iterator: true,
-     * });
-     * for await (let value of messages) {
-     *   console.log(value);
-     * }
-     * ```
-     */
-    getMessages(topicId: string, opts: CuserClientMessagesIteratorOptions): Promise<CuserClientMessageIteratorResult[]>;
-    /**
-     * Gets the message from ipfs using the CID given by parameter
-     * @param {String} cid
-     * @returns {Promise<GraphMessage>}
-     */
-    getMessage(cid: string): Promise<GraphMessage>;
+    _core: any;
+    _fetch: any;
+    _pubsub: any;
+    _routes: any;
     /**
      * Authenticates a user with the required fields of username and avatar,
      * this will epect to recieve an access_token to be used in publishing operations
@@ -216,18 +185,11 @@ declare class CuserClient {
      * @param {String} topicId topic identifier
      * @param {CuserClientSubscriber} subscriber function event subscriber
      */
-    subscribe(topicId: string, subscriber: CuserClientSubscriber): () => Promise<any>;
+    subscribe(topicId: string, subscriber: CuserClientSubscriber): any;
 }
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
-type CuserCore = import("@cuser/core/types/core").CuserCore;
-type CuserCoreOptions = {
-    key?: string;
-    format?: string;
-    hashAlg?: string;
-    timeout?: number;
-    allowOffline?: boolean;
-    parseCid?: Function;
-};
+type CuserReader = import("@cuser/reader/types/reader").CuserReader;
+type CuserReaderOptions = any;
 type CuserClientMessageIteratorResult = {
     node: GraphMessage;
     cursor: string;

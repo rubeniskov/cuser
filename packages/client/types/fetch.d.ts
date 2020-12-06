@@ -8,7 +8,7 @@ export = fetcher;
  */
 declare function fetcher(url: string, opts: any): Promise<any>;
 declare namespace fetcher {
-    export { defaults, fetch };
+    export { defaults };
 }
 declare namespace defaults {
     const headers: {
@@ -17,4 +17,3 @@ declare namespace defaults {
     const redirect: string;
     const cache: string;
 }
-type fetch = any;
