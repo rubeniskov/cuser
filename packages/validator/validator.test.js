@@ -1,5 +1,5 @@
 const test = require('ava');
-const createValidator = require('.');
+const createValidator = require('./validator');
 
 test('should expose ValidationError class', (t) => {
   const { ValidationError } = createValidator;

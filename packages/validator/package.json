@@ -2,7 +2,7 @@
   "name": "@cuser/validator",
   "version": "0.0.1",
   "description": "json schema validator",
-  "main": "index.js",
+  "main": "validator.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
