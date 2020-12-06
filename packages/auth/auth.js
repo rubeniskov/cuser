@@ -2,7 +2,7 @@
 /** @typedef {import("ipfs-core/src/components").IPFSAPI} Node */
 const { createBearer, createHash } = require('@cuser/crypto');
 const userSchema = require('@cuser/proto/schemas/PayloadUser.json');
-const validate = require('@cuser/validator/validator')(userSchema);
+const validate = require('@cuser/validator')(userSchema);
 const { pki } = require('node-forge');
 
 const getKeysFromNode = (node, secret, keyName) => {
