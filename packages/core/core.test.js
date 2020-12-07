@@ -159,6 +159,15 @@ test('should use default parseCid when get', async (t) => {
   await t.notThrowsAsync(() => core.get('Qmaf8QEShGonUSAXoGb4wQy827RtvBLNwnxiftRzdTK5w9'));
 });
 
+test('should return the peerId', async (t) => {
+  const { node } = t.context;
+  const core = createCore(node);
+
+  const peerId = await core.peerId();
+  const { id } = await node.id();
+  t.is(peerId, id);
+});
+
 test('should pubsub works as expected', (t) => {
   const { node } = t.context;
   const core = createCore(node);
