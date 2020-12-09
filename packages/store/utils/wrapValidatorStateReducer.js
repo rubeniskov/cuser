@@ -1,38 +1,30 @@
 // @ts-check
-const Ajv = require('ajv');
-const ajv = new Ajv({schemaId: '$id', allErrors: true, jsonPointers: true});
-require('ajv-errors')(ajv);
-require('ajv-merge-patch')(ajv);
+/** @typedef {import('redux').AnyAction} AnyAction */
+/** @typedef {import('redux').Reducer} Reducer */
+/** @typedef {import('@cuser/validator/types').ValidatorSchema} ValidatorSchema */
+const validator = require('@cuser/validator');
 const { format } = require('util');
 const {
-  TYPE_ERROR_INVALID_STATE,
+  TYPE_ERROR_INVALID_STATE
 } = require('../rtypes/errors');
-const isPromise = require('is-promise');
 
-class ValidationError extends Error {
-  constructor(message, v) {
-    super(message || 'Invalid schema');
-    this.errors = v.errors;
-    this.extendedInfo = JSON.stringify(v.errors, null, 4);
+/**
+ * Creates a state validator reducer
+ * @param {ValidatorSchema} schema
+ * @param {Reducer} reducer
+ */
+const wrapValidatorStateReducer = (schema, reducer = (state, action) => state) => {
+  const validate = validator(schema);
+  /**
+   * @param {any} state
+   * @param {AnyAction} action
+   */
+  const stateValidateReducer = (state, action) => {
+    const newState = reducer(state, action);
+    validate(newState, format(TYPE_ERROR_INVALID_STATE, action.type));
+    return newState;
   }
+  return stateValidateReducer;
 }
 
-const createValidator = (schema) => {
-  return ajv.compile(schema);
-}
-
-const wrapReducer = (schema, reducer) => {
-  const validate = createValidator(schema);
-  return (state, action, opts) => {
-    if (typeof state !== 'object' || isPromise(state)) {
-      return reducer(state, action, opts);
-    }
-    const valid = validate(state);
-    if (!valid) {
-      throw new ValidationError(format(TYPE_ERROR_INVALID_STATE, action.type, schema.$id), validate);
-    }
-    return reducer(state, action, opts);
-  }
-}
-
-module.exports = wrapReducer;
+module.exports = wrapValidatorStateReducer;

@@ -2,7 +2,7 @@
   "name": "@cuser/store",
   "version": "0.0.1",
   "description": "store tree changes managment",
-  "main": "./createStore",
+  "main": "./configureStore",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
@@ -14,8 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "is-promise": "^4.0.0",
-    "mutant-json": "0.6.1",
+    "mutant-json": "0.6.3",
     "redux": "^4.0.5"
   },
   "devDependencies": {

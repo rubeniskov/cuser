@@ -1,26 +1,36 @@
 // @ts-check
-// Schemas
-// @ts-ignore
-const graphUserSchema = require('@cuser/proto/schemas/GraphUser.json');
-// @ts-ignore
-const graphContentSchema = require('@cuser/proto/schemas/GraphContent.json');
-// @ts-ignore
-const graphMessageSchema = require('@cuser/proto/schemas/GraphMessage.json');
-// @ts-ignore
-const graphTopicSchema = require('@cuser/proto/schemas/GraphTopic.json');
 // Utils
 const wrapValidatorStateReducer = require('../utils/wrapValidatorStateReducer');
+const wrapResolveReducerAliases = require('../utils/wrapResolveReducerAliases');
 
-const aliases = {
+const aliases = wrapResolveReducerAliases({
   '@topics': require('./topics'),
-  '@topic': wrapValidatorStateReducer(graphTopicSchema, require('./topic')),
-  '@message': wrapValidatorStateReducer({"anyOf": [graphMessageSchema, {"type": "null"}]}, require('./message')),
-  '@user': wrapValidatorStateReducer(graphUserSchema, require('./user')),
-  '@content': wrapValidatorStateReducer(graphContentSchema, require('./content')),
+  '@topic': require('./topic'),
+  '@message': require('./message'),
+  '@user': require('./user'),
+  '@content': require('./content'),
   '@data': require('./data'),
   '@timestamp': require('./timestamp'),
   '@revision': require('./revision'),
   '@uuid': require('./uuid'),
-}
+});
 
-module.exports = aliases;
+module.exports = {
+  ...aliases,
+  '@topic': wrapValidatorStateReducer(
+    require('@cuser/proto/schemas/GraphTopic.json'),
+    aliases['@topic'],
+  ),
+  '@message': wrapValidatorStateReducer(
+    require('@cuser/proto/schemas/GraphMessage.json'),
+    aliases['@message'],
+  ),
+  '@user': wrapValidatorStateReducer(
+    require('@cuser/proto/schemas/GraphUser.json'),
+    aliases['@user'],
+  ),
+  '@content': wrapValidatorStateReducer(
+    require('@cuser/proto/schemas/GraphContent.json'),
+    aliases['@content'],
+  ),
+};

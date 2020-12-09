@@ -10,5 +10,5 @@
     },
     "additionalProperties": false,
     "type": "object",
-    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/PayloadContent.json#"
+    "$id": "https://github.com/rubeniskov/cuser/tree/master/packages/proto/schemas/PayloadContent.json#"
 }

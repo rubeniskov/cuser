@@ -29,7 +29,7 @@ const recursiveReducer = require('./recursive');
  * @param {ActionPublishMessage|ActionUpdateMessage} action
  */
 const messageReducer = createReducer({
-  [TYPE_ACTION_PUBLISH_MESSAGE]:(state) => ({
+  [TYPE_ACTION_PUBLISH_MESSAGE]: (state) => ({
     type: GraphType.GRAPH_MESSAGE,
     parent: state || null,
     id: '@uuid',

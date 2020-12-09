@@ -13,7 +13,7 @@
 
 const { CuserCore } = require('@cuser/core');
 const { CuserAuth } = require('@cuser/auth');
-const createStore = require('@cuser/store');
+const configureStore = require('@cuser/store');
 const createAction = require('@cuser/store/utils/createAction');
 
 const {
@@ -49,32 +49,27 @@ class CuserPublisher {
     /** @type {CuserAuth} */
     this._auth = auth;
 
-    const sopts = {
-      // preloadedState: 'bafyriqdt2bwaryqm2kc5sfvr2meyjbqukrpsywcshhsmgc57yk446gx2yttnl56gelwdpuxbi6vhy2orox3blpvmdjocgupfmmhw3tqabzhp4',
-      // preloadedState: 'bafyriqewrjviydtmwhuqoeserglpnxejnwzr3pxejosunul7xoioqdr7bw7z3sn7lfh7nrrcro4zallzels3uihhfxzoa3mg2buq7brtnmvle',
-      preloadedState: this._core.peerId().then(peerId => this._core.resolve(peerId)),
-      isDeserializable: isDagLink,
-      isSerializable: (state) => typeof state === 'object',
+    /** @type {CuserStore} */
+    this._store = configureStore(undefined && this._core.peerId().then(peerId => this._core.resolve(peerId)), {
+      serializable: (state) => typeof state === 'object',
+      deserializable: isDagLink,
       serialize: (value) => this._core.put(value),
       deserialize: (value) => this._core.get(value),
       ...opts
-    }
-
-    /** @type {CuserStore} */
-    this._store = createStore(sopts);
+    });
   }
 
   /**
    * Publish message and gets the computed cid
-   * @param {String} topicId
+   * @param {string} topicId
    * @param {CuserAuthAccessToken} accessToken
-   * @param {String} data
+   * @param {string} data
    */
   async publishMessage(topicId, accessToken, data) {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadPublishMessage} */
     const payload = { user, topicId, content: { data } };
-    return this._store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
+    return this._store.dispatch(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
       .then((cid) => {
         return this._core.publish(cid);
       });
@@ -82,16 +77,16 @@ class CuserPublisher {
 
   /**
    * Update message and gets computed cid
-   * @param {String} topicId
+   * @param {string} topicId
    * @param {CuserAuthAccessToken} accessToken
-   * @param {String} messageId
-   * @param {String} data
+   * @param {string} messageId
+   * @param {string} data
    */
   async updateMessage(topicId, accessToken, messageId, data) {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadUpdateMessage} */
     const payload = { user, topicId, messageId, content: { data } };
-    return this._store.exec(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
+    return this._store.dispatch(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
       .then((cid) => {
         return this._core.publish(cid);
       });
@@ -99,15 +94,15 @@ class CuserPublisher {
 
   /**
    * Delete message and gets the computed cid
-   * @param {String} topicId
+   * @param {string} topicId
    * @param {CuserAuthAccessToken} accessToken
-   * @param {String} messageId
+   * @param {string} messageId
    */
   async deleteMessage(topicId, accessToken, messageId) {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadDeleteMessage} */
     const payload = { user, topicId, messageId };
-    return this._store.exec(createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
+    return this._store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
       .then((cid) => {
         return this._core.publish(cid);
       });

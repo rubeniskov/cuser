@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const writeFile = promisify(fs.writeFile);
 
-const repo = 'https://github.com/rubeniskov/cuser/packages/proto/schemas';
+const repo = 'https://github.com/rubeniskov/cuser/tree/master/packages/proto/schemas';
 
 const main = async (pattern) => {
   const files = await glob(pattern);

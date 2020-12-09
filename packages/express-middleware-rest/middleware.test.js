@@ -116,7 +116,6 @@ test.serial('should update a message', async (t) => {
 
 test.serial('should delete a message', async (t) => {
   const { core, auth, reader, topicId, accessToken } = t.context;
-  const data = 'message content';
 
 
   const server = express().use(createMiddleware(core, auth));

@@ -1,8 +1,12 @@
 // @ts-check
 /** @typedef {import('redux').Reducer} Reducer */
+/** @typedef {import('redux').AnyAction} AnyAction */
 /** @typedef {import('redux').Action} Action */
+/** @typedef {import('./createSerializeReducer').CuserStoreSerializeReducerOptions} CuserStoreSerializeReducerOptions */
 const mutateJson = require('mutant-json');
-const isPromise = require('is-promise').default;
+const isPromise = require('@cuser/utils/isPromise');
+const createSerializeReducer = require('./createSerializeReducer');
+// const parseMapping = require('../utils/parseMapping');
 const debug = require('debug')('cuser:store:serializer');
 const {
   TYPE_ACTION_RESOLVED,
@@ -21,6 +25,7 @@ const phases = {
   SEALING: 1,
   REHYDRATING: 2
 }
+
 /**
  * @callback CuserSerializeCheck
  * @param {any} state
@@ -28,77 +33,99 @@ const phases = {
  */
 
 /**
- * @typedef {Object} CuserSerializeOptions
- * @prop {CuserSerializeCheck} isSerializable
- * @prop {(state: Object) => Promise<String>} serialize
+ * @typedef {object} CuserSerializeOptions
+ * @prop {CuserSerializeCheck} [serializable]
+ * @prop {(state: object) => Promise<string>} [serialize]
  */
 
 /**
- * @typedef {Object} CuserDeserializeOptions
- * @prop {CuserSerializeCheck} isDeserializable
- * @prop {(state: String) => Promise<any>} deserialize
+ * @typedef {object} CuserDeserializeOptions
+ * @prop {CuserSerializeCheck} [deserializable]
+ * @prop {(state: string) => Promise<any>} [deserialize]
  */
-
-/**
- *
- * @param {any} state
- * @param {Object} action
- * @param {CuserDeserializeOptions} opts
- */
-const rehydrateReducer = (state, { type }, { deserialize, isDeserializable }) => {
-  if (deserialize && type === TYPE_ACTION_REHYDRATE && isDeserializable(state)) {
-    return Promise.resolve(deserialize).then(deserialize => deserialize(state));
-  }
-  return state;
-}
-
-/**
- *
- * @param {any} state
- * @param {Object} action
- * @param {CuserSerializeOptions} opts
- */
-const sealReducer = (state, { type }, { serialize, isSerializable }) => {
-  if (serialize && type === TYPE_ACTION_SEAL && isSerializable(state)) {
-    return Promise.resolve(serialize).then(serialize => serialize(state));
-  }
-  return state;
-}
-
-
 
 /**
  * @callback CuserSerializeProcessMap
- * @param {String} pointer
- * @param {Object} action
- * @returns {String}
+ * @param {string} pointer
+ * @param {object} action
+ * @returns {string}
  */
 
 /**
- * @typedef {Record<string, string>} CuserSerializeMapping
+ * @callback CuserSerializeReducer
+ * @param {any} state
+ * @param {AnyAction} action
+ * @param {object} options
  */
 
 /**
- * @typedef {Record<string, Reducer>} CuserSerializeAliases
+ * @typedef {Array<string | any>} CuserSerializeMappingEntry
+*/
+
+/**
+ * @typedef {string|CuserSerializeMappingEntry} CuserSerializeMappingAlias
+*/
+
+/**
+ * @typedef {Record<string, CuserSerializeMappingAlias>} CuserSerializeMapping
  */
 
 /**
- * @typedef {Object} CuserSerializeEnhancerOptions
- * @prop {CuserSerializeMapping} [mapping]
- * @prop {CuserSerializeAliases} [aliases]
- * @prop {CuserSerializeProcessMap} [processMap]
+ * @typedef {Record<string, CuserSerializeReducer>} CuserSerializeAliases
  */
 
- /**
-  * @param {CuserSerializeEnhancerOptions & CuserSerializeOptions & CuserDeserializeOptions} opts
-  */
-const createSerializeEnhancer = (opts) => {
+/**
+ * @typedef {CuserStoreSerializeReducerOptions} CuserSerializeEnhancerOptions
+ */
+
+/**
+ * @param {CuserDeserializeOptions} opts
+ */
+const createRehydrateReducer = ({ deserialize, deserializable = () => true }) => {
+  /**
+   * @param {any} state
+   * @param {AnyAction} action
+   */
+  const rehydrateReducer = (state, { type }) => {
+    if (deserialize && type === TYPE_ACTION_REHYDRATE && deserializable(state)) {
+      return deserialize(state);
+    }
+    return state;
+  }
+  return rehydrateReducer;
+}
+
+/**
+ * @param {CuserSerializeOptions} opts
+ */
+const createSealReducer = ({ serialize, serializable = () => true }) => {
+  /**
+   * @param {any} state
+   * @param {AnyAction} action
+   */
+  const sealReducer = (state, { type }) => {
+    if (serialize && type === TYPE_ACTION_SEAL && serializable(state)) {
+      return serialize(state);
+    }
+    return state;
+  }
+  return sealReducer;
+}
+
+/**
+ * @param {Array<String>} patterns
+ * @param {CuserSerializeEnhancerOptions & CuserSerializeOptions & CuserDeserializeOptions} opts
+ */
+const createSerializeEnhancer = (patterns, opts) => {
   const {
-    mapping,
-    aliases,
-    processMap = p => p,
     ...restOpts
-  } = { ...opts };
+  } = {
+    deserializable: () => true,
+    serializable: () => true,
+    serialize: (state) => state,
+    deserialize: (state) => state,
+    ...opts
+  };
 
   return createStore => (
     rootReducer,
@@ -106,39 +133,31 @@ const createSerializeEnhancer = (opts) => {
     enhancer,
   ) => {
 
-    let store, phase;
+    let store, dispatch, phase;
 
     const deferred = {
       resolve: (resolved) => {}, reject: (err) => {}
     }
     const pending = [];
 
-    const mappingEntries = Object.entries(mapping);
-    // Sort first the shallowest paths
-    const shallowMapping = mappingEntries
-      .sort(([a], [b]) => a.match(/\//g).length - b.match(/\//g).length)
-    // Sort first the deepest paths
-    const deeperMapping = [...shallowMapping].reverse();
+    const sealReducer = createSealReducer(restOpts);
+    const rehydrateReducer = createRehydrateReducer(restOpts);
+    const serializeReducer = createSerializeReducer(sealReducer, patterns, {
+      ...restOpts,
+      promise: true,
+    });
+    const deserializeReducer = createSerializeReducer(rehydrateReducer, patterns, {
+      ...restOpts,
+      deeper: true,
+      promise: true,
+    });
 
-    const applySerializeReducers = (mapping, state, action) => mapping.reduce((prev, [ pattern, alias ]) => {
-      return mutateJson(prev, (mutate, prevState, path, result) => {
-        const reducer = aliases[alias];
-        if (!reducer) {
-          throw new Error(`Missing reducer for "${alias}"`);
-        }
-        const newState = sealReducer(reducer(rehydrateReducer(prevState, action, restOpts), action), action, restOpts);
+    const isPromiseTest = ([,value]) => isPromise(value);
 
-        mutate(Promise.resolve(newState).then(value => {
-          debug("reducer %s %s %s %s", action.type, path, prevState, result);
-          return ({ value })
-        }));
-      }, { nested: true, promise: true, test: processMap(pattern, action) });
-    }, state);
-
-    const serializeReducer = (state, action) => {
+    const enhancedSerializeReducer = (state, action) => {
       if (/@@redux\/INIT/.test(action.type)) {
         if (isPromise(state)) {
-          state.then((payload) => store.dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
+          state.then((payload) => dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
           return state;
         }
         return rootReducer(state, action)
@@ -148,7 +167,7 @@ const createSerializeEnhancer = (opts) => {
         case TYPE_ACTION_RESOLVED:
           if (pending.length) {
             process.nextTick(() => {
-              store.dispatch(pending.shift());
+              dispatch(pending.shift());
             });
           } else if (phase === phases.SEALING) {
             deferred.resolve(state);
@@ -157,29 +176,33 @@ const createSerializeEnhancer = (opts) => {
           return action.payload;
         case TYPE_ACTION_SEAL:
           phase = phases.SEALING;
-          state = applySerializeReducers(deeperMapping, state, action)
+          state = serializeReducer(state, action)
             .then((serialized) => {
-              debug("reducer %s %s %s", TYPE_ACTION_SEAL, '/', serialized);
-              return sealReducer(serialized, action, restOpts);
+              debug(`performing "${action.type}" on / %s`, serialized);
+              return sealReducer(serialized, action);
             });
           break;
         case TYPE_ACTION_REHYDRATE:
           phase = phases.REHYDRATING;
-          state = applySerializeReducers(shallowMapping, rehydrateReducer(state, action, restOpts), action);
+          state = deserializeReducer(rehydrateReducer(state, action), action)
+              .then((deserialized) => {
+                debug(`performing "${action.type}" on / %s`, deserialized);
+                return deserialized;
+              });
           break;
         default:
           phase = phases.IDLE;
         break;
       }
 
-      state = mutateJson(state || {}, (mutate, value) => {
+      state = mutateJson(state, (mutate, value) => {
         mutate({ value });
-      }, ([,value]) => value && value.then);
+      }, isPromiseTest);
 
       if (isPromise(state)) {
         state.then((payload) => {
-          store.dispatch({ type: TYPE_ACTION_RESOLVED, payload });
-        });
+          dispatch({ type: TYPE_ACTION_RESOLVED, payload });
+        }, deferred.reject)
         return state;
       }
 
@@ -188,7 +211,7 @@ const createSerializeEnhancer = (opts) => {
         process.nextTick(() => {
           debug('dispatching serializer for action %o', action);
           pending.push(action, { type: TYPE_ACTION_SEAL, payload: action.payload });
-          store.dispatch({ type: TYPE_ACTION_REHYDRATE, payload: action.payload });
+          dispatch({ type: TYPE_ACTION_REHYDRATE, payload: action.payload });
         });
         return state;
       }
@@ -200,19 +223,31 @@ const createSerializeEnhancer = (opts) => {
       }
 
       return Promise.resolve(state).then((payload) => {
-        store.dispatch({ type: TYPE_ACTION_RESOLVED, payload });
+        dispatch({ type: TYPE_ACTION_RESOLVED, payload });
       });
     }
 
-    store = createStore(serializeReducer, initialState, enhancer);
+    store = createStore(enhancedSerializeReducer, initialState, enhancer);
 
-    store.exec = (action) => {
+    /**
+     * Dispatch an action agains the store and returns a promise
+     * with serialized state when sealed complete
+     * @param {AnyAction} action
+     */
+    const serialiledDispatch = (action) => {
+      if (pending.length) {
+        throw new Error('CuserStore: dispatch can be performed if there is a process stil in progress')
+      }
       return new Promise((resolve, reject) => {
         deferred.resolve = resolve;
         deferred.reject = reject;
-        store.dispatch(action);
+        dispatch(action);
       });
     };
+
+    dispatch = store.dispatch;
+    store.dispatch = serialiledDispatch;
+
     return store;
   }
 }

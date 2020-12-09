@@ -35,12 +35,13 @@ test('should works without errors', (t) => {
 
 
 test('should raise an error with errors property', (t) => {
+  const value = [];
   const validate = createValidator({
     type: 'object'
   });
 
   try {
-    validate([]);
+    validate(value);
   } catch(ex) {
     t.deepEqual(ex.errors, [
       {
@@ -52,6 +53,18 @@ test('should raise an error with errors property', (t) => {
         },
         schemaPath: '#/type',
       },
-    ])
+    ]);
+    t.is(ex.value, value);
   }
+});
+
+test('should raise an error with a custom messsage', (t) => {
+  const value = [];
+  const validate = createValidator({
+    type: 'object'
+  });
+
+  t.throws(() => validate(value, 'Custom error message'), {
+    message: /Custom error message/
+  });
 });

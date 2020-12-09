@@ -65,11 +65,14 @@ test('should publish a message', async (t) => {
   const { core, auth, reader, accessToken } = t.context;
   const topicId = 'custom_topic_id_publish';
   const data = `unique message for publish ${new Date().getTime()}`;
-  const publisher = createPublisher(core, auth, {
-    preloadedState: null
-  });
+  const publisher = createPublisher(core, auth);
 
-  await publisher.publishMessage(topicId, accessToken, data);
+  await publisher.publishMessage(topicId, accessToken, data)
+
+  // .then(({ value }) => {
+  //   console.log(value);
+  //   // node.dag.get(value).console.log(value);
+  // });
 
   const messages = await reader.getMessages(topicId);
   t.is(messages.length, 1);
@@ -81,9 +84,7 @@ test('should update a message', async (t) => {
   const topicId = 'custom_topic_id_update';
   const data = `unique message for update ${new Date().getTime()}`;
   const modified = `modified ${data}`;
-  const publisher = createPublisher(core, auth, {
-    preloadedState: null
-  });
+  const publisher = createPublisher(core, auth);
 
   await publisher.publishMessage(topicId, accessToken, data);
 
@@ -102,9 +103,7 @@ test('should update a delete', async (t) => {
   const { core, auth, reader, accessToken } = t.context;
   const topicId = 'custom_topic_id_delete';
   const data = `unique message for delete ${new Date().getTime()}`;
-  const publisher = createPublisher(core, auth, {
-    preloadedState: null
-  });
+  const publisher = createPublisher(core, auth);
 
   await publisher.publishMessage(topicId, accessToken, data);
 

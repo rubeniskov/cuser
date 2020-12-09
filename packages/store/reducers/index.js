@@ -1,6 +1,9 @@
 // @ts-check
 const { GraphType } = require('@cuser/proto/graphs');
 const wrapValidatorActionReducer = require('../utils/wrapValidatorActionReducer');
+const createResolveReducer = require('../utils/createResolveReducer');
+const aliases = require('./aliases');
+
 const createReducer = require('../utils/createReducer')
 // @ts-ignore
 const publishMessageActionSchema = require('@cuser/proto/schemas/ActionPublishMessage.json');
@@ -15,9 +18,11 @@ const {
   TYPE_ACTION_DELETE_MESSAGE,
 } = require('../rtypes/actions');
 
-const rootReducer = () => ({
+const rootReducer = createResolveReducer(() => ({
   type: GraphType.GRAPH_ROOT,
   topics: '@topics',
+}), {
+  aliases,
 })
 
 module.exports = createReducer({

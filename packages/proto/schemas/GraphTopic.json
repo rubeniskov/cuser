@@ -22,10 +22,10 @@
     "message": {
       "anyOf": [
         {
-          "type": [
-            "string",
-            "null"
-          ]
+          "$ref": "#/definitions/hash"
+        },
+        {
+          "$ref": "#/definitions/null"
         },
         {
           "$ref": "#/definitions/message"
@@ -35,8 +35,14 @@
   },
   "additionalProperties": false,
   "type": "object",
-  "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/GraphTopic.json#",
+  "$id": "https://github.com/rubeniskov/cuser/tree/master/packages/proto/schemas/GraphTopic.json#",
   "definitions": {
+    "hash": {
+      "type": "string"
+    },
+    "null": {
+      "type": "null"
+    },
     "message": {
       "required": [
         "type",

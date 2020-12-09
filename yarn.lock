@@ -10756,10 +10756,10 @@ mutable-proxy@^1.0.0:
   resolved "https://registry.yarnpkg.com/mutable-proxy/-/mutable-proxy-1.0.0.tgz#3c6e6f9304c2e5a4751bb65b5a66677de9bcf3c8"
   integrity sha512-4OvNRr1DJpy2QuDUV74m+BWZ//n4gG4bmd21MzDSPqHEidIDWqwyOjcadU1LBMO3vXYGurVKjfBrxrSQIHFu9A==
 
-mutant-json@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/mutant-json/-/mutant-json-0.6.1.tgz#16c97446bba46ef92691974884fd0c99ce79a3da"
-  integrity sha512-chBeUwbycqGAovyJ9PkFdIQ+mh/ndHN5uDX4nYprd9IKzvKzBm0g9gXE60yx8b5RMKOdym1py+AMHg85S+OYXw==
+mutant-json@0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/mutant-json/-/mutant-json-0.6.3.tgz#69db17da530c65c4da5deef06364f12427fb35be"
+  integrity sha512-PFQHLIGfQt5BECDcFrzD2IrayjRDADBBZB6/s3eKTHIKrZ9BiTNIcEvyH2ho+jTR6Ndtf+Dl66J8urapbnxAvw==
   dependencies:
     is-promise "^4.0.0"
     jsonpatch "^3.0.1"

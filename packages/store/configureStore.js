@@ -1,36 +1,46 @@
 // @ts-check
-/** @typedef {import('redux').Reducer} Reducer */
-/** @typedef {import('redux').StoreEnhancer} StoreEnhancer */
-const { createStore, compose, applyMiddleware } = require('redux');
-const monitorReducerEnhancer = require('./enhancers/monitorReducerEnhancer');
-const createResolveReducer = require('./createResolveReducer');
-const loggerMiddleware = require('./middlewares/loggerMiddleware');
 
+/** @typedef {import('redux').PreloadedState<String|GraphRoot>} PreloadedState */
+/** @typedef {import('redux').Action} Action */
+/** @typedef {import('@cuser/proto/graphs').GraphRoot} GraphRoot */
+/** @typedef {import('./createStore').CuserStore} CuserStore */
+/** @typedef {import('./enhancers/createSerializeEnhancer').CuserSerializeEnhancerOptions} CuserSerializeEnhancerOptions */
 
-/**
- * @typedef {Object} CuserConfigureStoreOptions
- * @prop {any} [preloadedState]
- * @prop {StoreEnhancer} [enhancer]
- */
-
+const createStore = require('./createStore');
+const createSerializeEnhancer = require('./enhancers/createSerializeEnhancer');
+const rootReducer = require('./reducers');
+const aliases = require('./reducers/aliases');
 
 /**
- * Creates a store wrapping the default cuser enhancers
- * @param {Reducer} rootReducer
- * @param {CuserConfigureStoreOptions} param1
+ * @typedef {CuserSerializeEnhancerOptions} CuserStoreOptions
  */
-const configureStore = (rootReducer, {
-  preloadedState,
-  enhancer,
-  ...restOpts
-} = {}) => {
 
-  const middlewares = [loggerMiddleware];
-  const middlewareEnhancer = applyMiddleware(...middlewares);
-  const enhancers = [middlewareEnhancer, monitorReducerEnhancer, enhancer].filter(Boolean);
-  const composedEnhancers = compose(...enhancers);
-  const resolveReducer = createResolveReducer(rootReducer, restOpts);
-  return createStore(resolveReducer, preloadedState, composedEnhancers);
-}
+/**
+ * @param {PreloadedState} preloadedState
+ * @param {CuserStoreOptions} opts
+ * @returns {CuserStore}
+ */
+const configureStore = (preloadedState, opts) => {
+  const {
+    patterns = [
+      '/topics/*',
+      '/topics/*/message',
+      '/topics/*/message/**/user',
+      '/topics/*/message/**/parent',
+      '/topics/*/message/**/content',
+      '/topics/*/message/**/content/data',
+      '/topics/*/message/**/content/**/parent'
+    ],
+    processPattern = (pointer, { payload: { topicId = null } = {} } = {}) => pointer.replace('/topics/*', `/topics/${topicId}`),
+    ...restOpts
+  } = {
+    ...opts
+  }
+
+  return createStore(rootReducer, preloadedState, createSerializeEnhancer(patterns, {
+    processPattern,
+    ...restOpts
+  }))
+};
 
 module.exports = configureStore;

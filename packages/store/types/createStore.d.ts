@@ -1,44 +1,21 @@
 export = createStore;
+/** @typedef {Store} CuserStore */
 /**
- * @typedef {CuserSerializeEnhancerOptions} CuserStoreOptions
- */
-/**
- * @typedef {Object} CuserStore
- * @prop {(action: Action) => Promise<any>} exec
- * @prop {() => any} getState
- * @prop {(subscriber: Function) => any} subscribe
- */
-/**
- *
- * @param {CuserStoreOptions} opts
- * @returns {Store & CuserStore}
- */
-declare function createStore(opts: CuserStoreOptions): Store & CuserStore;
+ * Creates a store wrapping the default cuser enhancers
+ * @param {Reducer} rootReducer
+ * @param {Function} enhancer
+ * @returns {CuserStore}
+ */ /**
+* @param {Reducer} rootReducer
+* @param {any} preloadedState
+* @param {Function} enhancer
+* @returns {CuserStore}
+*/
+declare function createStore(rootReducer: Reducer, preloadedState: any, enhancer: Function): CuserStore;
 declare namespace createStore {
-    export { Store, Action, CuserConfigureStoreOptions, CuserSerializeEnhancerOptions, CuserStoreOptions, CuserStore };
+    export { Reducer, Store, StoreCreator, CuserStore };
 }
-type CuserStoreOptions = {
-    isSerializable?: () => boolean;
-    isDeserializable?: () => boolean;
-    mapping?: Record<string, string>;
-    aliases?: Record<string, import("redux").Reducer<any, import("redux").AnyAction>>;
-    processMap?: (pointer: string, action: any) => string;
-};
+type Reducer = (state: any, action: import("redux").AnyAction) => any;
+type CuserStore = import("redux").Store<any, import("redux").AnyAction>;
 type Store = import("redux").Store<any, import("redux").AnyAction>;
-type CuserStore = {
-    exec: (action: Action) => Promise<any>;
-    getState: () => any;
-    subscribe: (subscriber: Function) => any;
-};
-type Action = import("redux").Action<any>;
-type CuserConfigureStoreOptions = {
-    preloadedState?: any;
-    enhancer?: import("redux").StoreEnhancer<{}, {}>;
-};
-type CuserSerializeEnhancerOptions = {
-    isSerializable?: () => boolean;
-    isDeserializable?: () => boolean;
-    mapping?: Record<string, string>;
-    aliases?: Record<string, import("redux").Reducer<any, import("redux").AnyAction>>;
-    processMap?: (pointer: string, action: any) => string;
-};
+type StoreCreator = import("redux").StoreCreator;

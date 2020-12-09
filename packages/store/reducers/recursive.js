@@ -3,7 +3,9 @@ const mutateJson = require('mutant-json');
 const isPromise = require('is-promise');
 
 const recursiveReducer = (reducer, opts) => {
-  return (state, action, { resolve = (a, _) => a } = {}) => {
+
+  return (state, action, ropts) => {
+    console.log(ropts);
     if (typeof state !== 'object') {
       return state;
     }
@@ -15,10 +17,10 @@ const recursiveReducer = (reducer, opts) => {
 
     return mutateJson(state, (mutate, value) => {
 
-      if (resolve) {
-        value = resolve(value, action);
-      }
-
+      // if (resolve) {
+      //   value = resolve(value, action);
+      // }
+      // @ts-ignore
       if (isPromise(value)) {
         return mutate(value.then((value) => {
           if (value !== undefined) {

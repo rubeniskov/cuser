@@ -127,5 +127,5 @@
     },
     "additionalProperties": false,
     "type": "object",
-    "$id": "https://github.com/rubeniskov/cuser/packages/proto/schemas/PayloadQueryMessagesResult.json#"
+    "$id": "https://github.com/rubeniskov/cuser/tree/master/packages/proto/schemas/PayloadQueryMessagesResult.json#"
 }

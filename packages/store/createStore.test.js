@@ -1,18 +1,34 @@
 const test = require('ava');
-const crypto = require('crypto');
-const loremIpsum = require("lorem-ipsum").loremIpsum;
-
-const createAction = require('./utils/createAction');
-const createUsers = require('./testing/createUsers');
+const { format } = require('util');
+const { createIterator } = require('traverse-json');
 
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
-  TYPE_ACTION_DELETE_MESSAGE
+  TYPE_ACTION_UPDATE_MESSAGE,
+  TYPE_ACTION_DELETE_MESSAGE,
 } = require('./rtypes/actions');
+const {
+  TYPE_ERROR_INVALID_ACTION,
+  TYPE_ERROR_USER_MUST_BE_THE_OWNER,
+  TYPE_ERROR_MISSING_RESOURCE_ID,
+} = require('./rtypes/errors');
 
+const createAction = require('./utils/createAction');
+const createUsers = require('./testing/createUsers');
 const createStore = require('./createStore');
-const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
-const getLastTopicMessageFromCache = (cache, topicId, hash) => cache[cache[cache[hash].topics[topicId]].message];
+const rootReducer = require('./reducers');
+
+const getMessages = (store, topicId) => {
+  const message = store.getState().topics[topicId].message
+  return [message].concat(Array.from(createIterator(message, '@parent')).map(([,v]) => v).filter(Boolean));
+};
+const getMessageIds = (store) => Array.from(createIterator(store.getState(), '**/message/**/id')).map(([,v]) => v);
+const randomHash = (l = 32) => new Array(l).fill().map(() => String.fromCharCode(65 + ~~(Math.random() * 10))).join('');
+
+const dispatchActions = (store, actions) => (Array.isArray(actions) ? actions : [actions]).forEach((action) => {
+  store.dispatch(action);
+  return store.getState();
+})
 
 let users;
 
@@ -22,100 +38,318 @@ test.before((t) => {
 });
 
 test.beforeEach((t) => {
-  const cache = t.context.cache = {};
-  t.context.serialize = (data) => {
-    const hash = md5(data);
-    cache[hash] = data;
-    return hash
-  };
-  t.context.deserialize = (hash) => cache[hash];
+  t.context.store = createStore(rootReducer);
+  t.context.topicId = randomHash();
 });
 
-test('should create the store with defaults', (t) => {
-  const store = createStore();
-
-  t.is(typeof store.exec, 'function');
+test.afterEach((t) => {
+  t.log(JSON.stringify(t.context.store.getState(), null, 2));
 });
 
-test('should create the store and serialize data', async (t) => {
+test('should publish messages', (t) => {
+  const { store, topicId } = t.context;
+  const publishActions = [
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    })
+  ].map(({ type, payload }, idx) => ({
+    type,
+    payload: {
+      ...payload,
+      topicId,
+      content: { data: `message nº: ${idx}` },
+    }
+  }));
 
-  const {
-    cache,
-    serialize,
-    deserialize
-  } = t.context;
-
-  const store = createStore({
-    serialize, deserialize
+  t.plan(publishActions.length * 5);
+  let idx = 0;
+  store.subscribe(() => {
+    const state = store.getState();
+    t.truthy(state.topics[topicId]);
+    t.truthy(state.topics[topicId].message);
+    const messages = getMessages(store, topicId);
+    t.is(messages.length, idx + 1);
+    t.is(publishActions[0].payload.content.data, messages[idx].content.data);
+    t.is(publishActions[idx].payload.content.data, messages[messages.length - idx - 1].content.data);
+    idx++
   });
 
-  const data = loremIpsum();
-  const topicId = 'CUSTOM_TOPIC_ID';
-
-  const hash_state1 = await store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
-    topicId,
-    user: users[0],
-    content: {
-      data
-    }
-  }));
-
-  t.is(Object.entries(cache).length, 6);
-
-  const hash_state2 = await store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
-    topicId,
-    user: users[0],
-    content: {
-      data
-    }
-  }));
-
-  t.is(Object.entries(cache).length, 10);
-
-  t.is(getLastTopicMessageFromCache(cache, topicId, hash_state1).parent, null);
-  // TODO hash parent
-  // t.is(typeof getMessageFromCache(hash_state2).parent, 'string');
+  dispatchActions(store, publishActions);
 });
 
-test('should delete a message', async (t) => {
+test('should throws error when publish messages', (t) => {
+  const { store, topicId } = t.context;
 
-  const {
-    cache,
-    serialize,
-    deserialize
-  } = t.context;
-
-  const store = createStore({
-    serialize, deserialize
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+        topicId,
+        content: 'Wrong payload format',
+        user: users[0],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_INVALID_ACTION, TYPE_ACTION_PUBLISH_MESSAGE),
   });
+});
 
-  const data = loremIpsum();
-  const topicId = 'CUSTOM_TOPIC_ID';
-  const getMessageFromCache = (hash) => cache[cache[cache[hash].topics[topicId]].message]
-
-  const hash_state1 = await store.exec(createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
-    topicId,
-    user: users[0],
-    content: {
-      data
+test('should update messages', (t) => {
+  const { store, topicId } = t.context;
+  const publishActions = [
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+  ].map(({ type, payload }, idx) => ({
+    type,
+    payload: {
+      ...payload,
+      topicId,
+      content: { data: `message nº: ${idx}` },
     }
   }));
 
-  t.is(Object.entries(cache).length, 6);
-  const message = getLastTopicMessageFromCache(cache, topicId, hash_state1);
+  dispatchActions(store, publishActions);
 
-  const hash_state2 = await store.exec(createAction(TYPE_ACTION_DELETE_MESSAGE, {
-    topicId,
-    user: users[0],
-    messageId: message.id
+  const messageIds = getMessageIds(store);
+
+  const updateActions = [
+    createAction(TYPE_ACTION_UPDATE_MESSAGE, {
+      topicId,
+      content: { data: 'modified message 1 rev 2' },
+      messageId: messageIds[0],
+      user: users[0],
+    }),
+    createAction(TYPE_ACTION_UPDATE_MESSAGE, {
+      topicId,
+      content: { data: 'modified message 1 rev 2' },
+      messageId: messageIds[1],
+      user: users[1],
+    })
+  ];
+
+  t.plan(updateActions.length * 4);
+  let idx = 0;
+  store.subscribe(() => {
+    const state = store.getState();
+    t.truthy(state.topics[topicId]);
+    t.truthy(state.topics[topicId].message);
+    const messages = getMessages(store, topicId);
+    const message = messages.find(({ id }) => updateActions[idx].payload.messageId === id);
+    t.is(messages.length, 3);
+    t.is(updateActions[0].payload.content.data, message.content.data);
+    idx++
+  });
+
+  dispatchActions(store, updateActions);
+});
+
+test('should throws error when update messages', (t) => {
+  const { store, topicId } = t.context;
+  const publishActions = [
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+  ].map(({ type, payload }, idx) => ({
+    type,
+    payload: {
+      ...payload,
+      topicId,
+      content: { data: `message nº: ${idx}` },
+    }
   }));
 
-  console.log(cache);
-  console.log(hash_state2);
+  dispatchActions(store, publishActions);
+
+  const messageIds = getMessageIds(store);
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_UPDATE_MESSAGE, {
+        topicId: 'non_existing_topic',
+        content: { data: 'modified message 1 rev 2' },
+        messageId: messageIds[0],
+        user: users[1],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_MISSING_RESOURCE_ID, 'Topic', 'non_existing_topic'),
+  });
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_UPDATE_MESSAGE, {
+        topicId,
+        content: { data: 'modified message 1 rev 2' },
+        messageId: messageIds[0],
+        user: users[1],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_USER_MUST_BE_THE_OWNER, 'message')
+  });
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_UPDATE_MESSAGE, {
+        topicId,
+        content: { data: 'modified message 1 rev 2' },
+        messageId: 'non_existing_message_id',
+        user: users[0],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_MISSING_RESOURCE_ID, 'Message', 'non_existing_message_id'),
+  });
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_UPDATE_MESSAGE, {
+        topicId,
+        content: 'Wrong payload format',
+        messageId: messageIds[0],
+        user: users[0],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_INVALID_ACTION, TYPE_ACTION_UPDATE_MESSAGE),
+  });
+});
+
+test('should delete messages', (t) => {
+  const { store, topicId } = t.context;
+  const publishActions = [
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+  ].map(({ type, payload }, idx) => ({
+    type,
+    payload: {
+      ...payload,
+      topicId,
+      content: { data: `message nº: ${idx}` },
+    }
+  }));
+
+  dispatchActions(store, publishActions);
+
+  const messageIds = getMessageIds(store);
+
+  dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+      topicId,
+      messageId: messageIds[1],
+      user: users[1],
+    })
+  ]);
+
+  let messages = getMessages(store, topicId);
+  t.is(messages.length, 2);
+
+  t.true(!messages.map(({id}) => id).some((id) => id === messageIds[1]));
+  t.true(!messages.map(({content}) => content.data).includes('message nº: 1'))
   t.pass();
-  // t.is(Object.entries(cache).length, 10);
-  // console.log(hash_state1, hash_state2);
-  // t.is(getMessageFromCache(hash_state1).parent, null);
-  // TODO hash parent
-  // t.is(typeof getMessageFromCache(hash_state2).parent, 'string');
+
+
+  dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+      topicId,
+      messageId: messageIds[2],
+      user: users[0],
+    })
+  ]);
+
+  messages = getMessages(store, topicId);
+
+  t.is(messages.length, 1);
+  t.is(messages[0].content.data, 'message nº: 0');
+});
+
+
+test('should throws error when delete messages', (t) => {
+  const { store, topicId } = t.context;
+  const publishActions = [
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[1],
+    }),
+    createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+      user: users[0],
+    }),
+  ].map(({ type, payload }, idx) => ({
+    type,
+    payload: {
+      ...payload,
+      topicId,
+      content: { data: `message nº: ${idx}` },
+    }
+  }));
+
+  dispatchActions(store, publishActions);
+
+  const messageIds = getMessageIds(store);
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+        topicId: 'non_existing_topic',
+        messageId: messageIds[0],
+        user: users[1],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_MISSING_RESOURCE_ID, 'Topic', 'non_existing_topic'),
+  });
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+        topicId,
+        messageId: messageIds[0],
+        user: users[1],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_USER_MUST_BE_THE_OWNER, 'message'),
+  });
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+        topicId,
+        messageId: 'non_existing_message_id',
+        user: users[0],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_MISSING_RESOURCE_ID, 'Message', 'non_existing_message_id'),
+  });
+
+  t.throws(() => {
+    dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+        topicId,
+        user: users[0],
+      })
+    ]);
+  }, {
+    message: format(TYPE_ERROR_INVALID_ACTION, TYPE_ACTION_DELETE_MESSAGE),
+  });
 });

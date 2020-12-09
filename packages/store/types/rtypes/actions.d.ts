@@ -1,4 +1,5 @@
 export const TYPE_ACTION_PREFIX: "@cuser";
+export const TYPE_ACTION_DEFAULT: string;
 export const TYPE_ACTION_PUBLISH_MESSAGE: string;
 export const TYPE_ACTION_PROMISE_RESOLVED: string;
 export const TYPE_ACTION_UPDATE_MESSAGE: string;
