@@ -14,14 +14,15 @@
 
 ### constructor
 
-\+ **new CoreCryptoBearer**(`opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
+\+ **new CoreCryptoBearer**(`secret`: string, `opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
 
-*Defined in bearer.js:14*
+*Defined in [bearer.js:14](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/bearer.js#L14)*
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
+`secret` | string |  |
 `opts` | any |   |
 
 **Returns:** [CoreCryptoBearer](docs/classes/corecryptobearer.md)

@@ -16,24 +16,39 @@
 
 * [CoreCryptoBearer](docs/classes/corecryptobearer.md)
 * [CuserCryptoCypher](docs/classes/cusercryptocypher.md)
+* [CuserCryptoKeygen](docs/classes/cusercryptokeygen.md)
+
+### Variables
+
+* [pki](docs/globals.md#pki)
 
 ### Functions
 
 * [createBearer](docs/globals.md#createbearer)
 * [createHash](docs/globals.md#createhash)
+* [createKeygen](docs/globals.md#createkeygen)
+
+## Variables
+
+### pki
+
+•  **pki**: any
+
+*Defined in [keygen.js:6](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/keygen.js#L6)*
 
 ## Functions
 
 ### createBearer
 
-▸ `Const`**createBearer**(`opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
+▸ `Const`**createBearer**(`secret`: string, `opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
 
-*Defined in bearer.js:44*
+*Defined in [bearer.js:45](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/bearer.js#L45)*
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
+`secret` | string |  |
 `opts` | any |   |
 
 **Returns:** [CoreCryptoBearer](docs/classes/corecryptobearer.md)
@@ -44,7 +59,7 @@ ___
 
 ▸ `Const`**createHash**(`secret`: string, `encoding?`: string): Buffer & string
 
-*Defined in hash.js:8*
+*Defined in [hash.js:9](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/hash.js#L9)*
 
 Returns a 32 bytes fixed length hash from a secret word
 
@@ -56,6 +71,24 @@ Name | Type | Default value |
 `encoding` | string | "buffer" |
 
 **Returns:** Buffer & string
+
+___
+
+### createKeygen
+
+▸ `Const`**createKeygen**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserCryptoKeygenOptions): [CuserCryptoKeygen](docs/classes/cusercryptokeygen.md)
+
+*Defined in [keygen.js:55](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/keygen.js#L55)*
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`node` | IPFSAPI \| Promise\<IPFSAPI> |
+`secret` | string |
+`opts` | CuserCryptoKeygenOptions |
+
+**Returns:** [CuserCryptoKeygen](docs/classes/cusercryptokeygen.md)
 # Class: CoreCryptoBearer
 
 ## Hierarchy
@@ -72,14 +105,15 @@ Name | Type | Default value |
 
 ### constructor
 
-\+ **new CoreCryptoBearer**(`opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
+\+ **new CoreCryptoBearer**(`secret`: string, `opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
 
-*Defined in bearer.js:14*
+*Defined in [bearer.js:14](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/bearer.js#L14)*
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
+`secret` | string |  |
 `opts` | any |   |
 
 **Returns:** [CoreCryptoBearer](docs/classes/corecryptobearer.md)
@@ -88,3 +122,54 @@ Name | Type | Description |
 ## Hierarchy
 
 * **CuserCryptoCypher**
+# Class: CuserCryptoKeygen
+
+Generate rsa pair keys from ipfs
+
+## Hierarchy
+
+* **CuserCryptoKeygen**
+
+## Index
+
+### Constructors
+
+* [constructor](docs/classes/cusercryptokeygen.md#constructor)
+
+### Methods
+
+* [generateKeys](docs/classes/cusercryptokeygen.md#generatekeys)
+
+## Constructors
+
+### constructor
+
+\+ **new CuserCryptoKeygen**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserCryptoKeygenOptions): [CuserCryptoKeygen](docs/classes/cusercryptokeygen.md)
+
+*Defined in [keygen.js:16](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/keygen.js#L16)*
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`node` | IPFSAPI \| Promise\<IPFSAPI> |  |
+`secret` | string |  |
+`opts` | CuserCryptoKeygenOptions |   |
+
+**Returns:** [CuserCryptoKeygen](docs/classes/cusercryptokeygen.md)
+
+## Methods
+
+### generateKeys
+
+▸ **generateKeys**(`key`: string): Promise\<{ privateKey: any ; publicKey: any  }>
+
+*Defined in [keygen.js:34](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/keygen.js#L34)*
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`key` | string |
+
+**Returns:** Promise\<{ privateKey: any ; publicKey: any  }>
