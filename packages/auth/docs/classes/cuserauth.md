@@ -21,9 +21,9 @@ Auth controller
 
 ### constructor
 
-\+ **new CuserAuth**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserAuthOptions): [CuserAuth](cuserauth.md)
+\+ **new CuserAuth**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserCryptoKeygenOptions): [CuserAuth](cuserauth.md)
 
-*Defined in auth/auth.js:34*
+*Defined in [auth/auth.js:24](https://github.com/rubeniskov/cuser/blob/f5d3af5/packages/auth/auth.js#L24)*
 
 #### Parameters:
 
@@ -31,7 +31,7 @@ Name | Type |
 ------ | ------ |
 `node` | IPFSAPI \| Promise\<IPFSAPI> |
 `secret` | string |
-`opts` | CuserAuthOptions |
+`opts` | CuserCryptoKeygenOptions |
 
 **Returns:** [CuserAuth](cuserauth.md)
 
@@ -39,30 +39,32 @@ Name | Type |
 
 ### authenticate
 
-▸ **authenticate**(`payload`: any): Promise\<any>
+▸ **authenticate**(`payload`: PayloadUser): Promise\<string>
 
-*Defined in auth/auth.js:52*
+*Defined in [auth/auth.js:45](https://github.com/rubeniskov/cuser/blob/f5d3af5/packages/auth/auth.js#L45)*
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`payload` | any |   |
+Name | Type |
+------ | ------ |
+`payload` | PayloadUser |
 
-**Returns:** Promise\<any>
+**Returns:** Promise\<string>
 
 ___
 
 ### decode
 
-▸ **decode**(`accessToken`: string): Promise\<any>
+▸ **decode**(`accessToken`: string): Promise\<PayloadUser & { iat: Number  }>
 
-*Defined in auth/auth.js:61*
+*Defined in [auth/auth.js:55](https://github.com/rubeniskov/cuser/blob/f5d3af5/packages/auth/auth.js#L55)*
 
 #### Parameters:
 
-Name | Type | Description |
------- | ------ | ------ |
-`accessToken` | string |   |
+Name | Type |
+------ | ------ |
+`accessToken` | string |
 
-**Returns:** Promise\<any>
+**Returns:** Promise\<PayloadUser & { iat: Number  }>
+
+>}

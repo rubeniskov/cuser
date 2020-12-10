@@ -1,9 +1,9 @@
 // @ts-check
 /** @typedef {import("ipfs-core/src/components").IPFSAPI} Node */
 /** @typedef {import('@cuser/proto/types/payloads').PayloadUser} PayloadUser */
-/** @typedef {import('@cuser/crypto/types/bearer').CoreCryptoBearer} CuserCryptoBearer */
-/** @typedef {import('@cuser/crypto/types/keygen').CuserCryptoKeygenOptions} CuserCryptoKeygenOptions */
-/** @typedef {import('@cuser/crypto/types/keygen').CuserCryptoKeygen} CuserCryptoKeygen */
+/** @typedef {import('@cuser/crypto/bearer').CoreCryptoBearer} CuserCryptoBearer */
+/** @typedef {import('@cuser/crypto/keygen').CuserCryptoKeygenOptions} CuserCryptoKeygenOptions */
+/** @typedef {import('@cuser/crypto/keygen').CuserCryptoKeygen} CuserCryptoKeygen */
 const createBearer = require('@cuser/crypto/bearer');
 const createHash = require('@cuser/crypto/hash');
 const createKeygen = require('@cuser/crypto/keygen');

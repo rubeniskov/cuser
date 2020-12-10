@@ -7,7 +7,7 @@ export = createAuth;
  */
 declare function createAuth(node: Node | Promise<Node>, secret: string, opts?: CuserAuthOptions): CuserAuth;
 declare namespace createAuth {
-    export { CuserAuth, Node, PayloadUser, CuserAuthOptions, CuserAuthAccessToken };
+    export { CuserAuth, Node, PayloadUser, CuserCryptoBearer, CuserCryptoKeygenOptions, CuserCryptoKeygen, CuserAuthOptions, CuserAuthAccessToken };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -45,8 +45,7 @@ type CuserAuthOptions = {
     key?: string;
 };
 /**
- * @typedef {Object} CuserAuthOptions
- * @prop {String} [key='self']
+ * @typedef {CuserCryptoKeygenOptions} CuserAuthOptions
  */
 /**
  * @typedef {String} CuserAuthAccessToken
@@ -61,17 +60,29 @@ declare class CuserAuth {
      * @param {CuserAuthOptions} [opts]
      */
     constructor(node: Node | Promise<Node>, secret: string, opts?: CuserAuthOptions);
-    _bearer: Promise<any>;
+    /** @type {CuserCryptoKeygen} */
+    _keygen: CuserCryptoKeygen;
+    /** @type {Promise<CuserCryptoBearer>} */
+    _bearer: Promise<CuserCryptoBearer>;
     /**
-     * @param {Object} payload
+     * @param {PayloadUser} payload
      * @returns {Promise<CuserAuthAccessToken>}
      */
-    authenticate(payload: any): Promise<CuserAuthAccessToken>;
+    authenticate(payload: PayloadUser): Promise<CuserAuthAccessToken>;
     /**
      * @param {String} accessToken
-     * @returns {Promise<PayloadUser>}
+     * @returns {Promise<PayloadUser & { iat: Number }>}
      */
-    decode(accessToken: string): Promise<PayloadUser>;
+    decode(accessToken: string): Promise<PayloadUser & {
+        iat: number;
+    }>;
 }
-type PayloadUser = import("@cuser/proto/payloads").PayloadUser;
+type PayloadUser = import("@cuser/proto/types/payloads").PayloadUser;
+type CuserCryptoBearer = createBearer.CoreCryptoBearer;
+type CuserCryptoKeygenOptions = {
+    key?: string;
+};
+type CuserCryptoKeygen = createKeygen.CuserCryptoKeygen;
 type CuserAuthAccessToken = string;
+import createBearer = require("@cuser/crypto/bearer");
+import createKeygen = require("@cuser/crypto/keygen");
