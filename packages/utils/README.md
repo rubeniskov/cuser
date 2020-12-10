@@ -24,7 +24,7 @@
 
 ▸ `Const`**assert**(`assertion`: any, ...`args`: any[]): void
 
-*Defined in [assert.js:12](https://github.com/rubeniskov/cuser/blob/4e627ee/packages/utils/assert.js#L12)*
+*Defined in [assert.js:12](https://github.com/rubeniskov/cuser/blob/f3dfb9e/packages/utils/assert.js#L12)*
 
 Asserts a condition to raise an error when not fullfilled
 
@@ -49,7 +49,7 @@ ___
 
 ▸ `Const`**formatErr**(...`args`: any[]): Error
 
-*Defined in [formatErr.js:12](https://github.com/rubeniskov/cuser/blob/4e627ee/packages/utils/formatErr.js#L12)*
+*Defined in [formatErr.js:12](https://github.com/rubeniskov/cuser/blob/f3dfb9e/packages/utils/formatErr.js#L12)*
 
 Formats an error like sprintf
 
@@ -73,7 +73,7 @@ ___
 
 ▸ `Const`**timestamp**(): number
 
-*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/4e627ee/packages/utils/timestamp.js#L5)*
+*Defined in [timestamp.js:5](https://github.com/rubeniskov/cuser/blob/f3dfb9e/packages/utils/timestamp.js#L5)*
 
 Gets current timestamp
 
