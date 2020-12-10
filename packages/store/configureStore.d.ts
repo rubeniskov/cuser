@@ -3,13 +3,13 @@ export = configureStore;
  * @typedef {CuserSerializeEnhancerOptions} CuserStoreOptions
  */
 /**
- * @param {PreloadedState} preloadedState
+ * @param {Promise<PreloadedState>|PreloadedState} preloadedState
  * @param {CuserStoreOptions} opts
  * @returns {CuserStore}
  */
-declare function configureStore(preloadedState: PreloadedState, opts: CuserStoreOptions): CuserStore;
+declare function configureStore(preloadedState: Promise<PreloadedState> | PreloadedState, opts: CuserStoreOptions): CuserStore;
 declare namespace configureStore {
-    export { PreloadedState, Action, GraphRoot, CuserStore, CuserSerializeEnhancerOptions, CuserStoreOptions };
+    export { GraphRoot, PreloadedState, CuserStore, CuserSerializeEnhancerOptions, CuserStoreOptions };
 }
 type PreloadedState = string | {
     type: import("@cuser/proto/graphs").GraphType;
@@ -79,18 +79,13 @@ type PreloadedState = string | {
         };
     };
 };
-type CuserStoreOptions = {
-    deeper?: boolean;
-    nullable?: boolean;
-    promise?: boolean;
-    processPattern?: (pointer: string, action: any) => string;
+type CuserStoreOptions = import("./enhancers/createSerializeReducer").CuserStoreSerializeReducerOptions & createSerializeEnhancer.CuserSerializeOptions & createSerializeEnhancer.CuserDeserializeOptions;
+type CuserStore = {
+    dispatch: (action: import("redux").AnyAction) => Promise<string>;
+    getState: () => any;
+    subscribe: (listener: () => void) => Function;
+    replaceReducer: (nextReducer: import("redux").Reducer<any, import("redux").AnyAction>) => void;
 };
-type CuserStore = import("redux").Store<any, import("redux").AnyAction>;
-type Action = import("redux").Action<any>;
 type GraphRoot = import("@cuser/proto/graphs").GraphRoot;
-type CuserSerializeEnhancerOptions = {
-    deeper?: boolean;
-    nullable?: boolean;
-    promise?: boolean;
-    processPattern?: (pointer: string, action: any) => string;
-};
+type CuserSerializeEnhancerOptions = import("./enhancers/createSerializeReducer").CuserStoreSerializeReducerOptions & createSerializeEnhancer.CuserSerializeOptions & createSerializeEnhancer.CuserDeserializeOptions;
+import createSerializeEnhancer = require("./enhancers/createSerializeEnhancer");

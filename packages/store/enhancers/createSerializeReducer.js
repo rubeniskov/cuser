@@ -62,32 +62,3 @@ const createSerializeReducer = (reducer, patterns, opts) => {
 }
 
 module.exports = createSerializeReducer;
-
-// (state, action) => pointers.reduce((prev, pointer) => {
-//   const [ alias, mappingOptions ] = parseMapping(mapping);
-//   const computedOptions = { ...restOpts, ...mappingOptions };
-//   /**
-//    *
-//    * @param {function} mutate
-//    * @param {any} prevState
-//    * @param {string} path
-//    * @param {any} result
-//    */
-//   const process = async (mutate, prevState, path, result) => {
-//     const reducer = aliases[alias];
-//     if (!reducer) {
-//       throw new Error(`Missing reducer for "${alias}"`);
-//     }
-
-//     const rehydratedState = await rehydrateReducer(prevState, action, restOpts);
-//     console.log('rehydratedState', rehydratedState);
-//     const reducerState = await reducer(rehydratedState, action, computedOptions);
-//     // If state is nullish then no apply sealing
-//     const sealedState = await (reducerState === null
-//       ? null : sealReducer(reducerState, action, restOpts));
-//     console.log(action.type, path, sealedState);
-//     debug("reducer %s %s %s %s", action.type, path, sealedState);
-//     mutate({ value: sealedState });
-//   }
-//   return mutateJson(prev, process, { nested: true, promise: true, test: processMap(pattern, action) });
-// }, state);

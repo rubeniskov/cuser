@@ -8,13 +8,13 @@
 
 ### Variables
 
+* [CuserAuth](globals.md#cuserauth)
+* [CuserCore](globals.md#cusercore)
 * [TYPE\_ACTION\_DELETE\_MESSAGE](globals.md#type_action_delete_message)
 * [TYPE\_ACTION\_PUBLISH\_MESSAGE](globals.md#type_action_publish_message)
 * [TYPE\_ACTION\_UPDATE\_MESSAGE](globals.md#type_action_update_message)
+* [configureStore](globals.md#configurestore)
 * [createAction](globals.md#createaction)
-* [createAuth](globals.md#createauth)
-* [createCore](globals.md#createcore)
-* [createStore](globals.md#createstore)
 
 ### Functions
 
@@ -23,75 +23,75 @@
 
 ## Variables
 
+### CuserAuth
+
+•  **CuserAuth**: [CuserAuth](globals.md#cuserauth)
+
+*Defined in [publisher/publisher.js:13](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L13)*
+
+___
+
+### CuserCore
+
+•  **CuserCore**: [CuserCore](globals.md#cusercore)
+
+*Defined in [publisher/publisher.js:12](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L12)*
+
+___
+
 ### TYPE\_ACTION\_DELETE\_MESSAGE
 
-•  **TYPE\_ACTION\_DELETE\_MESSAGE**: any
+•  **TYPE\_ACTION\_DELETE\_MESSAGE**: string
 
-*Defined in [publisher/publisher.js:22](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L22)*
+*Defined in [publisher/publisher.js:20](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L20)*
 
 ___
 
 ### TYPE\_ACTION\_PUBLISH\_MESSAGE
 
-•  **TYPE\_ACTION\_PUBLISH\_MESSAGE**: any
+•  **TYPE\_ACTION\_PUBLISH\_MESSAGE**: string
 
-*Defined in [publisher/publisher.js:20](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L20)*
+*Defined in [publisher/publisher.js:18](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L18)*
 
 ___
 
 ### TYPE\_ACTION\_UPDATE\_MESSAGE
 
-•  **TYPE\_ACTION\_UPDATE\_MESSAGE**: any
+•  **TYPE\_ACTION\_UPDATE\_MESSAGE**: string
 
-*Defined in [publisher/publisher.js:21](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L21)*
+*Defined in [publisher/publisher.js:19](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L19)*
+
+___
+
+### configureStore
+
+• `Const` **configureStore**: [configureStore](globals.md#configurestore) = require('@cuser/store')
+
+*Defined in [publisher/publisher.js:14](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L14)*
 
 ___
 
 ### createAction
 
-• `Const` **createAction**: any = require('@cuser/store/utils/createAction')
+• `Const` **createAction**: [createAction](globals.md#createaction) = require('@cuser/store/utils/createAction')
 
-*Defined in [publisher/publisher.js:17](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L17)*
-
-___
-
-### createAuth
-
-• `Const` **createAuth**: any = require('@cuser/auth')
-
-*Defined in [publisher/publisher.js:15](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L15)*
-
-___
-
-### createCore
-
-• `Const` **createCore**: any = require('@cuser/core')
-
-*Defined in [publisher/publisher.js:14](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L14)*
-
-___
-
-### createStore
-
-• `Const` **createStore**: any = require('@cuser/store')
-
-*Defined in [publisher/publisher.js:16](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L16)*
+*Defined in [publisher/publisher.js:15](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L15)*
 
 ## Functions
 
 ### createPublisher
 
-▸ `Const`**createPublisher**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserStoreOptions & CuserCoreOptions & CuserAuthOptions): [CuserPublisher](classes/cuserpublisher.md)
+▸ `Const`**createPublisher**(`core`: [CuserCore](globals.md#cusercore), `auth`: [CuserAuth](globals.md#cuserauth), `opts`: CuserPublisherOptions & CuserStoreSerializeReducerOptions & CuserSerializeOptions & CuserDeserializeOptions): [CuserPublisher](classes/cuserpublisher.md)
 
-*Defined in [publisher/publisher.js:111](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L111)*
+*Defined in [publisher/publisher.js:114](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L114)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`node` | IPFSAPI \| Promise\<IPFSAPI> |
-`secret` | string |
-`opts` | CuserStoreOptions & CuserCoreOptions & CuserAuthOptions |
+`core` | [CuserCore](globals.md#cusercore) |
+`auth` | [CuserAuth](globals.md#cuserauth) |
+`opts` | CuserPublisherOptions & CuserStoreSerializeReducerOptions & CuserSerializeOptions & CuserDeserializeOptions |
 
 **Returns:** [CuserPublisher](classes/cuserpublisher.md)
 
@@ -101,7 +101,7 @@ ___
 
 ▸ `Const`**isDagLink**(`state`: any): boolean
 
-*Defined in [publisher/publisher.js:25](https://github.com/rubeniskov/cuser/blob/730a1b1/packages/publisher/publisher.js#L25)*
+*Defined in [publisher/publisher.js:23](https://github.com/rubeniskov/cuser/blob/45e5718/packages/publisher/publisher.js#L23)*
 
 #### Parameters:
 

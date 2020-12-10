@@ -68,7 +68,7 @@ const phases = {
  */
 
 /**
- * @typedef {CuserStoreSerializeReducerOptions} CuserSerializeEnhancerOptions
+ * @typedef {CuserStoreSerializeReducerOptions & CuserSerializeOptions & CuserDeserializeOptions} CuserSerializeEnhancerOptions
  */
 
 /**
@@ -107,7 +107,7 @@ const createSealReducer = ({ serialize, serializable = () => true }) => {
 
 /**
  * @param {Array<String>} patterns
- * @param {CuserSerializeEnhancerOptions & CuserSerializeOptions & CuserDeserializeOptions} opts
+ * @param {CuserSerializeEnhancerOptions} opts
  */
 const createSerializeEnhancer = (patterns, opts) => {
   const {

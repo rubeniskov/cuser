@@ -4,26 +4,19 @@ export = createPublisher;
  * @param {CuserAuth} auth
  * @param {CuserPublisherOptions & CuserStoreOptions} [opts]
  */
-declare function createPublisher(core: any, auth: any, opts?: CuserPublisherOptions & CuserStoreOptions): CuserPublisher;
+declare function createPublisher(core: CuserCore, auth: CuserAuth, opts?: CuserPublisherOptions & CuserStoreOptions): CuserPublisher;
 declare namespace createPublisher {
-    export { CuserPublisher, Node, CuserCore, CuserCoreOptions, CuserStore, CuserStoreOptions, CuserAuth, CuserAuthOptions, CuserAuthAccessToken, PayloadPublishMessage, PayloadUpdateMessage, PayloadDeleteMessage, CuserPublisherOptions };
+    export { CuserPublisher, Node, CuserCoreOptions, CuserStore, CuserStoreOptions, CuserAuthOptions, CuserAuthAccessToken, PayloadPublishMessage, PayloadUpdateMessage, PayloadDeleteMessage, CuserPublisherOptions };
 }
+import { CuserCore } from "@cuser/core";
+import { CuserAuth } from "@cuser/auth";
 type CuserPublisherOptions = {
-    isSerializable?: () => boolean;
-    isDeserializable?: () => boolean;
-    mapping?: Record<string, string>;
-    aliases?: Record<string, import("redux").Reducer<any, import("redux").AnyAction>>;
-    processMap?: (pointer: string, action: any) => string;
+    restore?: boolean;
 };
-type CuserStoreOptions = {
-    isSerializable?: () => boolean;
-    isDeserializable?: () => boolean;
-    mapping?: Record<string, string>;
-    aliases?: Record<string, import("redux").Reducer<any, import("redux").AnyAction>>;
-    processMap?: (pointer: string, action: any) => string;
-};
+type CuserStoreOptions = any;
 /**
- * @typedef {CuserStoreOptions} CuserPublisherOptions
+ * @typedef {Object} CuserPublisherOptions
+ * @prop {Boolean} [restore=true]
  */
 /**
  *
@@ -32,22 +25,22 @@ declare class CuserPublisher {
     /**
      * @param {CuserCore} core
      * @param {CuserAuth} auth
-     * @param {CuserStoreOptions} [opts]
+     * @param {CuserPublisherOptions & CuserStoreOptions} [opts]
      */
-    constructor(core: any, auth: any, opts?: CuserStoreOptions);
+    constructor(core: CuserCore, auth: CuserAuth, opts?: CuserPublisherOptions & CuserStoreOptions);
     /** @type {CuserCore} */
-    _core: any;
+    _core: CuserCore;
     /** @type {CuserAuth} */
-    _auth: any;
+    _auth: CuserAuth;
     /** @type {CuserStore} */
-    _store: CuserStore;
+    _store: any;
     /**
      * Publish message and gets the computed cid
      * @param {String} topicId
      * @param {CuserAuthAccessToken} accessToken
      * @param {String} data
      */
-    publishMessage(topicId: string, accessToken: CuserAuthAccessToken, data: string): Promise<any>;
+    publishMessage(topicId: string, accessToken: CuserAuthAccessToken, data: string): Promise<void>;
     /**
      * Update message and gets computed cid
      * @param {String} topicId
@@ -55,14 +48,14 @@ declare class CuserPublisher {
      * @param {String} messageId
      * @param {String} data
      */
-    updateMessage(topicId: string, accessToken: CuserAuthAccessToken, messageId: string, data: string): Promise<any>;
+    updateMessage(topicId: string, accessToken: CuserAuthAccessToken, messageId: string, data: string): Promise<import("@cuser/core").PublishResult>;
     /**
      * Delete message and gets the computed cid
      * @param {String} topicId
      * @param {CuserAuthAccessToken} accessToken
      * @param {String} messageId
      */
-    deleteMessage(topicId: string, accessToken: CuserAuthAccessToken, messageId: string): Promise<any>;
+    deleteMessage(topicId: string, accessToken: CuserAuthAccessToken, messageId: string): Promise<import("@cuser/core").PublishResult>;
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -96,7 +89,6 @@ type Node = {
     start: import("ipfs-core/src/components").Start;
     stop: import("ipfs-core/src/components").Stop;
 };
-type CuserCore = import("@cuser/core/types/core").CuserCore;
 type CuserCoreOptions = {
     key?: string;
     format?: string;
@@ -105,12 +97,7 @@ type CuserCoreOptions = {
     allowOffline?: boolean;
     parseCid?: Function;
 };
-type CuserStore = {
-    exec: (action: import("redux").Action<any>) => Promise<any>;
-    getState: () => any;
-    subscribe: (subscriber: Function) => any;
-};
-type CuserAuth = import("@cuser/auth/types/auth").CuserAuth;
+type CuserStore = any;
 type CuserAuthOptions = {
     key?: string;
 };

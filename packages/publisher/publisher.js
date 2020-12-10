@@ -1,12 +1,10 @@
 // @ts-check
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
-/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
-/** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
-/** @typedef {import('@cuser/store/types').CuserStore} CuserStore */
-/** @typedef {import('@cuser/store/types').CuserStoreOptions} CuserStoreOptions */
-/** @typedef {import('@cuser/auth/types').CuserAuth} CuserAuth */
-/** @typedef {import('@cuser/auth/types').CuserAuthOptions} CuserAuthOptions */
-/** @typedef {import('@cuser/auth/types').CuserAuthAccessToken} CuserAuthAccessToken */
+/** @typedef {import('@cuser/core').CuserCoreOptions} CuserCoreOptions */
+/** @typedef {import('@cuser/store').CuserStore} CuserStore */
+/** @typedef {import('@cuser/store').CuserStoreOptions} CuserStoreOptions */
+/** @typedef {import('@cuser/auth').CuserAuthOptions} CuserAuthOptions */
+/** @typedef {import('@cuser/auth').CuserAuthAccessToken} CuserAuthAccessToken */
 /** @typedef {import('@cuser/proto/types/payloads').PayloadPublishMessage} PayloadPublishMessage */
 /** @typedef {import('@cuser/proto/types/payloads').PayloadUpdateMessage} PayloadUpdateMessage */
 /** @typedef {import('@cuser/proto/types/payloads').PayloadDeleteMessage} PayloadDeleteMessage */
@@ -20,7 +18,7 @@ const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE,
-} = require('@cuser/store/rtypes/actions');
+} = require('@cuser/store/types/actions');
 
 const isDagLink = (state) => typeof state === 'string' && state.length === 110;
 
@@ -74,10 +72,8 @@ class CuserPublisher {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadPublishMessage} */
     const payload = { user, topicId, content: { data } };
-    return this._store.dispatch(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
-      .then((cid) => {
-        return this._core.publish(cid);
-      });
+    const cid = await this._store.dispatch(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
+    return this._core.publish(cid);
   }
 
   /**
@@ -91,10 +87,8 @@ class CuserPublisher {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadUpdateMessage} */
     const payload = { user, topicId, messageId, content: { data } };
-    return this._store.dispatch(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
-      .then((cid) => {
-        return this._core.publish(cid);
-      });
+    const cid = await this._store.dispatch(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
+    return this._core.publish(cid);
   }
 
   /**
@@ -107,10 +101,8 @@ class CuserPublisher {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadDeleteMessage} */
     const payload = { user, topicId, messageId };
-    return this._store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
-      .then((cid) => {
-        return this._core.publish(cid);
-      });
+    const cid = await this._store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
+    return this._core.publish(cid);
   }
 }
 

@@ -68,13 +68,13 @@
 
 •  **GraphType**: GraphType
 
-*Defined in [store/reducers/content.js:9](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/content.js#L9)*
+*Defined in [store/reducers/content.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/content.js#L9)*
 
-*Defined in [store/reducers/message.js:10](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L10)*
+*Defined in [store/reducers/message.js:10](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L10)*
 
-*Defined in [store/reducers/topic.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topic.js#L8)*
+*Defined in [store/reducers/topic.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topic.js#L8)*
 
-*Defined in [store/reducers/user.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/user.js#L6)*
+*Defined in [store/reducers/user.js:6](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/user.js#L6)*
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 •  **TYPE\_ACTION\_DEFAULT**: string
 
-*Defined in [store/reducers/topics.js:14](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L14)*
+*Defined in [store/reducers/topics.js:14](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L14)*
 
 ___
 
@@ -90,11 +90,11 @@ ___
 
 •  **TYPE\_ACTION\_DELETE\_MESSAGE**: string
 
-*Defined in [store/reducers/message.js:14](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L14)*
+*Defined in [store/reducers/message.js:14](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L14)*
 
-*Defined in [store/reducers/topic.js:12](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topic.js#L12)*
+*Defined in [store/reducers/topic.js:12](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topic.js#L12)*
 
-*Defined in [store/reducers/topics.js:13](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L13)*
+*Defined in [store/reducers/topics.js:13](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L13)*
 
 ___
 
@@ -102,17 +102,17 @@ ___
 
 •  **TYPE\_ACTION\_PUBLISH\_MESSAGE**: string
 
-*Defined in [store/reducers/content.js:10](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/content.js#L10)*
+*Defined in [store/reducers/content.js:10](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/content.js#L10)*
 
-*Defined in [store/reducers/data.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/data.js#L5)*
+*Defined in [store/reducers/data.js:5](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/data.js#L5)*
 
-*Defined in [store/reducers/message.js:12](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L12)*
+*Defined in [store/reducers/message.js:12](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L12)*
 
-*Defined in [store/reducers/topic.js:10](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topic.js#L10)*
+*Defined in [store/reducers/topic.js:10](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topic.js#L10)*
 
-*Defined in [store/reducers/topics.js:11](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L11)*
+*Defined in [store/reducers/topics.js:11](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L11)*
 
-*Defined in [store/reducers/user.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/user.js#L8)*
+*Defined in [store/reducers/user.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/user.js#L8)*
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 •  **TYPE\_ACTION\_REHYDRATE**: string
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:11](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L11)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:11](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L11)*
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 •  **TYPE\_ACTION\_SEAL**: string
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:12](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L12)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:12](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L12)*
 
 ___
 
@@ -136,15 +136,15 @@ ___
 
 •  **TYPE\_ACTION\_UPDATE\_MESSAGE**: string
 
-*Defined in [store/reducers/content.js:10](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/content.js#L10)*
+*Defined in [store/reducers/content.js:10](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/content.js#L10)*
 
-*Defined in [store/reducers/data.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/data.js#L5)*
+*Defined in [store/reducers/data.js:5](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/data.js#L5)*
 
-*Defined in [store/reducers/message.js:13](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L13)*
+*Defined in [store/reducers/message.js:13](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L13)*
 
-*Defined in [store/reducers/topic.js:11](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topic.js#L11)*
+*Defined in [store/reducers/topic.js:11](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topic.js#L11)*
 
-*Defined in [store/reducers/topics.js:12](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L12)*
+*Defined in [store/reducers/topics.js:12](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L12)*
 
 ___
 
@@ -152,7 +152,7 @@ ___
 
 •  **TYPE\_ERROR\_INVALID\_ACTION**: \"Invalid action format for "%s"\"
 
-*Defined in [store/utils/wrapValidatorActionReducer.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorActionReducer.js#L8)*
+*Defined in [store/utils/wrapValidatorActionReducer.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorActionReducer.js#L8)*
 
 ___
 
@@ -160,7 +160,7 @@ ___
 
 •  **TYPE\_ERROR\_INVALID\_STATE**: \"Invalid state format for "%s"\"
 
-*Defined in [store/utils/wrapValidatorStateReducer.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorStateReducer.js#L8)*
+*Defined in [store/utils/wrapValidatorStateReducer.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorStateReducer.js#L8)*
 
 ___
 
@@ -168,7 +168,7 @@ ___
 
 •  **TYPE\_ERROR\_MISSING\_PREVIOUS\_STATE**: \"Previous state does't exists\"
 
-*Defined in [store/reducers/content.js:11](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/content.js#L11)*
+*Defined in [store/reducers/content.js:11](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/content.js#L11)*
 
 ___
 
@@ -176,9 +176,9 @@ ___
 
 •  **TYPE\_ERROR\_MISSING\_RESOURCE\_ID**: \"%s with id "%s" doesn't exists\"
 
-*Defined in [store/reducers/message.js:18](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L18)*
+*Defined in [store/reducers/message.js:18](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L18)*
 
-*Defined in [store/reducers/topics.js:17](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L17)*
+*Defined in [store/reducers/topics.js:17](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L17)*
 
 ___
 
@@ -186,7 +186,7 @@ ___
 
 •  **TYPE\_ERROR\_USER\_MUST\_BE\_THE\_OWNER**: \"User must be the owner of the %s\"
 
-*Defined in [store/reducers/message.js:17](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L17)*
+*Defined in [store/reducers/message.js:17](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L17)*
 
 ___
 
@@ -194,7 +194,7 @@ ___
 
 • `Const` **actions**: "/Users/rubeniskov/Workspace/cuser/packages/store/types/actions" = require('../types/actions')
 
-*Defined in [store/utils/createReducer.js:4](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createReducer.js#L4)*
+*Defined in [store/utils/createReducer.js:4](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createReducer.js#L4)*
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 •  **applyMiddleware**: applyMiddleware
 
-*Defined in [store/createStore.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/createStore.js#L5)*
+*Defined in [store/createStore.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/createStore.js#L9)*
 
 ___
 
@@ -210,11 +210,11 @@ ___
 
 • `Const` **assert**: [assert](docs/globals.md#assert) = require('@cuser/utils/assert')
 
-*Defined in [store/reducers/content.js:7](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/content.js#L7)*
+*Defined in [store/reducers/content.js:7](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/content.js#L7)*
 
-*Defined in [store/reducers/message.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L8)*
+*Defined in [store/reducers/message.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L8)*
 
-*Defined in [store/reducers/topics.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L8)*
+*Defined in [store/reducers/topics.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L8)*
 
 ___
 
@@ -222,7 +222,7 @@ ___
 
 •  **compose**: compose
 
-*Defined in [store/createStore.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/createStore.js#L5)*
+*Defined in [store/createStore.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/createStore.js#L9)*
 
 ___
 
@@ -230,7 +230,7 @@ ___
 
 • `Const` **contentReducer**: Reducer = createReducer({ [TYPE\_ACTION\_PUBLISH\_MESSAGE]: () =\> ({ type: GraphType.GRAPH\_CONTENT, parent: null, revision: '@revision', cdate: '@timestamp', data: '@data', }), [TYPE\_ACTION\_UPDATE\_MESSAGE]: (state) =\> { assert(state, TYPE\_ERROR\_MISSING\_PREVIOUS\_STATE); return { ...state, parent: state, revision: '@revision', cdate: '@timestamp', data: '@data', } }})
 
-*Defined in [store/reducers/content.js:23](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/content.js#L23)*
+*Defined in [store/reducers/content.js:23](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/content.js#L23)*
 
 Content reducer for manage message data and its historical revisions,
 when update action, the current state will be swaped to parent in order
@@ -246,7 +246,7 @@ ___
 
 •  **createIterator**: any
 
-*Defined in [store/enhancers/createSerializeReducer.js:9](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeReducer.js#L9)*
+*Defined in [store/enhancers/createSerializeReducer.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeReducer.js#L9)*
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 •  **createReduxStore**: StoreCreator
 
-*Defined in [store/createStore.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/createStore.js#L5)*
+*Defined in [store/createStore.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/createStore.js#L9)*
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 • `Const` **dataReducer**: Reducer = createReducer({ [TYPE\_ACTION\_PUBLISH\_MESSAGE]: (\_, { payload: { content: { data } } }) =\> data, [TYPE\_ACTION\_UPDATE\_MESSAGE]: (state, { payload: { content: { data } } }) =\> data})
 
-*Defined in [store/reducers/data.js:15](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/data.js#L15)*
+*Defined in [store/reducers/data.js:15](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/data.js#L15)*
 
 Data string state
 
@@ -276,7 +276,7 @@ ___
 
 • `Const` **debug**: Debugger = require('debug')('cuser:store:serializer')
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:9](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L9)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L9)*
 
 ___
 
@@ -284,9 +284,9 @@ ___
 
 •  **format**: format
 
-*Defined in [store/utils/wrapValidatorActionReducer.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorActionReducer.js#L6)*
+*Defined in [store/utils/wrapValidatorActionReducer.js:6](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorActionReducer.js#L6)*
 
-*Defined in [store/utils/wrapValidatorStateReducer.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorStateReducer.js#L6)*
+*Defined in [store/utils/wrapValidatorStateReducer.js:6](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorStateReducer.js#L6)*
 
 ___
 
@@ -294,7 +294,7 @@ ___
 
 • `Const` **isAlias**: [isAlias](docs/globals.md#isalias) = require('./isAlias')
 
-*Defined in [store/utils/createResolveReducer.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createResolveReducer.js#L8)*
+*Defined in [store/utils/createResolveReducer.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createResolveReducer.js#L8)*
 
 ___
 
@@ -302,7 +302,7 @@ ___
 
 • `Const` **isPromise**: [isPromise](docs/globals.md#ispromise) = require('@cuser/utils/isPromise')
 
-*Defined in [store/reducers/recursive.js:7](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/recursive.js#L7)*
+*Defined in [store/reducers/recursive.js:7](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/recursive.js#L7)*
 
 ___
 
@@ -310,7 +310,7 @@ ___
 
 • `Const` **isReducer**: [isReducer](docs/globals.md#isreducer) = require('./isReducer')
 
-*Defined in [store/utils/createResolveReducer.js:9](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createResolveReducer.js#L9)*
+*Defined in [store/utils/createResolveReducer.js:9](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createResolveReducer.js#L9)*
 
 ___
 
@@ -318,7 +318,7 @@ ___
 
 • `Const` **loggerMiddleware**: [loggerMiddleware](docs/globals.md#loggermiddleware) = require('./middlewares/loggerMiddleware')
 
-*Defined in [store/createStore.js:7](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/createStore.js#L7)*
+*Defined in [store/createStore.js:11](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/createStore.js#L11)*
 
 ___
 
@@ -326,7 +326,7 @@ ___
 
 • `Const` **messageReducer**: Reducer = createReducer({ [TYPE\_ACTION\_PUBLISH\_MESSAGE]: (state) =\> ({ type: GraphType.GRAPH\_MESSAGE, parent: state \|\| null, id: '@uuid', user: '@user', content: '@content', cdate: '@timestamp', mdate: '@timestamp', }), [TYPE\_ACTION\_UPDATE\_MESSAGE]: recursiveReducer((state, { payload }) =\> { const { messageId } = payload; if (state && state.id === messageId) { assert(payload.user.peerId === state.user.peerId, TYPE\_ERROR\_USER\_MUST\_BE\_THE\_OWNER, 'message') return { ...state, content: '@content', mdate: '@timestamp', } } else { assert(state.parent, TYPE\_ERROR\_MISSING\_RESOURCE\_ID, 'Message', messageId) } }), [TYPE\_ACTION\_DELETE\_MESSAGE]: recursiveReducer((state, { payload }) =\> { const { messageId } = payload; if (state && state.id === messageId) { assert(payload.user.peerId === state.user.peerId, TYPE\_ERROR\_USER\_MUST\_BE\_THE\_OWNER, 'message') return state.parent } else { assert(state.parent, TYPE\_ERROR\_MISSING\_RESOURCE\_ID, 'Message', messageId) } })})
 
-*Defined in [store/reducers/message.js:31](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/message.js#L31)*
+*Defined in [store/reducers/message.js:31](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/message.js#L31)*
 
 Message reducer
 
@@ -340,7 +340,7 @@ ___
 
 • `Const` **minimatch**: M = require('minimatch')
 
-*Defined in [store/enhancers/createSerializeReducer.js:8](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeReducer.js#L8)*
+*Defined in [store/enhancers/createSerializeReducer.js:8](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeReducer.js#L8)*
 
 ___
 
@@ -348,7 +348,7 @@ ___
 
 • `Const` **monitorReducerEnhancer**: [monitorReducerEnhancer](docs/globals.md#monitorreducerenhancer) = require('./enhancers/monitorReducerEnhancer')
 
-*Defined in [store/createStore.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/createStore.js#L6)*
+*Defined in [store/createStore.js:10](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/createStore.js#L10)*
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 • `Const` **mutantJson**: any = require('mutant-json')
 
-*Defined in [store/utils/createResolveReducer.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createResolveReducer.js#L6)*
+*Defined in [store/utils/createResolveReducer.js:6](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createResolveReducer.js#L6)*
 
 ___
 
@@ -364,9 +364,9 @@ ___
 
 • `Const` **mutateJson**: any = require('mutant-json')
 
-*Defined in [store/enhancers/createSerializeReducer.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeReducer.js#L6)*
+*Defined in [store/enhancers/createSerializeReducer.js:6](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeReducer.js#L6)*
 
-*Defined in [store/reducers/recursive.js:6](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/recursive.js#L6)*
+*Defined in [store/reducers/recursive.js:6](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/recursive.js#L6)*
 
 ___
 
@@ -374,7 +374,7 @@ ___
 
 • `Const` **rootReducer**: (state: any, action: AnyAction) => any = require('./reducers')
 
-*Defined in [store/configureStore.js:11](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/configureStore.js#L11)*
+*Defined in [store/configureStore.js:10](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/configureStore.js#L10)*
 
 ___
 
@@ -382,9 +382,9 @@ ___
 
 • `Const` **tap**: any = require('mutant-json/tap')
 
-*Defined in [store/enhancers/createSerializeReducer.js:7](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeReducer.js#L7)*
+*Defined in [store/enhancers/createSerializeReducer.js:7](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeReducer.js#L7)*
 
-*Defined in [store/utils/createResolveReducer.js:7](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createResolveReducer.js#L7)*
+*Defined in [store/utils/createResolveReducer.js:7](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createResolveReducer.js#L7)*
 
 ___
 
@@ -392,7 +392,7 @@ ___
 
 • `Const` **topicReducer**: Reducer = createReducer({ [TYPE\_ACTION\_PUBLISH\_MESSAGE]: ({ count = 0 } = {}) =\> ({ type: GraphType.GRAPH\_TOPIC, message: '@message', count: count + 1 }), [TYPE\_ACTION\_UPDATE\_MESSAGE]: (state) =\> ({ ...state, message: '@message', }), [TYPE\_ACTION\_DELETE\_MESSAGE]: (state) =\> ({ ...state, message: '@message', count: state.count - 1 })})
 
-*Defined in [store/reducers/topic.js:23](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topic.js#L23)*
+*Defined in [store/reducers/topic.js:23](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topic.js#L23)*
 
 Topic reducer
 
@@ -406,7 +406,7 @@ ___
 
 • `Const` **topicsReducer**: Reducer = createReducer({ [TYPE\_ACTION\_PUBLISH\_MESSAGE]: (state, { payload: { topicId } }) =\> ({ ...state, [topicId]: '@topic' }), [TYPE\_ACTION\_UPDATE\_MESSAGE]: (state, { payload: { topicId } }) =\> { assert(state && state[topicId], TYPE\_ERROR\_MISSING\_RESOURCE\_ID, 'Topic', topicId); return { ...state, [topicId]: '@topic' } }, [TYPE\_ACTION\_DELETE\_MESSAGE]: (state, { payload: { topicId } }) =\> { assert(state && state[topicId], TYPE\_ERROR\_MISSING\_RESOURCE\_ID, 'Topic', topicId); return { ...state, [topicId]: '@topic' } }})
 
-*Defined in [store/reducers/topics.js:28](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/topics.js#L28)*
+*Defined in [store/reducers/topics.js:28](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/topics.js#L28)*
 
 Topic reducer
 
@@ -420,7 +420,7 @@ ___
 
 • `Const` **userReducer**: Reducer = createReducer({ // @ts-ignore [TYPE\_ACTION\_PUBLISH\_MESSAGE]: (\_, { payload: { user: { avatar, username, peerId } } = {} }) =\> ({ type: GraphType.GRAPH\_USER, username, peerId, avatar })})
 
-*Defined in [store/reducers/user.js:18](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/user.js#L18)*
+*Defined in [store/reducers/user.js:18](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/user.js#L18)*
 
 User reducer
 
@@ -434,26 +434,26 @@ ___
 
 • `Const` **validator**: createValidator = require('@cuser/validator')
 
-*Defined in [store/utils/wrapValidatorActionReducer.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorActionReducer.js#L5)*
+*Defined in [store/utils/wrapValidatorActionReducer.js:5](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorActionReducer.js#L5)*
 
-*Defined in [store/utils/wrapValidatorStateReducer.js:5](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorStateReducer.js#L5)*
+*Defined in [store/utils/wrapValidatorStateReducer.js:5](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorStateReducer.js#L5)*
 
 ## Functions
 
 ### configureStore
 
-▸ `Const`**configureStore**(`preloadedState`: string \| {}, `opts`: CuserSerializeEnhancerOptions): Store<any, AnyAction\>
+▸ `Const`**configureStore**(`preloadedState`: string \| {} \| Promise<string \| {}\>, `opts`: CuserSerializeEnhancerOptions): CuserStore
 
-*Defined in [store/configureStore.js:22](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/configureStore.js#L22)*
+*Defined in [store/configureStore.js:21](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/configureStore.js#L21)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`preloadedState` | string \| {} |
+`preloadedState` | string \| {} \| Promise<string \| {}\> |
 `opts` | CuserSerializeEnhancerOptions |
 
-**Returns:** Store<any, AnyAction\>
+**Returns:** CuserStore
 
 ___
 
@@ -461,7 +461,7 @@ ___
 
 ▸ `Const`**createReducer**(`mutations`: Record<string, Reducer<any, AnyAction\>\>): Reducer<any, AnyAction\>
 
-*Defined in [store/utils/createReducer.js:12](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createReducer.js#L12)*
+*Defined in [store/utils/createReducer.js:12](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createReducer.js#L12)*
 
 #### Parameters:
 
@@ -477,7 +477,7 @@ ___
 
 ▸ `Const`**createRehydrateReducer**(`__namedParameters`: { deserialize: (state: string) => Promise<any\> ; deserializable: () => true  }): rehydrateReducer
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:77](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L77)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:77](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L77)*
 
 #### Parameters:
 
@@ -493,7 +493,7 @@ ___
 
 ▸ `Const`**createResolveReducer**(`rootReducer`: Reducer<any, AnyAction\>, `opts`: any): resolveReducer
 
-*Defined in [store/utils/createResolveReducer.js:24](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createResolveReducer.js#L24)*
+*Defined in [store/utils/createResolveReducer.js:24](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createResolveReducer.js#L24)*
 
 #### Parameters:
 
@@ -510,7 +510,7 @@ ___
 
 ▸ `Const`**createSealReducer**(`__namedParameters`: { serialize: (state: any) => Promise<string\> ; serializable: () => true  }): sealReducer
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:94](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L94)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:94](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L94)*
 
 #### Parameters:
 
@@ -524,16 +524,16 @@ ___
 
 ### createSerializeEnhancer
 
-▸ `Const`**createSerializeEnhancer**(`patterns`: string[], `opts`: CuserStoreSerializeReducerOptions & CuserSerializeOptions & CuserDeserializeOptions): (Anonymous function)
+▸ `Const`**createSerializeEnhancer**(`patterns`: string[], `opts`: CuserSerializeEnhancerOptions): (Anonymous function)
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:112](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L112)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:112](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L112)*
 
 #### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
 `patterns` | string[] |  |
-`opts` | CuserStoreSerializeReducerOptions & CuserSerializeOptions & CuserDeserializeOptions |   |
+`opts` | CuserSerializeEnhancerOptions |   |
 
 **Returns:** (Anonymous function)
 
@@ -543,7 +543,7 @@ ___
 
 ▸ `Const`**createSerializeReducer**(`reducer`: Reducer<any, AnyAction\>, `patterns`: string[], `opts`: CuserStoreSerializeReducerOptions): serializeReducer
 
-*Defined in [store/enhancers/createSerializeReducer.js:24](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeReducer.js#L24)*
+*Defined in [store/enhancers/createSerializeReducer.js:24](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeReducer.js#L24)*
 
 #### Parameters:
 
@@ -559,9 +559,9 @@ ___
 
 ### createStore
 
-▸ `Const`**createStore**(`rootReducer`: Reducer<any, AnyAction\>, `preloadedState`: any, `enhancer`: Function): Store<any, AnyAction\>
+▸ `Const`**createStore**(`rootReducer`: Reducer<any, AnyAction\>, `preloadedState`: any, `enhancer`: Function): CuserStore
 
-*Defined in [store/createStore.js:22](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/createStore.js#L22)*
+*Defined in [store/createStore.js:32](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/createStore.js#L32)*
 
 #### Parameters:
 
@@ -571,7 +571,7 @@ Name | Type |
 `preloadedState` | any |
 `enhancer` | Function |
 
-**Returns:** Store<any, AnyAction\>
+**Returns:** CuserStore
 
 ___
 
@@ -579,7 +579,7 @@ ___
 
 ▸ `Const`**parseAliasReducer**(`reducer`: any): any[]
 
-*Defined in [store/utils/createResolveReducer.js:11](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/createResolveReducer.js#L11)*
+*Defined in [store/utils/createResolveReducer.js:11](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/createResolveReducer.js#L11)*
 
 #### Parameters:
 
@@ -595,7 +595,7 @@ ___
 
 ▸ `Const`**parseMapping**(`mapping`: string \| any[]): any[]
 
-*Defined in [store/utils/parseMapping.js:7](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/parseMapping.js#L7)*
+*Defined in [store/utils/parseMapping.js:7](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/parseMapping.js#L7)*
 
 #### Parameters:
 
@@ -611,7 +611,7 @@ ___
 
 ▸ `Const`**recursiveReducer**(`reducer`: Reducer<any, AnyAction\>, `opts`: any): (Anonymous function)
 
-*Defined in [store/reducers/recursive.js:14](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/reducers/recursive.js#L14)*
+*Defined in [store/reducers/recursive.js:14](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/reducers/recursive.js#L14)*
 
 Creates a recursive reducer for a certain key by, default parent
 
@@ -630,7 +630,7 @@ ___
 
 ▸ `Const`**wrapReducerAction**(`schema`: any, `reducer?`: Reducer<any, AnyAction\>): actionValidateReducer
 
-*Defined in [store/utils/wrapValidatorActionReducer.js:16](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorActionReducer.js#L16)*
+*Defined in [store/utils/wrapValidatorActionReducer.js:16](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorActionReducer.js#L16)*
 
 Creates a state validator reducer
 
@@ -649,7 +649,7 @@ ___
 
 ▸ `Const`**wrapValidatorStateReducer**(`schema`: any, `reducer?`: Reducer<any, AnyAction\>): stateValidateReducer
 
-*Defined in [store/utils/wrapValidatorStateReducer.js:16](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/utils/wrapValidatorStateReducer.js#L16)*
+*Defined in [store/utils/wrapValidatorStateReducer.js:16](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/utils/wrapValidatorStateReducer.js#L16)*
 
 Creates a state validator reducer
 
@@ -668,7 +668,7 @@ Name | Type | Default value | Description |
 
 ▪ `Const` **phases**: object
 
-*Defined in [store/enhancers/createSerializeEnhancer.js:16](https://github.com/rubeniskov/cuser/blob/d0809ed/packages/store/enhancers/createSerializeEnhancer.js#L16)*
+*Defined in [store/enhancers/createSerializeEnhancer.js:16](https://github.com/rubeniskov/cuser/blob/45e5718/packages/store/enhancers/createSerializeEnhancer.js#L16)*
 
 #### Properties:
 

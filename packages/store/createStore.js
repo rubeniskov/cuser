@@ -1,12 +1,22 @@
 // @ts-check
+
+/** @typedef {import('@cuser/proto/graphs').GraphRoot} GraphRoot */
 /** @typedef {import('redux').Reducer} Reducer */
 /** @typedef {import('redux').Store} Store */
 /** @typedef {import('redux').StoreCreator} StoreCreator */
+/** @typedef {import('redux').AnyAction} AnyAction */
+
 const { createStore: createReduxStore, compose, applyMiddleware } = require('redux');
 const monitorReducerEnhancer = require('./enhancers/monitorReducerEnhancer');
 const loggerMiddleware = require('./middlewares/loggerMiddleware');
 
-/** @typedef {Store} CuserStore */
+/**
+ * @typedef {Object} CuserStore
+ * @prop {(action: AnyAction) => Promise<String>} dispatch
+ * @prop {() => any} getState
+ * @prop {(listener: () => void) => Function} subscribe
+ * @prop {(nextReducer: Reducer) => void} replaceReducer
+ */
 
 /**
  * Creates a store wrapping the default cuser enhancers

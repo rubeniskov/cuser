@@ -1,8 +1,7 @@
 // @ts-check
 
-/** @typedef {import('redux').PreloadedState<String|GraphRoot>} PreloadedState */
-/** @typedef {import('redux').Action} Action */
 /** @typedef {import('@cuser/proto/graphs').GraphRoot} GraphRoot */
+/** @typedef {import('redux').PreloadedState<String | GraphRoot>} PreloadedState */
 /** @typedef {import('./createStore').CuserStore} CuserStore */
 /** @typedef {import('./enhancers/createSerializeEnhancer').CuserSerializeEnhancerOptions} CuserSerializeEnhancerOptions */
 
@@ -15,7 +14,7 @@ const rootReducer = require('./reducers');
  */
 
 /**
- * @param {PreloadedState} preloadedState
+ * @param {Promise<PreloadedState>|PreloadedState} preloadedState
  * @param {CuserStoreOptions} opts
  * @returns {CuserStore}
  */
