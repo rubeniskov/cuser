@@ -1,6 +1,5 @@
 // @ts-check
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
-/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
 const itAll = require('it-all');
 const { CuserCore } = require('@cuser/core');
 const createMessageIterator = require('./messageIterator');

@@ -8,8 +8,6 @@
 
 ### Variables
 
-* [createCore](globals.md#createcore)
-* [createMessageIterator](globals.md#createmessageiterator)
 * [itAll](globals.md#itall)
 
 ### Functions
@@ -21,41 +19,25 @@
 
 ## Variables
 
-### createCore
-
-• `Const` **createCore**: any = require('@cuser/core')
-
-*Defined in [reader/reader.js:7](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L7)*
-
-___
-
-### createMessageIterator
-
-• `Const` **createMessageIterator**: [messageIterator](globals.md#messageiterator) = require('./messageIterator')
-
-*Defined in [reader/reader.js:8](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L8)*
-
-___
-
 ### itAll
 
 • `Const` **itAll**: all = require('it-all')
 
-*Defined in [reader/reader.js:6](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L6)*
+*Defined in [reader/reader.js:3](https://github.com/rubeniskov/cuser/blob/c27bb68/packages/reader/reader.js#L3)*
 
 ## Functions
 
 ### createMessageIteratee
 
-▸ `Const`**createMessageIteratee**(`resolve`: (cursor: any) => Promise\<any>, `root`: any, `opts`: CuserMessageIteratorOptions): function
+▸ `Const`**createMessageIteratee**(`resolve`: (cursor: any) => Promise<any\>, `root`: any, `opts`: CuserMessageIteratorOptions): function
 
-*Defined in [reader/messageIterator.js:16](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/messageIterator.js#L16)*
+*Defined in [reader/messageIterator.js:16](https://github.com/rubeniskov/cuser/blob/c27bb68/packages/reader/messageIterator.js#L16)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`resolve` | (cursor: any) => Promise\<any> |
+`resolve` | (cursor: any) => Promise<any\> |
 `root` | any |
 `opts` | CuserMessageIteratorOptions |
 
@@ -65,15 +47,15 @@ ___
 
 ### createMessageMapper
 
-▸ `Const`**createMessageMapper**(`resolve`: (hash: String) => Promise\<Object>): function
+▸ `Const`**createMessageMapper**(`resolve`: (hash: String) => Promise<Object\>): function
 
-*Defined in reader/mapper.js:8*
+*Defined in [reader/mapper.js:8](https://github.com/rubeniskov/cuser/blob/c27bb68/packages/reader/mapper.js#L8)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`resolve` | (hash: String) => Promise\<Object> |
+`resolve` | (hash: String) => Promise<Object\> |
 
 **Returns:** function
 
@@ -81,17 +63,17 @@ ___
 
 ### createReader
 
-▸ `Const`**createReader**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `peerId`: string, `opts`: any): [CuserReader](classes/cuserreader.md)
+▸ `Const`**createReader**(`core`: CuserCore, `peerId`: string \| Promise<string\>, `opts`: CuserReaderOptions): [CuserReader](classes/cuserreader.md)
 
-*Defined in [reader/reader.js:154](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/reader.js#L154)*
+*Defined in [reader/reader.js:156](https://github.com/rubeniskov/cuser/blob/c27bb68/packages/reader/reader.js#L156)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`node` | IPFSAPI \| Promise\<IPFSAPI> |
-`peerId` | string |
-`opts` | any |
+`core` | CuserCore |
+`peerId` | string \| Promise<string\> |
+`opts` | CuserReaderOptions |
 
 **Returns:** [CuserReader](classes/cuserreader.md)
 
@@ -99,9 +81,9 @@ ___
 
 ### messageIterator
 
-▸ `Const`**messageIterator**(`resolve`: (cursor: any) => Promise\<any>, `root`: any, `opts`: CuserMessageIteratorOptions): AsyncIterable\<any>
+▸ `Const`**messageIterator**(`resolve`: (cursor: any) => Promise<any\>, `root`: any, `opts`: CuserMessageIteratorOptions): AsyncIterable<any\>
 
-*Defined in [reader/messageIterator.js:66](https://github.com/rubeniskov/cuser/blob/c3668c9/packages/reader/messageIterator.js#L66)*
+*Defined in [reader/messageIterator.js:66](https://github.com/rubeniskov/cuser/blob/c27bb68/packages/reader/messageIterator.js#L66)*
 
 Create message iterator which traverse resolving root and itertating by the key define by options
 
@@ -109,8 +91,8 @@ Create message iterator which traverse resolving root and itertating by the key 
 
 Name | Type |
 ------ | ------ |
-`resolve` | (cursor: any) => Promise\<any> |
+`resolve` | (cursor: any) => Promise<any\> |
 `root` | any |
 `opts` | CuserMessageIteratorOptions |
 
-**Returns:** AsyncIterable\<any>
+**Returns:** AsyncIterable<any\>

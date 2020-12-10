@@ -4,10 +4,11 @@ export = createReader;
  * @param {String|Promise<String>} peerId
  * @param {CuserReaderOptions} [opts]
  */
-declare function createReader(core: any, peerId: string | Promise<string>, opts?: CuserReaderOptions): CuserReader;
+declare function createReader(core: CuserCore, peerId: string | Promise<string>, opts?: CuserReaderOptions): CuserReader;
 declare namespace createReader {
-    export { CuserReader, GraphMessage, CuserCore, CuserReaderMessageIteratorResult, CuserReaderMessagesIteratorOptions, CuserReaderOptions };
+    export { CuserReader, GraphMessage, CuserReaderMessageIteratorResult, CuserReaderMessagesIteratorOptions, CuserReaderOptions };
 }
+import { CuserCore } from "@cuser/core";
 type CuserReaderOptions = {
     mapper?: (message: GraphMessage) => Promise<any>;
 };
@@ -38,9 +39,9 @@ declare class CuserReader {
      * @param {String|Promise<String>} peerId
      * @param {CuserReaderOptions} [opts]
      */
-    constructor(core: any, peerId: string | Promise<string>, opts?: CuserReaderOptions);
+    constructor(core: CuserCore, peerId: string | Promise<string>, opts?: CuserReaderOptions);
     /** @type {CuserCore} */
-    _core: any;
+    _core: CuserCore;
     _peerId: string | Promise<string>;
     _mapper: (message: GraphMessage) => Promise<any>;
     /** @type {(message: Object, cursor: String) => Promise<CuserReaderMessageIteratorResult>} */
@@ -77,11 +78,11 @@ declare class CuserReader {
      * Get the root message for a certain topicId
      * @private
      * @param {String} topicId
+     * @returns {Promise<string|null>}
      */
     private _resolveRootMessage;
 }
 type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
-type CuserCore = import("@cuser/core/types/core").CuserCore;
 type CuserReaderMessageIteratorResult = {
     node: GraphMessage;
     cursor: string;

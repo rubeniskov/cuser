@@ -9,7 +9,9 @@
     "postcoverage": "codecov -F reader",
     "docs": "typedoc --tsconfig ./tsconfig.json --out ./docs --plugin typedoc-plugin-markdown --mode file --hideProjectName --hideBreadcrumbs --excludeNotExported --excludeNotDocumented",
     "postdocs": "cat HEADER.md docs/classes/*.md > README.md",
-    "types": "rm -rf types && tsc --declaration --emitDeclarationOnly --outDir types"
+    "types:clean": "rimraf *.d.ts",
+    "types:gen": "tsc --declaration --emitDeclarationOnly --outDir .",
+    "types": "npm-run-all types:clean types:gen"
   },
   "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
   "license": "MIT",
@@ -22,27 +24,30 @@
     "url": "git+https://github.com/rubeniskov/cuser.git"
   },
   "devDependencies": {
+    "@cuser/core": "v0.0.1",
+    "@cuser/proto": "v0.0.1",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "jsdoc": "^3.6.6",
+    "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
     "sinon": "^9.2.1",
     "typedoc": "^0.19.2",
     "typedoc-plugin-markdown": "^3.0.11",
-    "typescript": "4.1.2",
-    "@cuser/proto": "v0.0.1",
-    "@cuser/core": "v0.0.1"
+    "typescript": "4.1.2"
   },
   "dependencies": {
     "it-all": "^1.0.4"
   },
   "peerDependencies": {
-    "@cuser/proto": "v0.0.1",
-    "@cuser/core": "v0.0.1"
+    "@cuser/core": "v0.0.1",
+    "@cuser/proto": "v0.0.1"
   },
   "nyc": {
     "exclude": [
-      "testing", "*.test.js"
+      "testing",
+      "*.test.js"
     ]
   }
 }
