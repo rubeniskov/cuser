@@ -1,12 +1,12 @@
 export = createClient;
 /**
- * @param {Node} node
+ * @param {Node|Promise<Node>} node
  * @param {String} cuserId
- * @param {CuserClientOptions} [opts]
+ * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
  */
-declare function createClient(node: Node, cuserId: string, opts?: CuserClientOptions): CuserClient;
+declare function createClient(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions & CuserReaderOptions & CuserCoreOptions): CuserClient;
 declare namespace createClient {
-    export { CuserClient, Node, GraphMessage, CuserReader, CuserReaderOptions, CuserClientMessageIteratorResult, CuserClientMessagesIteratorOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
+    export { CuserClient, Node, GraphMessage, CuserReaderOptions, CuserCoreOptions, CuserClientOptions, CuserClientEvent, CuserClientSubscriber };
 }
 type Node = {
     add: import("ipfs-core/src/components").Add;
@@ -54,21 +54,21 @@ type CuserClientOptions = {
      */
     routes?: Record<string, string>;
 };
-/**
- * @typedef {Object} CuserClientMessageIteratorResult
- * @prop {GraphMessage} node
- * @prop {String} cursor
- */
-/**
- * Iteration options for traversing messages using pagination
- * interface like [graphql](https://graphql.org/learn/pagination/)
- * @typedef {Object} CuserClientMessagesIteratorOptions
- * @prop {Number} [after=null]
- * @prop {Number} [first=10]
- * @prop {Number} [offset=0]
- * @prop {Boolean} [iterator=false] Return the iterator instead of array
- * @prop {(node: GraphMessage, cursor: String) => CuserClientMessageIteratorResult} [map] The iterator mapper
- */
+type CuserReaderOptions = {
+    mapper?: (message: import("@cuser/proto/graphs").GraphMessage) => Promise<any>;
+};
+type CuserCoreOptions = {
+    key?: string; /**
+     * @param {Node|Promise<Node>} node
+     * @param {String} cuserId
+     * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
+     */
+    format?: string;
+    hashAlg?: string;
+    timeout?: number;
+    allowOffline?: boolean;
+    parseCid?: Function;
+};
 /**
  * @typedef {Object} CuserClientOptions
  * @prop {Function} [fetch=fetch] fetch function using to resolve requests
@@ -108,20 +108,21 @@ type CuserClientOptions = {
  * });
  * ```
  */
-declare class CuserClient {
+declare class CuserClient extends CuserReader {
     /**
      * @param {Node|Promise<Node>} node
      * @param {String} cuserId
-     * @param {CuserClientOptions & CuserCoreOptions} [opts]
+     * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
      */
-    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions & any);
+    constructor(node: Node | Promise<Node>, cuserId: string, opts?: CuserClientOptions & CuserReaderOptions & CuserCoreOptions);
     _cuserId: string;
     _url: string;
-    /** @type {CuserCore} */
-    _core: any;
-    _fetch: any;
-    _pubsub: any;
-    _routes: any;
+    _fetch: Function;
+    _pubsub: import("@cuser/core/pubsub").ClientCorePubSub;
+    _routes: {
+        publisher: string;
+        auth: string;
+    };
     /**
      * Authenticates a user with the required fields of username and avatar,
      * this will epect to recieve an access_token to be used in publishing operations
@@ -185,34 +186,13 @@ declare class CuserClient {
      * @param {String} topicId topic identifier
      * @param {CuserClientSubscriber} subscriber function event subscriber
      */
-    subscribe(topicId: string, subscriber: CuserClientSubscriber): any;
+    subscribe(topicId: string, subscriber: CuserClientSubscriber): () => Promise<any>;
 }
-type GraphMessage = import("@cuser/proto/graphs").GraphMessage;
-type CuserReader = import("@cuser/reader/types/reader").CuserReader;
-type CuserReaderOptions = any;
-type CuserClientMessageIteratorResult = {
-    node: GraphMessage;
-    cursor: string;
-};
-/**
- * Iteration options for traversing messages using pagination
- * interface like [graphql](https://graphql.org/learn/pagination/)
- */
-type CuserClientMessagesIteratorOptions = {
-    after?: number;
-    first?: number;
-    offset?: number;
-    /**
-     * Return the iterator instead of array
-     */
-    iterator?: boolean;
-    /**
-     * The iterator mapper
-     */
-    map?: (node: GraphMessage, cursor: string) => CuserClientMessageIteratorResult;
-};
+type GraphMessage = import("@cuser/proto/types/graphs").GraphMessage;
 type CuserClientEvent = {
     type: ('created' | 'updated' | 'deleted');
     messageId: string;
 };
 type CuserClientSubscriber = (event: CuserClientEvent) => any;
+import CuserReader_1 = require("@cuser/reader");
+import CuserReader = CuserReader_1.CuserReader;

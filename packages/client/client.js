@@ -1,9 +1,8 @@
 // @ts-check
 /** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
 /** @typedef {import('@cuser/proto/types/graphs').GraphMessage} GraphMessage */
-/** @typedef {import('@cuser/reader/types').CuserReader} CuserReader */
-/** @typedef {import('@cuser/reader/types').CuserReaderOptions} CuserReaderOptions */
-/** @typedef {import('@cuser/core/types').CuserCoreOptions} CuserCoreOptions */
+/** @typedef {import('@cuser/reader').CuserReaderOptions} CuserReaderOptions */
+/** @typedef {import('@cuser/core').CuserCoreOptions} CuserCoreOptions */
 const CuserReader = require('@cuser/reader').CuserReader;
 const createCore = require('@cuser/core');
 const fetch = require('./fetch');

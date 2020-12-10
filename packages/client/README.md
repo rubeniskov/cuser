@@ -38,13 +38,20 @@ client.getMessages(topicId).then((messages) => {
 
 ## Hierarchy
 
-* **CuserClient**
+* [CuserReader](../globals.md#cuserreader)
+
+  ↳ **CuserClient**
 
 ## Index
 
 ### Constructors
 
 * [constructor](cuserclient.md#constructor)
+
+### Properties
+
+* [\_core](cuserclient.md#_core)
+* [\_process](cuserclient.md#_process)
 
 ### Methods
 
@@ -60,27 +67,49 @@ client.getMessages(topicId).then((messages) => {
 
 ### constructor
 
-\+ **new CuserClient**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `cuserId`: string, `opts?`: CuserClientOptions & CuserCoreOptions): [CuserClient](cuserclient.md)
+\+ **new CuserClient**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `cuserId`: string, `opts?`: CuserClientOptions & CuserReaderOptions & CuserCoreOptions): [CuserClient](cuserclient.md)
 
-*Defined in [client/client.js:71](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L71)*
+*Overrides void*
+
+*Defined in [client/client.js:53](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L53)*
 
 #### Parameters:
 
 Name | Type | Default value |
 ------ | ------ | ------ |
-`node` | IPFSAPI \| Promise\<IPFSAPI> | - |
+`node` | IPFSAPI \| Promise<IPFSAPI\> | - |
 `cuserId` | string | - |
-`opts` | CuserClientOptions & CuserCoreOptions | {} |
+`opts` | CuserClientOptions & CuserReaderOptions & CuserCoreOptions | {} |
 
 **Returns:** [CuserClient](cuserclient.md)
+
+## Properties
+
+### \_core
+
+•  **\_core**: CuserCore
+
+*Inherited from [CuserClient](cuserclient.md).[_core](cuserclient.md#_core)*
+
+*Defined in [reader/reader.d.ts:44](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/reader/reader.d.ts#L44)*
+
+___
+
+### \_process
+
+•  **\_process**: (message: any, cursor: string) => Promise<CuserReaderMessageIteratorResult\>
+
+*Inherited from [CuserClient](cuserclient.md).[_process](cuserclient.md#_process)*
+
+*Defined in [reader/reader.d.ts:48](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/reader/reader.d.ts#L48)*
 
 ## Methods
 
 ### authenticate
 
-▸ **authenticate**(`username`: string, `avatar`: string): Promise\<any>
+▸ **authenticate**(`username`: string, `avatar`: string): Promise<any\>
 
-*Defined in [client/client.js:175](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L175)*
+*Defined in [client/client.js:80](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L80)*
 
 Authenticates a user with the required fields of username and avatar,
 this will epect to recieve an access_token to be used in publishing operations
@@ -92,15 +121,15 @@ Name | Type | Description |
 `username` | string |  |
 `avatar` | string | data url scheme https://tools.ietf.org/html/rfc2397  |
 
-**Returns:** Promise\<any>
+**Returns:** Promise<any\>
 
 ___
 
 ### deleteMessage
 
-▸ **deleteMessage**(`topicId`: string, `accessToken`: string, `messageId`: string): Promise\<[any, Response]>
+▸ **deleteMessage**(`topicId`: string, `accessToken`: string, `messageId`: string): Promise<[any, Response]\>
 
-*Defined in [client/client.js:237](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L237)*
+*Defined in [client/client.js:142](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L142)*
 
 Deletes message for certain topic using topicId as identifier
 and accessToken to identify the user
@@ -113,15 +142,17 @@ Name | Type |
 `accessToken` | string |
 `messageId` | string |
 
-**Returns:** Promise\<[any, Response]>
+**Returns:** Promise<[any, Response]\>
 
 ___
 
 ### getMessage
 
-▸ **getMessage**(`cid`: string): Promise\<GraphMessage>
+▸ **getMessage**(`cid`: string): Promise<GraphMessage\>
 
-*Defined in [client/client.js:165](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L165)*
+*Inherited from [CuserClient](cuserclient.md).[getMessage](cuserclient.md#getmessage)*
+
+*Defined in [reader/reader.d.ts:76](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/reader/reader.d.ts#L76)*
 
 Gets the message from ipfs using the CID given by parameter
 
@@ -131,27 +162,29 @@ Name | Type |
 ------ | ------ |
 `cid` | string |
 
-**Returns:** Promise\<GraphMessage>
+**Returns:** Promise<GraphMessage\>
 
 ___
 
 ### getMessages
 
-▸ **getMessages**(`topicId`: string, `opts`: CuserClientMessagesIteratorOptions): Promise\<CuserClientMessageIteratorResult[]>
+▸ **getMessages**(`topicId`: string, `opts`: CuserReaderMessagesIteratorOptions): Promise<CuserReaderMessageIteratorResult[]\> \| AsyncIterable<CuserReaderMessageIteratorResult\>
 
-*Defined in [client/client.js:122](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L122)*
+*Inherited from [CuserClient](cuserclient.md).[getMessages](cuserclient.md#getmessages)*
+
+*Defined in [reader/reader.d.ts:70](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/reader/reader.d.ts#L70)*
 
 Gets messages from `ipfs` layer
 
 **`example`** 
 ### Array
 ```javascript
-const messages = client.getMessages('custom_topic_id');
+const messages = reader.getMessages('custom_topic_id');
 console.log(messages);
 ```
 ### Iterator
 ```javascript
-const messages = client.getMessages('custom_topic_id', {
+const messages = reader.getMessages('custom_topic_id', {
   iterator: true,
 });
 for await (let value of messages) {
@@ -164,17 +197,17 @@ for await (let value of messages) {
 Name | Type |
 ------ | ------ |
 `topicId` | string |
-`opts` | CuserClientMessagesIteratorOptions |
+`opts` | CuserReaderMessagesIteratorOptions |
 
-**Returns:** Promise\<CuserClientMessageIteratorResult[]>
+**Returns:** Promise<CuserReaderMessageIteratorResult[]\> \| AsyncIterable<CuserReaderMessageIteratorResult\>
 
 ___
 
 ### publishMessage
 
-▸ **publishMessage**(`topicId`: string, `accessToken`: string, `content`: string): Promise\<[any, Response]>
+▸ **publishMessage**(`topicId`: string, `accessToken`: string, `content`: string): Promise<[any, Response]\>
 
-*Defined in [client/client.js:192](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L192)*
+*Defined in [client/client.js:97](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L97)*
 
 Publish a new message for certain topic using topicId as identifier
 and accessToken to identify the user
@@ -187,7 +220,7 @@ Name | Type |
 `accessToken` | string |
 `content` | string |
 
-**Returns:** Promise\<[any, Response]>
+**Returns:** Promise<[any, Response]\>
 
 ___
 
@@ -195,7 +228,7 @@ ___
 
 ▸ **subscribe**(`topicId`: string, `subscriber`: CuserClientSubscriber): function
 
-*Defined in [client/client.js:279](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L279)*
+*Defined in [client/client.js:184](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L184)*
 
 Subscribe to message changes of a certain topic.
 
@@ -236,9 +269,9 @@ ___
 
 ### updateMessage
 
-▸ **updateMessage**(`topicId`: string, `accessToken`: string, `messageId`: string, `content`: string): Promise\<[any, Response]>
+▸ **updateMessage**(`topicId`: string, `accessToken`: string, `messageId`: string, `content`: string): Promise<[any, Response]\>
 
-*Defined in [client/client.js:215](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L215)*
+*Defined in [client/client.js:120](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L120)*
 
 Updates message for certain topic using topicId as identifier
 and accessToken to identify the user
@@ -252,4 +285,4 @@ Name | Type |
 `messageId` | string |
 `content` | string |
 
-**Returns:** Promise\<[any, Response]>
+**Returns:** Promise<[any, Response]\>

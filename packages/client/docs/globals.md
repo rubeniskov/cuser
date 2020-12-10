@@ -8,10 +8,9 @@
 
 ### Variables
 
+* [CuserReader](globals.md#cuserreader)
 * [createCore](globals.md#createcore)
-* [createMessageIterator](globals.md#createmessageiterator)
 * [fetch](globals.md#fetch)
-* [toArray](globals.md#toarray)
 
 ### Functions
 
@@ -22,53 +21,45 @@
 
 ## Variables
 
-### createCore
+### CuserReader
 
-• `Const` **createCore**: any = require('@cuser/core')
+• `Const` **CuserReader**: [CuserReader](globals.md#cuserreader) = require('@cuser/reader').CuserReader
 
-*Defined in [client/client.js:6](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L6)*
+*Defined in [client/client.js:6](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L6)*
 
 ___
 
-### createMessageIterator
+### createCore
 
-• `Const` **createMessageIterator**: messageIterator = require('./messageIterator')
+• `Const` **createCore**: [createCore](globals.md#createcore) = require('@cuser/core')
 
-*Defined in [client/client.js:9](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L9)*
+*Defined in [client/client.js:7](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L7)*
 
 ___
 
 ### fetch
 
-• `Const` **fetch**: [fetcher](globals.md#fetcher) = require('./fetch')
+• `Const` **fetch**: any = global.fetch \|\| require('node-' + 'fetch')
 
-*Defined in [client/fetch.js:3](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/fetch.js#L3)*
+*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L8)*
 
-*Defined in [client/client.js:8](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L8)*
-
-___
-
-### toArray
-
-• `Const` **toArray**: any = require('async-iterator-to-array')
-
-*Defined in [client/client.js:7](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L7)*
+*Defined in [client/fetch.js:3](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/fetch.js#L3)*
 
 ## Functions
 
 ### createClient
 
-▸ `Const`**createClient**(`node`: IPFSAPI, `cuserId`: string, `opts`: CuserClientOptions): [CuserClient](classes/cuserclient.md)
+▸ `Const`**createClient**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `cuserId`: string, `opts`: CuserClientOptions & CuserReaderOptions & CuserCoreOptions): [CuserClient](classes/cuserclient.md)
 
-*Defined in [client/client.js:298](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/client.js#L298)*
+*Defined in [client/client.js:203](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/client.js#L203)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`node` | IPFSAPI |
+`node` | IPFSAPI \| Promise<IPFSAPI\> |
 `cuserId` | string |
-`opts` | CuserClientOptions |
+`opts` | CuserClientOptions & CuserReaderOptions & CuserCoreOptions |
 
 **Returns:** [CuserClient](classes/cuserclient.md)
 
@@ -76,9 +67,9 @@ ___
 
 ### fetcher
 
-▸ `Const`**fetcher**(`url`: string, `opts`: any): Promise\<any>
+▸ `Const`**fetcher**(`url`: string, `opts`: any): Promise<any\>
 
-*Defined in [client/fetch.js:21](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/fetch.js#L21)*
+*Defined in [client/fetch.js:21](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/fetch.js#L21)*
 
 Fetcher interface
 
@@ -89,7 +80,7 @@ Name | Type |
 `url` | string |
 `opts` | any |
 
-**Returns:** Promise\<any>
+**Returns:** Promise<any\>
 
 ___
 
@@ -97,7 +88,7 @@ ___
 
 ▸ `Const`**noPublisher**(): never
 
-*Defined in [client/utils.js:17](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/utils.js#L17)*
+*Defined in [client/utils.js:17](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/utils.js#L17)*
 
 No publisher function
 
@@ -109,7 +100,7 @@ ___
 
 ▸ `Const`**parseUrl**(`url`: string): string
 
-*Defined in [client/utils.js:7](https://github.com/rubeniskov/cuser/blob/60e0918/packages/client/utils.js#L7)*
+*Defined in [client/utils.js:7](https://github.com/rubeniskov/cuser/blob/dceceb4/packages/client/utils.js#L7)*
 
 if url guess url from global.location
 
