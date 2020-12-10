@@ -1,6 +1,6 @@
 // @ts-check
-/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
-/** @typedef {import('@cuser/reader/types').CuserReaderOptions} CuserReaderOptions */
+/** @typedef {import('@cuser/core').CuserCore} CuserCore */
+/** @typedef {import('@cuser/reader').CuserReaderOptions} CuserReaderOptions */
 /** @typedef {import('./wrapper').WrappedHandler} WrappedHandler */
 
 const Router = require('router');

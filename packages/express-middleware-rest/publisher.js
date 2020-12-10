@@ -1,7 +1,7 @@
 // @ts-check
-/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
-/** @typedef {import('@cuser/auth/types').CuserAuth} CuserAuth */
-/** @typedef {import('@cuser/publisher/types').CuserPublisherOptions} CuserPublisherOptions */
+/** @typedef {import('@cuser/core').CuserCore} CuserCore */
+/** @typedef {import('@cuser/auth').CuserAuth} CuserAuth */
+/** @typedef {import('@cuser/publisher').CuserPublisherOptions} CuserPublisherOptions */
 /** @typedef {import('@cuser/express-middleware-auth').CuserExpressMiddlewareAuthGuardOptions} CuserExpressMiddlewareAuthGuardOptions */
 /** @typedef {import('./wrapper').WrappedHandler} WrappedHandler */
 
