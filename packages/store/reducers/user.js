@@ -6,7 +6,7 @@
 const { GraphType } = require('@cuser/proto/graphs');
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
-} = require('../rtypes/actions');
+} = require('../types/actions');
 // Utils
 const createReducer = require('../utils/createReducer');
 

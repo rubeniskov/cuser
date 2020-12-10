@@ -1,9 +1,16 @@
 // @ts-check
-const actions = require('../rtypes/actions');
+
+/** @typedef {import('redux').Reducer} Reducer */
+const actions = require('../types/actions');
 const actionTypesArray = Object.values(actions);
 
+/**
+ *
+ * @param {Record<string, Reducer>} mutations
+ * @returns {Reducer}
+ */
 const createReducer = (mutations) => {
-  return (state, action, opts) => {
+  return (state, action) => {
     let reducer;
 
     if (!/@@redux\/INIT/.test(action.type) && !actionTypesArray.includes(action.type)) {
@@ -19,7 +26,7 @@ const createReducer = (mutations) => {
     };
 
     if (reducer) {
-      return reducer(state, action, opts);
+      return reducer(state, action);
     }
     return state;
   }

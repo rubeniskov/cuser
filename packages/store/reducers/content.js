@@ -7,8 +7,8 @@
 const assert = require('@cuser/utils/assert');
 // Types
 const { GraphType } = require('@cuser/proto/graphs');
-const { TYPE_ACTION_PUBLISH_MESSAGE, TYPE_ACTION_UPDATE_MESSAGE } = require('../rtypes/actions');
-const { TYPE_ERROR_MISSING_PREVIOUS_STATE } = require('../rtypes/errors');
+const { TYPE_ACTION_PUBLISH_MESSAGE, TYPE_ACTION_UPDATE_MESSAGE } = require('../types/actions');
+const { TYPE_ERROR_MISSING_PREVIOUS_STATE } = require('../types/errors');
 // Utils
 const createReducer = require('../utils/createReducer');
 

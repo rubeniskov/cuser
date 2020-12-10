@@ -6,7 +6,7 @@ export = contentReducer;
  * @param {GraphContent} [state]
  * @param {ActionPublishMessage|ActionUpdateMessage} action
  */
-declare const contentReducer: (state: any, action: any, opts: any) => any;
+declare const contentReducer: import("redux").Reducer<any, import("redux").AnyAction>;
 declare namespace contentReducer {
     export { GraphContent, ActionPublishMessage, ActionUpdateMessage };
 }

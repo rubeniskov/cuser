@@ -12,10 +12,10 @@ const {
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE,
   TYPE_ACTION_DEFAULT,
-} = require('../rtypes/actions');
+} = require('../types/actions');
 const {
   TYPE_ERROR_MISSING_RESOURCE_ID,
-} = require('../rtypes/errors');
+} = require('../types/errors');
 // Utils
 const createReducer = require('../utils/createReducer');
 

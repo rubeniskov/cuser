@@ -16,7 +16,7 @@ const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE,
-} = require('../rtypes/actions');
+} = require('../types/actions');
 
 const rootReducer = () => ({
   type: GraphType.GRAPH_ROOT,

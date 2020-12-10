@@ -12,11 +12,11 @@ const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_UPDATE_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE
-} = require('../rtypes/actions');
+} = require('../types/actions');
 const {
   TYPE_ERROR_USER_MUST_BE_THE_OWNER,
   TYPE_ERROR_MISSING_RESOURCE_ID,
-} = require('../rtypes/errors');
+} = require('../types/errors');
 // Utils
 const createReducer = require('../utils/createReducer');
 // Reducers

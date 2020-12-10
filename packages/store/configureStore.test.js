@@ -9,7 +9,7 @@ const createSerializer = require('./testing/createSerializer');
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
   TYPE_ACTION_DELETE_MESSAGE
-} = require('./rtypes/actions');
+} = require('./types/actions');
 
 const configureStore = require('./configureStore');
 const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");

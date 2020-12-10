@@ -1,11 +1,11 @@
-export = topicReducer;
+export = topicsReducer;
 /**
  * Topic reducer
- * @param {GraphTopic} [state]
+ * @param {Record<string,GraphTopic>} [state]
  * @param {ActionPublishMessage|ActionUpdateMessage|ActionDeleteMessage} action
  */
-declare const topicReducer: (state: any, action: any, opts: any) => any;
-declare namespace topicReducer {
+declare const topicsReducer: import("redux").Reducer<any, import("redux").AnyAction>;
+declare namespace topicsReducer {
     export { GraphTopic, ActionPublishMessage, ActionUpdateMessage, ActionDeleteMessage };
 }
 type GraphTopic = import("@cuser/proto/types/graphs").GraphTopic;

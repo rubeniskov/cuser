@@ -1,12 +1,12 @@
 // @ts-check
 /** @typedef {import('redux').AnyAction} AnyAction */
 /** @typedef {import('redux').Reducer} Reducer */
-/** @typedef {import('@cuser/validator/types').ValidatorSchema} ValidatorSchema */
+/** @typedef {import('@cuser/validator').ValidatorSchema} ValidatorSchema */
 const validator = require('@cuser/validator');
 const { format } = require('util');
 const {
   TYPE_ERROR_INVALID_ACTION
-} = require('../rtypes/errors');
+} = require('../types/errors');
 
 /**
  * Creates a state validator reducer

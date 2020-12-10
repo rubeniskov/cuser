@@ -4,7 +4,7 @@ export = userReducer;
  * @param {GraphUser} [state]
  * @param {ActionPublishMessage} action
  */
-declare const userReducer: (state: any, action: any, opts: any) => any;
+declare const userReducer: import("redux").Reducer<any, import("redux").AnyAction>;
 declare namespace userReducer {
     export { GraphUser, ActionPublishMessage };
 }

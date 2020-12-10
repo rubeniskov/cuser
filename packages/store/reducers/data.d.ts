@@ -4,7 +4,7 @@ export = dataReducer;
  * @param {string} [state]
  * @param {ActionPublishMessage|ActionUpdateMessage} action
  */
-declare const dataReducer: (state: any, action: any, opts: any) => any;
+declare const dataReducer: import("redux").Reducer<any, import("redux").AnyAction>;
 declare namespace dataReducer {
     export { ActionPublishMessage, ActionUpdateMessage };
 }

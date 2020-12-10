@@ -18,15 +18,5 @@ type CuserStoreResolveReducerOptions = {
     aliases?: Record<string, Reducer>;
     maxRecursion?: number;
 };
-type MutantOptions = {
-    recursive?: boolean;
-    nested?: boolean;
-    step?: boolean;
-    test?: any;
-    once?: boolean;
-    promises?: boolean;
-    promise?: boolean;
-    iterator?: any;
-    patcher?: Function;
-};
+type MutantOptions = any;
 type AnyAction = import("redux").AnyAction;

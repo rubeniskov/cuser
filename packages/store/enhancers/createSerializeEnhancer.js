@@ -10,7 +10,7 @@ const debug = require('debug')('cuser:store:serializer');
 const {
   TYPE_ACTION_REHYDRATE,
   TYPE_ACTION_SEAL
-} = require('../rtypes/actions');
+} = require('../types/actions');
 
 
 const phases = {
