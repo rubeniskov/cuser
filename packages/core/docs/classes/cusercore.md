@@ -26,15 +26,15 @@ ipfs.dag in order to normalize the mainly used methods and allows future replace
 
 ### constructor
 
-\+ **new CuserCore**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
+\+ **new CuserCore**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
-*Defined in [core.js:28](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L28)*
+*Defined in [core.js:28](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L28)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`node` | IPFSAPI \| Promise\<IPFSAPI> |
+`node` | IPFSAPI \| Promise<IPFSAPI\> |
 `opts` | CuserCoreOptions |
 
 **Returns:** [CuserCore](docs/classes/cusercore.md)
@@ -43,9 +43,9 @@ Name | Type |
 
 ### get
 
-▸ **get**(`cid`: string, `opts`: AbortOptions): Promise\<any>
+▸ **get**(`cid`: string, `opts`: AbortOptions): Promise<any\>
 
-*Defined in [core.js:91](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L91)*
+*Defined in [core.js:91](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L91)*
 
 #### Parameters:
 
@@ -54,27 +54,27 @@ Name | Type |
 `cid` | string |
 `opts` | AbortOptions |
 
-**Returns:** Promise\<any>
+**Returns:** Promise<any\>
 
 ___
 
 ### peerId
 
-▸ **peerId**(): Promise\<string>
+▸ **peerId**(): Promise<string\>
 
-*Defined in [core.js:117](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L117)*
+*Defined in [core.js:117](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L117)*
 
 Gets the node peerId
 
-**Returns:** Promise\<string>
+**Returns:** Promise<string\>
 
 ___
 
 ### publish
 
-▸ **publish**(`cid`: string, `opts`: AbortOptions): Promise\<PublishResult>
+▸ **publish**(`cid`: string, `opts`: AbortOptions): Promise<PublishResult\>
 
-*Defined in [core.js:56](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L56)*
+*Defined in [core.js:56](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L56)*
 
 Publish using ipns to link the current cid to a fixed entry
 
@@ -85,7 +85,7 @@ Name | Type |
 `cid` | string |
 `opts` | AbortOptions |
 
-**Returns:** Promise\<PublishResult>
+**Returns:** Promise<PublishResult\>
 
 ___
 
@@ -93,7 +93,7 @@ ___
 
 ▸ **pubsub**(`opts`: CuserClientPubSubOptions): [ClientCorePubSub](docs/classes/clientcorepubsub.md)
 
-*Defined in [core.js:126](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L126)*
+*Defined in [core.js:126](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L126)*
 
 #### Parameters:
 
@@ -107,9 +107,9 @@ ___
 
 ### put
 
-▸ **put**(`value`: any, `opts`: AbortOptions & PutOptions): Promise\<string>
+▸ **put**(`value`: any, `opts`: AbortOptions & PutOptions): Promise<string\>
 
-*Defined in [core.js:75](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L75)*
+*Defined in [core.js:75](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L75)*
 
 #### Parameters:
 
@@ -118,15 +118,15 @@ Name | Type |
 `value` | any |
 `opts` | AbortOptions & PutOptions |
 
-**Returns:** Promise\<string>
+**Returns:** Promise<string\>
 
 ___
 
 ### resolve
 
-▸ **resolve**(`cid`: string): Promise\<string>
+▸ **resolve**(`cid`: string \| Promise<string\>): Promise<string\>
 
-*Defined in [core.js:106](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L106)*
+*Defined in [core.js:106](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L106)*
 
 Resolve the linked dag cid
 
@@ -134,6 +134,6 @@ Resolve the linked dag cid
 
 Name | Type |
 ------ | ------ |
-`cid` | string |
+`cid` | string \| Promise<string\> |
 
-**Returns:** Promise\<string>
+**Returns:** Promise<string\>

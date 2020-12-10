@@ -11,8 +11,8 @@
 
 * [CID](docs/globals.md#cid)
 * [Room](docs/globals.md#room)
-* [all](docs/globals.md#all)
 * [debug](docs/globals.md#debug)
+* [itAll](docs/globals.md#itall)
 
 ### Functions
 
@@ -27,7 +27,7 @@
 
 • `Const` **CID**: [CID](docs/globals.md#cid) = require("cids")
 
-*Defined in [core.js:9](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L9)*
+*Defined in [core.js:9](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L9)*
 
 ___
 
@@ -35,15 +35,7 @@ ___
 
 • `Const` **Room**: any = require('ipfs-pubsub-room')
 
-*Defined in [pubsub.js:3](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L3)*
-
-___
-
-### all
-
-• `Const` **all**: [all](docs/globals.md#all) = require("it-all")
-
-*Defined in [core.js:8](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L8)*
+*Defined in [pubsub.js:3](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L3)*
 
 ___
 
@@ -51,21 +43,29 @@ ___
 
 • `Const` **debug**: Debugger = require("debug")('cuser:core')
 
-*Defined in [core.js:11](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L11)*
+*Defined in [core.js:11](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L11)*
+
+___
+
+### itAll
+
+• `Const` **itAll**: all = require("it-all")
+
+*Defined in [core.js:8](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L8)*
 
 ## Functions
 
 ### createCore
 
-▸ `Const`**createCore**(`node`: IPFSAPI, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
+▸ `Const`**createCore**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
-*Defined in [core.js:135](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/core.js#L135)*
+*Defined in [core.js:135](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L135)*
 
 #### Parameters:
 
 Name | Type |
 ------ | ------ |
-`node` | IPFSAPI |
+`node` | IPFSAPI \| Promise<IPFSAPI\> |
 `opts` | CuserCoreOptions |
 
 **Returns:** [CuserCore](docs/classes/cusercore.md)
@@ -74,9 +74,9 @@ ___
 
 ### createPubSub
 
-▸ `Const`**createPubSub**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `opts`: CuserClientPubSubOptions): [ClientCorePubSub](docs/classes/clientcorepubsub.md)
+▸ `Const`**createPubSub**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `opts`: CuserClientPubSubOptions): [ClientCorePubSub](docs/classes/clientcorepubsub.md)
 
-*Defined in [pubsub.js:92](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L92)*
+*Defined in [pubsub.js:92](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L92)*
 
 Creates pubsub to listen changes on cuser network
 
@@ -84,7 +84,7 @@ Creates pubsub to listen changes on cuser network
 
 Name | Type |
 ------ | ------ |
-`node` | IPFSAPI \| Promise\<IPFSAPI> |
+`node` | IPFSAPI \| Promise<IPFSAPI\> |
 `opts` | CuserClientPubSubOptions |
 
 **Returns:** [ClientCorePubSub](docs/classes/clientcorepubsub.md)
@@ -95,7 +95,7 @@ ___
 
 ▸ `Const`**createRoomFromEventEmiter**(`node`: any, `channel`: any): object
 
-*Defined in [pubsub.js:18](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L18)*
+*Defined in [pubsub.js:18](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L18)*
 
 Creates a room using EventEmiter
 
@@ -120,7 +120,7 @@ ___
 
 ▸ `Const`**randomSeqno**(`bytes`: any): Buffer
 
-*Defined in [pubsub.js:14](https://github.com/rubeniskov/cuser/blob/d94f1e7/packages/core/pubsub.js#L14)*
+*Defined in [pubsub.js:14](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L14)*
 
 **`prop`** {(data: Object) => Buffer} [encode=cbor.encode] Encoder function to serialize event object
 
