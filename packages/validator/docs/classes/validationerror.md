@@ -18,9 +18,9 @@ Validator error class with nested errors
 
 ### constructor
 
-\+ **new ValidationError**(`message`: any, `validator`: ValidateFunction): [ValidationError](docs/classes/validationerror.md)
+\+ **new ValidationError**(`message`: any, `validator`: ValidateFunction, `value`: any): [ValidationError](docs/classes/validationerror.md)
 
-*Defined in [index.js:11](https://github.com/rubeniskov/cuser/blob/61e448a/packages/validator/index.js#L11)*
+*Defined in [validator.js:15](https://github.com/rubeniskov/cuser/blob/d8636b7/packages/validator/validator.js#L15)*
 
 #### Parameters:
 
@@ -28,5 +28,6 @@ Name | Type |
 ------ | ------ |
 `message` | any |
 `validator` | ValidateFunction |
+`value` | any |
 
 **Returns:** [ValidationError](docs/classes/validationerror.md)

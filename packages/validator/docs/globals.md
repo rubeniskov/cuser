@@ -16,14 +16,14 @@
 
 ▸ `Const`**createValidator**(`schema`: any): validate
 
-*Defined in [index.js:27](https://github.com/rubeniskov/cuser/blob/61e448a/packages/validator/index.js#L27)*
+*Defined in [validator.js:34](https://github.com/rubeniskov/cuser/blob/d8636b7/packages/validator/validator.js#L34)*
 
 Creates a validator which raise a ValidationError when the object doesn't fit the schema
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`schema` | any |
+Name | Type | Description |
+------ | ------ | ------ |
+`schema` | any |   |
 
 **Returns:** validate
