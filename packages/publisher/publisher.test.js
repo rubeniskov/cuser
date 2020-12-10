@@ -65,14 +65,11 @@ test('should publish a message', async (t) => {
   const { core, auth, reader, accessToken } = t.context;
   const topicId = 'custom_topic_id_publish';
   const data = `unique message for publish ${new Date().getTime()}`;
-  const publisher = createPublisher(core, auth);
+  const publisher = createPublisher(core, auth, {
+    restore: false
+  });
 
   await publisher.publishMessage(topicId, accessToken, data)
-
-  // .then(({ value }) => {
-  //   console.log(value);
-  //   // node.dag.get(value).console.log(value);
-  // });
 
   const messages = await reader.getMessages(topicId);
   t.is(messages.length, 1);
@@ -84,7 +81,9 @@ test('should update a message', async (t) => {
   const topicId = 'custom_topic_id_update';
   const data = `unique message for update ${new Date().getTime()}`;
   const modified = `modified ${data}`;
-  const publisher = createPublisher(core, auth);
+  const publisher = createPublisher(core, auth, {
+    restore: false
+  });
 
   await publisher.publishMessage(topicId, accessToken, data);
 
@@ -99,20 +98,109 @@ test('should update a message', async (t) => {
   t.is(messages[0].node.content.data, modified);
 });
 
+test('should update a deeper message', async (t) => {
+  const { core, auth, reader, accessToken } = t.context;
+  const topicId = 'custom_topic_id_update_deeper';
+  const data = `unique message for update deeper ${new Date().getTime()}`;
+  const modified = `modified ${data}`;
+  const publisher = createPublisher(core, auth, {
+    restore: false
+  });
+
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 1`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 2`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 3`);
+
+  let messages = await reader.getMessages(topicId);
+  t.is(messages.length, 3);
+  t.is(messages[0].node.content.data, `${data} nº 3`);
+  t.is(messages[1].node.content.data, `${data} nº 2`);
+  t.is(messages[2].node.content.data, `${data} nº 1`);
+
+  await publisher.updateMessage(topicId, accessToken, messages[2].node.id, `${modified} nº 1`);
+  messages = await reader.getMessages(topicId);
+  t.is(messages.length, 3);
+  t.is(messages[0].node.content.data, `${data} nº 3`);
+  t.is(messages[1].node.content.data, `${data} nº 2`);
+  t.is(messages[2].node.content.data, `${modified} nº 1`);
+});
+
 test('should update a delete', async (t) => {
   const { core, auth, reader, accessToken } = t.context;
   const topicId = 'custom_topic_id_delete';
   const data = `unique message for delete ${new Date().getTime()}`;
-  const publisher = createPublisher(core, auth);
+  const publisher = createPublisher(core, auth, {
+    restore: false
+  });
 
   await publisher.publishMessage(topicId, accessToken, data);
 
   let messages = await reader.getMessages(topicId);
+
   t.is(messages.length, 1);
   t.is(messages[0].node.content.data, data);
 
   await publisher.deleteMessage(topicId, accessToken, messages[0].node.id);
-
   messages = await reader.getMessages(topicId);
   t.is(messages.length, 0);
+});
+
+test('should delete a deeper message', async (t) => {
+  const { core, auth, reader, accessToken } = t.context;
+  const topicId = 'custom_topic_id_delete_deeper';
+  const data = `unique message for delete deeper ${new Date().getTime()}`;
+  const publisher = createPublisher(core, auth, {
+    restore: false
+  });
+
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 1`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 2`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 3`);
+
+  let messages = await reader.getMessages(topicId);
+  t.is(messages.length, 3);
+  t.is(messages[0].node.content.data, `${data} nº 3`);
+  t.is(messages[1].node.content.data, `${data} nº 2`);
+  t.is(messages[2].node.content.data, `${data} nº 1`);
+
+  await publisher.deleteMessage(topicId, accessToken, messages[2].node.id);
+  messages = await reader.getMessages(topicId);
+  t.is(messages.length, 2);
+  t.is(messages[0].node.content.data, `${data} nº 3`);
+  t.is(messages[1].node.content.data, `${data} nº 2`);
+});
+
+test('should restore the previous state', async (t) => {
+  const { core, auth, reader, accessToken } = t.context;
+  const topicId = 'custom_topic_id_delete_deeper';
+  const data = `unique message for delete deeper ${new Date().getTime()}`;
+  let publisher = createPublisher(core, auth, {
+    restore: false
+  });
+
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 1`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 2`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 3`);
+
+  let messages = await reader.getMessages(topicId);
+  t.is(messages.length, 3);
+  t.is(messages[0].node.content.data, `${data} nº 3`);
+  t.is(messages[1].node.content.data, `${data} nº 2`);
+  t.is(messages[2].node.content.data, `${data} nº 1`);
+
+  publisher = createPublisher(core, auth);
+
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 4`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 5`);
+  await publisher.publishMessage(topicId, accessToken, `${data} nº 6`);
+
+  messages = await reader.getMessages(topicId);
+  t.is(messages.length, 6);
+
+  t.is(messages[0].node.content.data, `${data} nº 6`);
+  t.is(messages[1].node.content.data, `${data} nº 5`);
+  t.is(messages[2].node.content.data, `${data} nº 4`);
+  t.is(messages[3].node.content.data, `${data} nº 3`);
+  t.is(messages[4].node.content.data, `${data} nº 2`);
+  t.is(messages[5].node.content.data, `${data} nº 1`);
 });

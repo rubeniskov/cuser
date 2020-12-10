@@ -1,19 +1,11 @@
 const test = require('ava');
 const faker = require('faker');
-const crypto = require('crypto');
 
+const createSerializer = require('../testing/createSerializer');
 const createSerializeReducer = require('./createSerializeReducer');
 
-const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
-
 test.beforeEach((t) => {
-  const cache = t.context.cache = {};
-  t.context.serialize = (data) => {
-    const hash = md5(data);
-    cache[hash] = data;
-    return hash
-  };
-  t.context.deserialize = (hash) => cache[hash];
+  t.context.serializer = createSerializer();
 });
 
 const createUser = () => ({
@@ -22,7 +14,7 @@ const createUser = () => ({
 });
 
 test('should return the serialized state and capable of deserialize it', (t) => {
-  const { cache, serialize, deserialize } = t.context;
+  const { serializer: { cache, serialize, deserialize } } = t.context;
   const state = {
     foo: faker.lorem.sentence(),
     message: {
@@ -60,6 +52,7 @@ test('should return the serialized state and capable of deserialize it', (t) => 
     '/message/**/user',
     '/message/**/parent',
     '/message/**/content',
+    '/message/**/content/data',
     '/message/**/content/**/parent'
   ]
 
@@ -80,7 +73,7 @@ test('should return the serialized state and capable of deserialize it', (t) => 
 
   t.deepEqual(deserializedState, state);
 
-  t.is(Object.keys(cache).length, 10);
+  t.is(Object.keys(cache).length, 13);
 
   Object.values(cache).forEach((value) => {
     Object.values(value).forEach((value) => {

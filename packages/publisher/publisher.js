@@ -25,7 +25,8 @@ const {
 const isDagLink = (state) => typeof state === 'string' && state.length === 110;
 
 /**
- * @typedef {CuserStoreOptions} CuserPublisherOptions
+ * @typedef {Object} CuserPublisherOptions
+ * @prop {Boolean} [restore=true]
  */
 
 /**
@@ -35,9 +36,12 @@ class CuserPublisher {
   /**
    * @param {CuserCore} core
    * @param {CuserAuth} auth
-   * @param {CuserPublisherOptions} [opts]
+   * @param {CuserPublisherOptions & CuserStoreOptions} [opts]
    */
   constructor(core, auth, opts) {
+    const {
+      restore = true
+    } = { ...opts }
     if (!(core instanceof CuserCore)) {
       throw new Error('CuserPublisher: core must be defined and be an instance of CuserCore')
     }
@@ -49,8 +53,9 @@ class CuserPublisher {
     /** @type {CuserAuth} */
     this._auth = auth;
 
+    const preloadedState = restore ? this._core.peerId().then(peerId => this._core.resolve(peerId)) : undefined
     /** @type {CuserStore} */
-    this._store = configureStore(undefined && this._core.peerId().then(peerId => this._core.resolve(peerId)), {
+    this._store = configureStore(preloadedState, {
       serializable: (state) => typeof state === 'object',
       deserializable: isDagLink,
       serialize: (value) => this._core.put(value),
@@ -61,9 +66,9 @@ class CuserPublisher {
 
   /**
    * Publish message and gets the computed cid
-   * @param {string} topicId
+   * @param {String} topicId
    * @param {CuserAuthAccessToken} accessToken
-   * @param {string} data
+   * @param {String} data
    */
   async publishMessage(topicId, accessToken, data) {
     const user = await this._auth.decode(accessToken);
@@ -77,10 +82,10 @@ class CuserPublisher {
 
   /**
    * Update message and gets computed cid
-   * @param {string} topicId
+   * @param {String} topicId
    * @param {CuserAuthAccessToken} accessToken
-   * @param {string} messageId
-   * @param {string} data
+   * @param {String} messageId
+   * @param {String} data
    */
   async updateMessage(topicId, accessToken, messageId, data) {
     const user = await this._auth.decode(accessToken);
@@ -94,9 +99,9 @@ class CuserPublisher {
 
   /**
    * Delete message and gets the computed cid
-   * @param {string} topicId
+   * @param {String} topicId
    * @param {CuserAuthAccessToken} accessToken
-   * @param {string} messageId
+   * @param {String} messageId
    */
   async deleteMessage(topicId, accessToken, messageId) {
     const user = await this._auth.decode(accessToken);

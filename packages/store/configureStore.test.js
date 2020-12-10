@@ -4,6 +4,7 @@ const loremIpsum = require("lorem-ipsum").loremIpsum;
 
 const createAction = require('./utils/createAction');
 const createUsers = require('./testing/createUsers');
+const createSerializer = require('./testing/createSerializer');
 
 const {
   TYPE_ACTION_PUBLISH_MESSAGE,
@@ -26,13 +27,7 @@ test.before((t) => {
 });
 
 test.beforeEach((t) => {
-  const cache = t.context.cache = {};
-  t.context.serialize = (data) => {
-    const hash = md5(data);
-    cache[hash] = data;
-    return Promise.resolve(hash)
-  };
-  t.context.deserialize = (hash) => Promise.resolve(cache[hash]);
+  t.context.serializer = createSerializer({}, (value) => Promise.resolve(value));
 });
 
 test('should create the store with defaults', (t) => {
@@ -43,15 +38,9 @@ test('should create the store with defaults', (t) => {
 
 test('should create the store and serialize data', async (t) => {
 
-  const {
-    cache,
-    serialize,
-    deserialize
-  } = t.context;
+  const { serializer: { cache, ...storeOpts } } = t.context;
 
-  const store = configureStore(undefined, {
-    serialize, deserialize
-  });
+  const store = configureStore(undefined, storeOpts);
 
   const data = loremIpsum();
   const topicId = 'CUSTOM_TOPIC_ID';
@@ -86,15 +75,9 @@ test('should create the store and serialize data', async (t) => {
 
 test('should delete a message', async (t) => {
 
-  const {
-    cache,
-    serialize,
-    deserialize
-  } = t.context;
+  const { serializer: { cache, ...storeOpts } } = t.context;
 
-  const store = configureStore(undefined, {
-    serialize, deserialize
-  });
+  const store = configureStore(undefined, storeOpts);
 
   const data = loremIpsum();
   const topicId = 'CUSTOM_TOPIC_ID';

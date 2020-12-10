@@ -35,5 +35,8 @@
     "@cuser/proto": "^0.0.1",
     "@cuser/utils": "^0.0.1",
     "@cuser/validator": "^0.0.1"
+  },
+  "nyc": {
+    "exclude": ["testing"]
   }
 }

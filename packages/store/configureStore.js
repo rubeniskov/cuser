@@ -9,7 +9,6 @@
 const createStore = require('./createStore');
 const createSerializeEnhancer = require('./enhancers/createSerializeEnhancer');
 const rootReducer = require('./reducers');
-const aliases = require('./reducers/aliases');
 
 /**
  * @typedef {CuserSerializeEnhancerOptions} CuserStoreOptions

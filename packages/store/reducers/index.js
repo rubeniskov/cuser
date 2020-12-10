@@ -18,15 +18,15 @@ const {
   TYPE_ACTION_DELETE_MESSAGE,
 } = require('../rtypes/actions');
 
-const rootReducer = createResolveReducer(() => ({
+const rootReducer = () => ({
   type: GraphType.GRAPH_ROOT,
   topics: '@topics',
-}), {
-  aliases,
-})
+});
 
-module.exports = createReducer({
+module.exports = createResolveReducer(createReducer({
   [TYPE_ACTION_PUBLISH_MESSAGE]: wrapValidatorActionReducer(publishMessageActionSchema, rootReducer),
   [TYPE_ACTION_UPDATE_MESSAGE]: wrapValidatorActionReducer(updateMessageActionSchema, rootReducer),
   [TYPE_ACTION_DELETE_MESSAGE]: wrapValidatorActionReducer(deleteMessageActionSchema, rootReducer),
+}), {
+  aliases,
 });

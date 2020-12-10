@@ -3,22 +3,15 @@
 /** @typedef {import('redux').AnyAction} AnyAction */
 /** @typedef {import('redux').Action} Action */
 /** @typedef {import('./createSerializeReducer').CuserStoreSerializeReducerOptions} CuserStoreSerializeReducerOptions */
-const mutateJson = require('mutant-json');
-const isPromise = require('@cuser/utils/isPromise');
+
 const createSerializeReducer = require('./createSerializeReducer');
-// const parseMapping = require('../utils/parseMapping');
+
 const debug = require('debug')('cuser:store:serializer');
 const {
-  TYPE_ACTION_RESOLVED,
   TYPE_ACTION_REHYDRATE,
   TYPE_ACTION_SEAL
 } = require('../rtypes/actions');
 
-const serializeActions = [
-  TYPE_ACTION_RESOLVED,
-  TYPE_ACTION_REHYDRATE,
-  TYPE_ACTION_RESOLVED
-];
 
 const phases = {
   IDLE: 0,
@@ -132,13 +125,7 @@ const createSerializeEnhancer = (patterns, opts) => {
     initialState,
     enhancer,
   ) => {
-
-    let store, dispatch, phase;
-
-    const deferred = {
-      resolve: (resolved) => {}, reject: (err) => {}
-    }
-    const pending = [];
+    let store;
 
     const sealReducer = createSealReducer(restOpts);
     const rehydrateReducer = createRehydrateReducer(restOpts);
@@ -152,103 +139,34 @@ const createSerializeEnhancer = (patterns, opts) => {
       promise: true,
     });
 
-    const isPromiseTest = ([,value]) => isPromise(value);
-
-    const enhancedSerializeReducer = (state, action) => {
-      if (/@@redux\/INIT/.test(action.type)) {
-        if (isPromise(state)) {
-          state.then((payload) => dispatch({ type: TYPE_ACTION_RESOLVED, payload }));
-          return state;
-        }
-        return rootReducer(state, action)
-      };
-
-      switch (action.type) {
-        case TYPE_ACTION_RESOLVED:
-          if (pending.length) {
-            process.nextTick(() => {
-              dispatch(pending.shift());
-            });
-          } else if (phase === phases.SEALING) {
-            deferred.resolve(state);
-            debug('resolved state: %s', action.payload);
-          }
-          return action.payload;
-        case TYPE_ACTION_SEAL:
-          phase = phases.SEALING;
-          state = serializeReducer(state, action)
-            .then((serialized) => {
-              debug(`performing "${action.type}" on / %s`, serialized);
-              return sealReducer(serialized, action);
-            });
-          break;
-        case TYPE_ACTION_REHYDRATE:
-          phase = phases.REHYDRATING;
-          state = deserializeReducer(rehydrateReducer(state, action), action)
-              .then((deserialized) => {
-                debug(`performing "${action.type}" on / %s`, deserialized);
-                return deserialized;
-              });
-          break;
-        default:
-          phase = phases.IDLE;
-        break;
-      }
-
-      state = mutateJson(state, (mutate, value) => {
-        mutate({ value });
-      }, isPromiseTest);
-
-      if (isPromise(state)) {
-        state.then((payload) => {
-          dispatch({ type: TYPE_ACTION_RESOLVED, payload });
-        }, deferred.reject)
-        return state;
-      }
-
-      // Dispatch rehydarte when action detected
-      if (!pending.length && !serializeActions.includes(action.type)) {
-        process.nextTick(() => {
-          debug('dispatching serializer for action %o', action);
-          pending.push(action, { type: TYPE_ACTION_SEAL, payload: action.payload });
-          dispatch({ type: TYPE_ACTION_REHYDRATE, payload: action.payload });
-        });
-        return state;
-      }
-
-      try {
-        state = rootReducer(state, action)
-      } catch (ex) {
-        deferred.reject(ex);
-      }
-
-      return Promise.resolve(state).then((payload) => {
-        dispatch({ type: TYPE_ACTION_RESOLVED, payload });
-      });
+    const enhancedSerializeReducer = async (state, action) => {
+      state = await state;
+      debug(`performing "${TYPE_ACTION_REHYDRATE}" on / %s`, state);
+      state = await rehydrateReducer(state, { type: TYPE_ACTION_REHYDRATE });
+      state = await deserializeReducer(state, { type: TYPE_ACTION_REHYDRATE });
+      state = await rootReducer(state, action);
+      debug(`performing "${TYPE_ACTION_SEAL}" on / %s`, state);
+      state = await serializeReducer(state, { type: TYPE_ACTION_SEAL });
+      state = await sealReducer(state, { type: TYPE_ACTION_SEAL });
+      return state;
     }
 
     store = createStore(enhancedSerializeReducer, initialState, enhancer);
+
+    const dispatch = store.dispatch;
 
     /**
      * Dispatch an action agains the store and returns a promise
      * with serialized state when sealed complete
      * @param {AnyAction} action
+     * @returns {Promise<any>}
      */
-    const serialiledDispatch = (action) => {
-      if (pending.length) {
-        throw new Error('CuserStore: dispatch can be performed if there is a process stil in progress')
-      }
-      return new Promise((resolve, reject) => {
-        deferred.resolve = resolve;
-        deferred.reject = reject;
-        dispatch(action);
-      });
+    const deferredDispatch = async (action) => {
+      dispatch(action);
+      return store.getState();
     };
 
-    dispatch = store.dispatch;
-    store.dispatch = serialiledDispatch;
-
-    return store;
+    return Object.assign(store, { dispatch: deferredDispatch });
   }
 }
 

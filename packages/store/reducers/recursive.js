@@ -1,11 +1,19 @@
 // @ts-check
-const mutateJson = require('mutant-json');
-const isPromise = require('is-promise');
 
+/** @typedef {import('redux').Reducer} Reducer */
+/** @typedef {import('mutant-json').MutantOptions} MutantOptions */
+
+const mutateJson = require('mutant-json');
+const isPromise = require('@cuser/utils/isPromise');
+
+/**
+ * Creates a recursive reducer for a certain key by, default parent
+ * @param {Reducer} reducer
+ * @param {MutantOptions} opts
+ */
 const recursiveReducer = (reducer, opts) => {
 
-  return (state, action, ropts) => {
-    console.log(ropts);
+  return (state, action) => {
     if (typeof state !== 'object') {
       return state;
     }
@@ -16,11 +24,6 @@ const recursiveReducer = (reducer, opts) => {
     }
 
     return mutateJson(state, (mutate, value) => {
-
-      // if (resolve) {
-      //   value = resolve(value, action);
-      // }
-      // @ts-ignore
       if (isPromise(value)) {
         return mutate(value.then((value) => {
           if (value !== undefined) {
