@@ -1,6 +1,5 @@
 // @ts-check
-/** @typedef {import('@cuser/auth/types').CuserAuth} CuserAuth */
-const createAuth = require('@cuser/auth');
+/** @typedef {import('@cuser/auth').CuserAuth} CuserAuth */
 const Router = require('router');
 const bodyParser = require('body-parser');
 

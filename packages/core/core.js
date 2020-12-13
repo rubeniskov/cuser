@@ -107,7 +107,9 @@ class CuserCore {
     const node = await this._node;
     const id = await cid;
     debug(`resolving "${id}"`);
-    const [resolved] = await itAll(node.name.resolve(id))
+    const [resolved] = await itAll(node.name.resolve(id, {
+      ...this._options
+    }));
     return resolved.replace(/^\/ipfs\//, '');
   }
 

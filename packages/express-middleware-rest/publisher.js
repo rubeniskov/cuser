@@ -34,13 +34,13 @@ const createRestPublisherMiddleware = (core, auth, opts = {}) => {
   router.post(
     mount,
     authGuard(auth, { verify: false, ...restOpts }),
-    wrapper((req) => publisher.publishMessage(req.body.topicId, req.auth.accessToken, req.body.content && req.body.content.data))
+    wrapper((req) => publisher.publishMessage(req.body.topicId, req.auth.accessToken, req.body.content))
   );
   // @ts-ignore
   router.patch(
     mount,
     authGuard(auth, { verify: false, ...restOpts }),
-    wrapper((req) => publisher.updateMessage(req.body.topicId, req.auth.accessToken, req.body.messageId, req.body.content && req.body.content.data))
+    wrapper((req) => publisher.updateMessage(req.body.topicId, req.auth.accessToken, req.body.messageId, req.body.content))
   );
   // @ts-ignore
   router.delete(

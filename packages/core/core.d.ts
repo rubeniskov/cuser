@@ -136,7 +136,7 @@ type CuserClientPubSubOptions = {
      * Decoder function to unserialize event object
      */
     decode?: (buf: Buffer) => any;
-    channel?: string;
+    channel?: string | Promise<string>;
 };
 import CID = require("cids");
 import createPubSub = require("./pubsub");

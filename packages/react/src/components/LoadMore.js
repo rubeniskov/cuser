@@ -12,8 +12,7 @@ export const LoadMore = ({
 }) => {
 
   useInfinityScroll(onLoadMore, {
-    disabled: !auto,
-    loading,
+    disabled: !auto || loading,
     contentRef
   })
 

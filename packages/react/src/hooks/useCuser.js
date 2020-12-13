@@ -1,10 +1,15 @@
+// @ts-check
+/** @typedef {import('@cuser/client').CuserClient} CuserClient */
+
 import { useContext } from 'react';
 import cuserContext from '../utils/context';
 import createCache from '../utils/cache';
 
 const useCuser = (opts) => {
 
-  const { client } = useContext(cuserContext);
+  const {
+    client
+  } = useContext(cuserContext);
   const cache = createCache();
 
   if (!client) {
@@ -12,6 +17,7 @@ const useCuser = (opts) => {
   }
 
   return {
+    /** @type {CuserClient} */
     client,
     cache
   }

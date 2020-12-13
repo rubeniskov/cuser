@@ -28,7 +28,12 @@ const usePromiseResolver = (resolver, {
     suspendPromise(new Promise((resolve) => !result.loading && resolve())).read();
   }
 
-  const mergeData = useCallback((cb) => setResult({ ...result, data: cb(result.data) }), [result])
+  /**
+   * Merges data
+   */
+  const mergeData = useCallback((setData) => {
+    Promise.resolve(setData(result.data)).then((data) => setResult({ ...result, data }));
+  }, [result]);
   const fetchMore = useCallback((opts) => doFetch(opts), [doFetch]);
   const clean = useCallback(() => setResult({ ...result, data: undefined }), [result]);
 
@@ -36,6 +41,7 @@ const usePromiseResolver = (resolver, {
     ...result,
     fetchMore,
     mergeData,
+    refetch: doFetch,
     clean
   }), [result, fetchMore, mergeData])
 

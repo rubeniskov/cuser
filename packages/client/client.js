@@ -65,10 +65,11 @@ class CuserClient extends CuserReader {
       channel: cuserId
     });
     this._routes = {
-      publisher: '/v1/message',
-      auth: '/auth',
+      publisher: '/api/v0/rest/message',
+      auth: '/api/v0/auth',
       ...opts.routes
     }
+    this._authHeaderName = 'Authorization'
   }
 
   /**
@@ -99,12 +100,8 @@ class CuserClient extends CuserReader {
       method: 'POST',
       body: JSON.stringify({ topicId, content }),
       headers: {
-        'Authentication': accessToken
+        [this._authHeaderName]: accessToken
       },
-    })
-    .then((res) => {
-      this._pubsub.broadcast({ topicId, type: 'created', ...res });
-      return res;
     });
   }
 
@@ -122,12 +119,8 @@ class CuserClient extends CuserReader {
       method: 'PATCH',
       body: JSON.stringify({ topicId, messageId, content }),
       headers: {
-        'Authentication': accessToken
+        [this._authHeaderName]: accessToken
       },
-    })
-    .then((res) => {
-      this._pubsub.broadcast({ topicId, type: 'updated', ...res });
-      return res;
     });
   }
 
@@ -144,12 +137,8 @@ class CuserClient extends CuserReader {
       method: 'DELETE',
       body: JSON.stringify({ topicId, messageId }),
       headers: {
-        'Authentication': accessToken
+        [this._authHeaderName]: accessToken
       },
-    })
-    .then((res) => {
-      this._pubsub.broadcast({ topicId, type: 'deleted', ...res });
-      return res;
     });
   }
 

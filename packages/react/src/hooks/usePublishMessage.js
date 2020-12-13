@@ -4,7 +4,7 @@ import usePromiseResolver from './usePromiseResolver';
 
 const usePublishMessage = (variables) => {
   const { client } = useCuser();
-  const resolver = useCallback(({ topicId, content }) => client.publishMessage(topicId, null, content), [client]);
+  const resolver = useCallback(({ topicId, accessToken, content }) => client.publishMessage(topicId, accessToken, content), [client]);
   return usePromiseResolver(resolver, { variables });
 }
 

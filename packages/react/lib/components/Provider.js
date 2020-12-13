@@ -1,19 +1,33 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import { useMemo } from 'react';
-import context from '../utils/context';
-const Provider = context.Provider;
+"use strict";
 
-const CuserProvider = ({
-  client,
-  children
-}) => {
-  const value = useMemo(() => ({
-    client
-  }), [client]);
-  return /*#__PURE__*/_jsx(Provider, {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _jsxRuntime = require("react/jsx-runtime");
+
+var _react = require("react");
+
+var _context = _interopRequireDefault(require("../utils/context"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var Provider = _context["default"].Provider;
+
+var CuserProvider = function CuserProvider(_ref) {
+  var client = _ref.client,
+      children = _ref.children;
+  var value = (0, _react.useMemo)(function () {
+    return {
+      client: client
+    };
+  }, [client]);
+  return /*#__PURE__*/(0, _jsxRuntime.jsx)(Provider, {
     value: value,
     children: children
   });
 };
 
-export default CuserProvider;
+var _default = CuserProvider;
+exports["default"] = _default;

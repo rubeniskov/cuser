@@ -6,8 +6,8 @@ import usePromiseResolver from './usePromiseResolver';
 const useAuth = () => {
   const { client, cache } = useCuser();
 
-  const resolver = useCallback((variables) => client.authenticate(variables).then((authResult) => {
-    const result = { ...variables, ...authResult };
+  const resolver = useCallback(({ username, avatar }) => client.authenticate(username, avatar).then((authResult) => {
+    const result = { username, avatar, ...authResult };
     cache.put('@cuser/auth', result);
     return result;
   }), [client, cache]);

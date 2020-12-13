@@ -18,9 +18,13 @@ const defaults = {
  * @param {Object} opts
  * @returns {Promise}
  */
-const fetcher = (url, opts) => fetch(url, {
+const fetcher = (url, opts = {}) => fetch(url, {
   ...opts,
   ...defaults,
+  headers: {
+    ...defaults.headers,
+    ...opts.headers
+  }
 }).then((response) => {
   if (response.status < 400) {
     return response.json();

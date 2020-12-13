@@ -22,7 +22,7 @@ Generate rsa pair keys from ipfs
 
 \+ **new CuserCryptoKeygen**(`node`: IPFSAPI \| Promise\<IPFSAPI>, `secret`: string, `opts`: CuserCryptoKeygenOptions): [CuserCryptoKeygen](docs/classes/cusercryptokeygen.md)
 
-*Defined in [keygen.js:16](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/keygen.js#L16)*
+*Defined in [keygen.js:16](https://github.com/rubeniskov/cuser/blob/f5d3af5/packages/crypto/keygen.js#L16)*
 
 #### Parameters:
 
@@ -40,7 +40,7 @@ Name | Type | Description |
 
 ▸ **generateKeys**(`key`: string): Promise\<{ privateKey: any ; publicKey: any  }>
 
-*Defined in [keygen.js:34](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/keygen.js#L34)*
+*Defined in [keygen.js:34](https://github.com/rubeniskov/cuser/blob/f5d3af5/packages/crypto/keygen.js#L34)*
 
 #### Parameters:
 

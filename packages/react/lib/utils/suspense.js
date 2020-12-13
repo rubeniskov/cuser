@@ -1,15 +1,22 @@
-export const suspendPromise = promise => {
-  let status = "pending";
-  let response;
-  const suspender = promise.then(res => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.suspendPromise = void 0;
+
+var suspendPromise = function suspendPromise(promise) {
+  var status = "pending";
+  var response;
+  var suspender = promise.then(function (res) {
     status = "success";
     response = res;
-  }, err => {
+  }, function (err) {
     status = "error";
     response = err;
   });
 
-  const read = () => {
+  var read = function read() {
     switch (status) {
       case "pending":
         throw suspender;
@@ -22,8 +29,10 @@ export const suspendPromise = promise => {
     }
   };
 
-  const result = {
-    read
+  var result = {
+    read: read
   };
   return result;
 };
+
+exports.suspendPromise = suspendPromise;

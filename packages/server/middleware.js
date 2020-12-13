@@ -1,7 +1,7 @@
 // @ts-check
 // /** @typedef {import('express').Router} Router */
-/** @typedef {import('@cuser/core/types').CuserCore} CuserCore */
-/** @typedef {import('@cuser/auth/types').CuserAuth} CuserAuth */
+/** @typedef {import('@cuser/core').CuserCore} CuserCore */
+/** @typedef {import('@cuser/auth').CuserAuth} CuserAuth */
 /** @typedef {import('@cuser/express-middleware-graphql').CuserExpressMiddlewareGraphqlOptions} CuserExpressMiddlewareGraphqlOptions */
 /** @typedef {import('@cuser/express-middleware-rest').CuserExpressMiddlewareRestOptions} CuserExpressMiddlewareRestOptions */
 /** @typedef {import('@cuser/express-middleware-auth').CuserExpressMiddlewareAuthOptions} CuserExpressMiddlewareAuthOptions */
@@ -40,7 +40,7 @@ const createMiddleware = (core, auth, opts) => {
 
   if(corsOpts) {
     debug('enable cors');
-    route.use(require('cors'));
+    route.use(require('cors')(corsOpts));
   }
 
   if (authOpts) {

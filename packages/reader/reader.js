@@ -1,5 +1,6 @@
 // @ts-check
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
+/** @typedef {import('@cuser/proto/graphs').GraphTopic} GraphTopic */
 const itAll = require('it-all');
 const { CuserCore } = require('@cuser/core');
 const createMessageIterator = require('./messageIterator');
@@ -53,38 +54,31 @@ class CuserReader {
   }
 
   /**
-   * Gets messages from `ipfs` layer
+   * Creates a message iterator resolving the data from `ipfs` layer
    * @param {String} topicId
-   * @param {CuserReaderMessagesIteratorOptions} opts
-   * @returns {Promise<CuserReaderMessageIteratorResult[]>|AsyncIterable<CuserReaderMessageIteratorResult>}
+   * @param {CuserReaderMessagesIteratorOptions} [opts]
+   * @returns {AsyncIterable<CuserReaderMessageIteratorResult>}
    * @example
    * ### Array
    * ```javascript
    * const messages = reader.getMessages('custom_topic_id');
-   * console.log(messages);
-   * ```
-   * ### Iterator
-   * ```javascript
-   * const messages = reader.getMessages('custom_topic_id', {
-   *   iterator: true,
-   * });
    * for await (let value of messages) {
    *   console.log(value);
    * }
    * ```
    */
-  getMessages(topicId, opts) {
+  createMessageIterator(topicId, opts) {
     const iopts = {
       after: null,
+      rootId: null,
       first: 10,
       offset: 0,
-      iterator: false,
       ...opts
     }
 
     const message = iopts.after
       ? Promise.resolve(iopts.after)
-      : this._resolveRootMessage(topicId);
+      : this._resolveRootMessage(topicId, iopts.rootId).then(({ message }) => message);
 
     /** @type {AsyncIterable<CuserReaderMessageIteratorResult>} */
     const messageIterator = createMessageIterator((cid) => cid ? this.getMessage(cid) : null, message, {
@@ -93,11 +87,41 @@ class CuserReader {
       process: this._process,
     });
 
-    if (iopts.iterator) {
-      return messageIterator
-    }
+    return messageIterator
+  }
 
-    return itAll(messageIterator);
+  /**
+   * Gets messages from `ipfs` layer
+   * @param {String} topicId
+   * @param {CuserReaderMessagesIteratorOptions} [opts]
+   * @returns {Promise<CuserReaderMessageIteratorResult[]>}
+   * @example
+   * ### Array
+   * ```javascript
+   * const messages = reader.getMessages('custom_topic_id');
+   * console.log(messages);
+   * ```
+   */
+  async getMessages(topicId, opts) {
+    return itAll(this.createMessageIterator(topicId, opts));
+  }
+
+  /**
+   *
+   * @param {String} topicId
+   * @param {CuserReaderMessagesIteratorOptions} [opts]
+   */
+  async getMessagesEdges(topicId, opts) {
+    const edges = await this.getMessages(topicId, { ...opts, iterator: false });
+    const lastNode = edges[edges.length - 1];
+    const hasNextPage = lastNode ? lastNode.node.parent !== null : false;
+
+    return {
+      edges,
+      pageInfo: {
+        hasNextPage
+      }
+    }
   }
 
   /**
@@ -113,38 +137,38 @@ class CuserReader {
    * Get the root message for a certain topicId
    * @private
    * @param {String} topicId
-   * @returns {Promise<string|null>}
+   * @param {String} [rootId]
+   * @returns {Promise<GraphTopic|null>}
    */
-  async _resolveRootMessage(topicId) {
-    return this._core
-      .resolve(this._peerId)
-      .then((cid) => this._core.get(cid))
-      .then(async ({ topics }) => {
-        let topic = topics[topicId];
+  async _resolveRootMessage(topicId, rootId) {
+    rootId = await (rootId || this._core.resolve(this._peerId));
+    const { topics } = await this._core.get(rootId)
 
-        if (!topic) {
-          throw new Error(`CuserReader: topicId "${topicId}" doesn't exists`);
-        }
+    let topic = topics[topicId];
 
-        if (typeof topic !== 'string') {
-          throw new Error(`CuserReader: error bad topic signature "${topicId}"`);
-        }
+    if (!topic) {
+      throw new Error(`CuserReader: topicId "${topicId}" doesn't exists`);
+    }
 
-        const { message: messageCid } = await this._core.get(topic);
+    if (typeof topic !== 'string') {
+      throw new Error(`CuserReader: error bad topic signature "${topicId}"`);
+    }
 
-        if (messageCid === null) {
-          return null;
-        }
+    const topicGraph = await this._core.get(topic);
 
-        if (!messageCid) {
-          throw new Error(`CuserReader: error message signature for topic "${topicId}", message is not detected`);
-        }
+    if (topicGraph.message === null) {
+      return topicGraph;
+    }
 
-        if (typeof messageCid !== 'string') {
-          throw new Error(`CuserReader: error message signature for topic "${topicId}", message has not the right format`);
-        }
-        return messageCid;
-      });
+    if (!topicGraph.message) {
+      throw new Error(`CuserReader: error message signature for topic "${topicId}", message is not detected`);
+    }
+
+    if (typeof topicGraph.message !== 'string') {
+      throw new Error(`CuserReader: error message signature for topic "${topicId}", message has not the right format`);
+    }
+
+    return topicGraph;
   }
 }
 

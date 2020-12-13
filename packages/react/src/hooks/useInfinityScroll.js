@@ -2,7 +2,6 @@ import { useLayoutEffect } from 'react';
 
 const useInfinityScroll = (onLoadMore, {
   contentRef = {},
-  loading = false,
   disabled = false
 } = {}) => {
 
@@ -17,7 +16,7 @@ const useInfinityScroll = (onLoadMore, {
         const handleScroll = (evt) => {
           const botttomRefPos = contentRef.current.clientTop + contentRef.current.clientHeight;
           const scrollBottomPos = document.documentElement.scrollTop + document.documentElement.clientHeight
-          if (!loading && botttomRefPos - scrollBottomPos < 0) {
+          if (botttomRefPos - scrollBottomPos < 0) {
             onLoadMore(evt);
           }
         }
@@ -27,7 +26,7 @@ const useInfinityScroll = (onLoadMore, {
         }
       }
     }
-  }, [contentRef, loading, onLoadMore, disabled]);
+  }, [contentRef, onLoadMore, disabled]);
 }
 
 export default useInfinityScroll;

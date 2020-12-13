@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 import clsx from 'clsx';
-import humanElapsed from 'human-elapsed';
+import moment from 'moment';
 import Avatar from './Avatar';
 import ListItem from './ListItem';
 
@@ -11,10 +11,10 @@ export const Message = ({ id,
   user = {},
   mdate
 }) => (
-  <ListItem className={clsx(className, { loading })} side={<Avatar loading={loading} avatar={user.avatar} />}>
+  <ListItem className={clsx(className, { loading })} side={<Avatar className="user-avatar" loading={loading} avatar={user.avatar} />}>
     <span className="user-username">{user.username}</span>
     <br />
-    <small className="elapsed-time">{humanElapsed(new Date().getTime() - mdate)}</small>
+    <small className="elapsed-time">{!loading && moment.duration(new Date().getTime() - mdate).humanize()}</small>
     <p className="content-data">{content.data}</p>
   </ListItem>
 );
@@ -35,6 +35,9 @@ export default styled(Message)`
     font-weight: bold;
     margin-top: 0.1rem;
     margin-bottom: 0.1rem;
+  }
+  .user-avatar {
+    width: 3em;
   }
   .elapsed-time {
     display: inline-block;

@@ -1,7 +1,14 @@
-const createCache = () => {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var createCache = function createCache() {
   return {
-    get: name => {
-      const value = localStorage.getItem(name);
+    get: function get(name) {
+      var value = localStorage.getItem(name);
 
       if (value) {
         return JSON.parse(value);
@@ -9,16 +16,17 @@ const createCache = () => {
 
       return undefined;
     },
-    put: (name, value) => {
+    put: function put(name, value) {
       localStorage.setItem(name, JSON.stringify(value));
     },
-    remove: name => {
+    remove: function remove(name) {
       localStorage.removeItem(name);
     },
-    clear: () => {
+    clear: function clear() {
       localStorage.clear();
     }
   };
 };
 
-export default createCache;
+var _default = createCache;
+exports["default"] = _default;

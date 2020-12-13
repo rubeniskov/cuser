@@ -49,7 +49,7 @@ type CuserClientPubSubOptions = {
      * Decoder function to unserialize event object
      */
     decode?: (buf: Buffer) => any;
-    channel?: string;
+    channel?: string | Promise<string>;
 };
 /**
  * Creates pubsub to listen changes on cuser network
@@ -62,7 +62,10 @@ declare class ClientCorePubSub {
     constructor(node: Node | Promise<Node>, opts?: CuserClientPubSubOptions);
     _encode: any;
     _decode: any;
-    _room: Promise<any>;
+    _room: Promise<{
+        subscribe: (listener: any) => () => void;
+        broadcast: (data: any) => void;
+    }>;
     /**
      * @param {Object} payload
      */
@@ -70,5 +73,5 @@ declare class ClientCorePubSub {
     /**
      * @param {(payload: Object) => void} subscriber
      */
-    subscribe(subscriber: (payload: any) => void): () => Promise<any>;
+    subscribe(subscriber: (payload: any) => void): () => void;
 }

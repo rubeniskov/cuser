@@ -16,7 +16,7 @@
 
 \+ **new CoreCryptoBearer**(`secret`: string, `opts`: any): [CoreCryptoBearer](docs/classes/corecryptobearer.md)
 
-*Defined in [bearer.js:14](https://github.com/rubeniskov/cuser/blob/79d8370/packages/crypto/bearer.js#L14)*
+*Defined in [bearer.js:14](https://github.com/rubeniskov/cuser/blob/f5d3af5/packages/crypto/bearer.js#L14)*
 
 #### Parameters:
 

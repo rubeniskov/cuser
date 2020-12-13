@@ -1,18 +1,26 @@
-// 1. npm init
-// 2. npm install --save webpack webpack-dev-server babel-loader babel-preset-es2015
-// 3. mkdir dist && touch index.html
-// 4. Include `<script src="/bundle.js"></script>` inside index.html
-// 5. mkdir src && touch src/index.js
-// 6. Add some code to index.js (e.g. `console.log('Hello, World!'))
-// 7. npm start
-// 8. Browse to http://localhost:8080/dist/
-
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const fs = require('fs');
+const { spawn } = require('child_process');
 
 const webpack = require('webpack')
 
-module.exports = {
+const startServer = () => new Promise((resolve, reject) => {
+  const proc = spawn(path.resolve(process.cwd(), 'node_modules', '.bin', 'cuser'), ['serve', '--host', '0.0.0.0', '--verbose', '--cors'], {
+    stdio: [0, 'pipe', 2]
+  });
+  proc.stdout.on('data', (data) => {
+    console.log(data.toString());
+    const [,cuserId] = /p2p\/([a-z0-9]+)/i.exec(data) || []
+    if (cuserId) {
+      resolve(cuserId);
+    }
+  });
+
+  proc.on('error', reject);
+});
+
+module.exports = () => startServer().then((cuserId) => ({
   // context: __dirname + "/src",
   mode: 'development',
   entry: "./index",
@@ -36,6 +44,24 @@ module.exports = {
       },
     ]
   },
+  // devServer: {
+  //   https: true,
+  //   before: function(app) {
+  //     app.get('/ssl', function(_, res) {
+  //       res.set('Content-Type', 'text/plain'),
+  //       res.set('Content-Disposition', 'attachment; filename="cuser.crt"');
+  //       res.send(fs.readFileSync('cuser.crt'));
+  //     });
+  //   },
+  //   key: fs.readFileSync('cuser.key'),
+  //   cert: fs.readFileSync('cuser.crt'),
+  //   proxy: {
+  //     '/p2p': {
+  //       target: 'ws://localhost:4004',
+  //       ws: true
+  //     },
+  //   },
+  // },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Development',
@@ -45,7 +71,8 @@ module.exports = {
       process: ['process'],
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      'process.env.CUSER_ID': JSON.stringify(cuserId),
     })
   ]
-}
+}))

@@ -1,36 +1,57 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import useCuser from './useCuser';
 import usePromiseResolver from './usePromiseResolver';
 
 const useMessages = (variables, {
-  subscribe = true
+  subscribe = true,
+  ...restOpts
 } = {}) => {
 
+  const { topicId } = variables;
   const { client } = useCuser();
-  const resolver = ({ topicId, offset, limit }) => client.getMessages(topicId, limit, offset);
-  const merge = ({ messages = [], ...restState } = {}, data) => ({
+  const resolver = (resVars) => client.getMessagesEdges(topicId, resVars);
+  const merge = ({ edges = [], ...restState } = {}, data) => ({
     ...restState,
     ...data,
-    messages: [...messages, ...data.messages],
-  })
-
-  const [_, result] = usePromiseResolver(resolver, {
-      lazy: false,
-      variables,
-      merge,
+    edges: [...edges, ...data.edges]
   });
 
-  const { mergeData } = result;
+  const [_, result] = usePromiseResolver(resolver, {
+    ...restOpts,
+    lazy: false,
+    variables,
+    merge,
+  });
+
+  const { fetchMore, mergeData, data } = result;
 
   useEffect(() => {
     if (subscribe) {
-      return client.subscribe(variables.topicId, (message) => {
-        mergeData((prev) => merge({ messages: [ message ]}, prev));
-      })
+      return client.subscribe(variables.topicId, (evt) => {
+        mergeData((prev) => {
+          const first = prev.edges[0];
+          if (first) {
+            return client.getMessagesEdges(topicId, {
+              rootId: evt.value.replace(/^\/ipfs\//, ''),
+              // rootId: evt.value,
+              limit: prev.edges.length
+            });
+          }
+          return prev;
+        });
+      });
     }
-  }, [subscribe, result.data, mergeData]);
+  }, [subscribe, topicId, data, mergeData]);
 
-  return result;
+  const wrappedFetchMore = useCallback(() => {
+    const last = data.edges[data.edges.length - 1] || {};
+    result.fetchMore({ after: last.cursor });
+  }, [fetchMore, data]);
+
+  return {
+    ...result,
+    fetchMore: wrappedFetchMore
+  };
 }
 
 export default useMessages;

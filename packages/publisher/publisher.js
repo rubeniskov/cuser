@@ -60,6 +60,9 @@ class CuserPublisher {
       deserialize: (value) => this._core.get(value),
       ...opts
     });
+    this._pubsub = this._core.pubsub({
+      channel: this._core.peerId()
+    });
   }
 
   /**
@@ -73,6 +76,7 @@ class CuserPublisher {
     /** @type {PayloadPublishMessage} */
     const payload = { user, topicId, content: { data } };
     const cid = await this._store.dispatch(createAction(TYPE_ACTION_PUBLISH_MESSAGE, payload))
+    this._pubsub.broadcast({ topicId, type: 'created', value: cid });
     return this._core.publish(cid);
   }
 
@@ -87,7 +91,8 @@ class CuserPublisher {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadUpdateMessage} */
     const payload = { user, topicId, messageId, content: { data } };
-    const cid = await this._store.dispatch(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload))
+    const cid = await this._store.dispatch(createAction(TYPE_ACTION_UPDATE_MESSAGE, payload));
+    this._pubsub.broadcast({ topicId, type: 'updated', value: cid });
     return this._core.publish(cid);
   }
 
@@ -101,7 +106,8 @@ class CuserPublisher {
     const user = await this._auth.decode(accessToken);
     /** @type {PayloadDeleteMessage} */
     const payload = { user, topicId, messageId };
-    const cid = await this._store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, payload))
+    const cid = await this._store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, payload));
+    this._pubsub.broadcast({ topicId, type: 'deleted', value: cid });
     return this._core.publish(cid);
   }
 }

@@ -111,6 +111,7 @@ const createSealReducer = ({ serialize, serializable = () => true }) => {
  */
 const createSerializeEnhancer = (patterns, opts) => {
   const {
+    init = false,
     ...restOpts
   } = {
     deserializable: () => true,
@@ -141,6 +142,9 @@ const createSerializeEnhancer = (patterns, opts) => {
 
     const enhancedSerializeReducer = async (state, action) => {
       state = await state;
+      if (!init && /@@redux\/INIT/.test(action.type)) {
+        return state;
+      }
       debug(`performing "${TYPE_ACTION_REHYDRATE}" on / %s`, state);
       state = await rehydrateReducer(state, { type: TYPE_ACTION_REHYDRATE });
       state = await deserializeReducer(state, { type: TYPE_ACTION_REHYDRATE });

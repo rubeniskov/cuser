@@ -19,6 +19,7 @@
 * [createCore](docs/globals.md#createcore)
 * [createPubSub](docs/globals.md#createpubsub)
 * [createRoomFromEventEmiter](docs/globals.md#createroomfromeventemiter)
+* [createRoomFromIpfs](docs/globals.md#createroomfromipfs)
 * [randomSeqno](docs/globals.md#randomseqno)
 
 ## Variables
@@ -27,7 +28,7 @@
 
 • `Const` **CID**: [CID](docs/globals.md#cid) = require("cids")
 
-*Defined in [core.js:9](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L9)*
+*Defined in [core.js:9](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/core.js#L9)*
 
 ___
 
@@ -35,7 +36,7 @@ ___
 
 • `Const` **Room**: any = require('ipfs-pubsub-room')
 
-*Defined in [pubsub.js:3](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L3)*
+*Defined in [pubsub.js:3](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/pubsub.js#L3)*
 
 ___
 
@@ -43,7 +44,7 @@ ___
 
 • `Const` **debug**: Debugger = require("debug")('cuser:core')
 
-*Defined in [core.js:11](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L11)*
+*Defined in [core.js:11](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/core.js#L11)*
 
 ___
 
@@ -51,7 +52,7 @@ ___
 
 • `Const` **itAll**: all = require("it-all")
 
-*Defined in [core.js:8](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L8)*
+*Defined in [core.js:8](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/core.js#L8)*
 
 ## Functions
 
@@ -59,7 +60,7 @@ ___
 
 ▸ `Const`**createCore**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `opts`: CuserCoreOptions): [CuserCore](docs/classes/cusercore.md)
 
-*Defined in [core.js:135](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/core.js#L135)*
+*Defined in [core.js:137](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/core.js#L137)*
 
 #### Parameters:
 
@@ -76,7 +77,7 @@ ___
 
 ▸ `Const`**createPubSub**(`node`: IPFSAPI \| Promise<IPFSAPI\>, `opts`: CuserClientPubSubOptions): [ClientCorePubSub](docs/classes/clientcorepubsub.md)
 
-*Defined in [pubsub.js:92](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L92)*
+*Defined in [pubsub.js:125](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/pubsub.js#L125)*
 
 Creates pubsub to listen changes on cuser network
 
@@ -93,26 +94,49 @@ ___
 
 ### createRoomFromEventEmiter
 
-▸ `Const`**createRoomFromEventEmiter**(`node`: any, `channel`: any): object
+▸ `Const`**createRoomFromEventEmiter**(`node`: IPFSAPI, `channel`: string): object
 
-*Defined in [pubsub.js:18](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L18)*
+*Defined in [pubsub.js:21](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/pubsub.js#L21)*
 
 Creates a room using EventEmiter
 
 #### Parameters:
 
-Name | Type |
------- | ------ |
-`node` | any |
-`channel` | any |
+Name | Type | Description |
+------ | ------ | ------ |
+`node` | IPFSAPI |  |
+`channel` | string |   |
 
 **Returns:** object
 
 Name | Type |
 ------ | ------ |
-`off` | any |
-`on` | any |
 `broadcast` | (data: any) => void |
+`subscribe` | (listener: any) => (Anonymous function) |
+
+___
+
+### createRoomFromIpfs
+
+▸ `Const`**createRoomFromIpfs**(`node`: IPFSAPI, `channel`: string): object
+
+*Defined in [pubsub.js:52](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/pubsub.js#L52)*
+
+Creates a room using IPFS
+
+#### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`node` | IPFSAPI |  |
+`channel` | string |   |
+
+**Returns:** object
+
+Name | Type |
+------ | ------ |
+`broadcast` | (data: any) => void |
+`subscribe` | (listener: any) => (Anonymous function) |
 
 ___
 
@@ -120,13 +144,13 @@ ___
 
 ▸ `Const`**randomSeqno**(`bytes`: any): Buffer
 
-*Defined in [pubsub.js:14](https://github.com/rubeniskov/cuser/blob/ba091f8/packages/core/pubsub.js#L14)*
+*Defined in [pubsub.js:14](https://github.com/rubeniskov/cuser/blob/8b8610c/packages/core/pubsub.js#L14)*
 
 **`prop`** {(data: Object) => Buffer} [encode=cbor.encode] Encoder function to serialize event object
 
 **`prop`** {(buf: Buffer) => Object} [decode=cbor.decodeFirstSync] Decoder function to unserialize event object
 
-**`prop`** {String} [channel='@cuser']
+**`prop`** {String|Promise<String>} [channel='@cuser']
 
 #### Parameters:
 

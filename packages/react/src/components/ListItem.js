@@ -17,7 +17,6 @@ export default styled(ListItem)`
   margin-bottom: 0.5rem;
   position: 'relative';
   .side {
-    width: 3rem;
     margin-right: 1rem;
   }
   .content {

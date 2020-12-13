@@ -1,35 +1,45 @@
-import { useLayoutEffect } from 'react';
+"use strict";
 
-const useInfinityScroll = (onLoadMore, {
-  contentRef = {},
-  loading = false,
-  disabled = false
-} = {}) => {
-  useLayoutEffect(() => {
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = require("react");
+
+var useInfinityScroll = function useInfinityScroll(onLoadMore) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$contentRef = _ref.contentRef,
+      contentRef = _ref$contentRef === void 0 ? {} : _ref$contentRef,
+      _ref$disabled = _ref.disabled,
+      disabled = _ref$disabled === void 0 ? false : _ref$disabled;
+
+  (0, _react.useLayoutEffect)(function () {
     if (!disabled && contentRef.current && typeof onLoadMore === 'function') {
-      let scrollTarget = contentRef.current.offsetParent;
+      var scrollTarget = contentRef.current.offsetParent;
 
       if (scrollTarget) {
         if (scrollTarget === document.body) {
           scrollTarget = window;
         }
 
-        const handleScroll = evt => {
-          const botttomRefPos = contentRef.current.clientTop + contentRef.current.clientHeight;
-          const scrollBottomPos = document.documentElement.scrollTop + document.documentElement.clientHeight;
+        var handleScroll = function handleScroll(evt) {
+          var botttomRefPos = contentRef.current.clientTop + contentRef.current.clientHeight;
+          var scrollBottomPos = document.documentElement.scrollTop + document.documentElement.clientHeight;
 
-          if (!loading && botttomRefPos - scrollBottomPos < 0) {
+          if (botttomRefPos - scrollBottomPos < 0) {
             onLoadMore(evt);
           }
         };
 
         scrollTarget.addEventListener('scroll', handleScroll, true);
-        return () => {
+        return function () {
           scrollTarget.removeEventListener('scroll', handleScroll, true);
         };
       }
     }
-  }, [contentRef, loading, onLoadMore, disabled]);
+  }, [contentRef, onLoadMore, disabled]);
 };
 
-export default useInfinityScroll;
+var _default = useInfinityScroll;
+exports["default"] = _default;

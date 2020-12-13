@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "exit 0",
-    "prepare": "openssl req -new -x509 -nodes -subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost' -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365",
-    "start:server": "DEBUG=cuser:* cuser start --cors",
-    "start:client": "webpack serve --open localhost",
-    "start": "concurrently 'npm:start:server' 'npm:start:client'"
+    "certs:gen": "openssl req -new -x509 -nodes -subj '/C=ES/ST=Spain/L=Madrid/O=cuser/CN=demo' -newkey rsa:4096 -keyout cuser.key -out cuser.crt -days 365",
+    "start": "SECRET=demo_cuser_secret DEBUG=cuser:* webpack serve --open localhost --host 0.0.0.0 --disable-host-check --port 8080"
   },
   "author": "",
   "license": "ISC",

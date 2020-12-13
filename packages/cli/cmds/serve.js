@@ -2,7 +2,7 @@
 const os = require('os')
 const path = require('path')
 
-const { create } = require('ipfs');
+const createNode = require('../createNode');
 const restMiddleware = require('@cuser/express-middleware-rest');
 const graphqlMiddleware = require('@cuser/express-middleware-graphql');
 const createServer = require('@cuser/server');
@@ -105,13 +105,17 @@ module.exports = {
       .epilog('copyright 2020')
       .wrap(null)
   },
-  handler: async (argv) => {
+  handler: (argv) => {
     const { ipfs, ...restOptions } = parseOptions({ ...argv, ipfs: true });
-    const node = await create({
-      ...ipfs,
+    // require('libp2p-webrtc-star/src/sig-server').start({
+    //   host: '0.0.0.0',
+    //   port: 13579,
+    // });
+    const node = createNode({
       EXPERIMENTAL: {
         ipnsPubsub: true,
       },
+      ...ipfs
     });
     createServer(node, restOptions);
   }
