@@ -34,6 +34,7 @@
     "concurrently": "^5.3.0",
     "css-loader": "^5.0.1",
     "html-webpack-plugin": "^4.5.0",
+    "qrcode": "^1.4.4",
     "react": "17.0.1",
     "react-dat-gui": "^4.0.3",
     "react-dom": "17.0.1",

@@ -1,57 +1,68 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import useCuser from './useCuser';
 import usePromiseResolver from './usePromiseResolver';
 
-const useMessages = (variables, {
+const useMessages = ({
   subscribe = true,
   ...restOpts
 } = {}) => {
 
-  const { topicId } = variables;
-  const { client } = useCuser();
-  const resolver = (resVars) => client.getMessagesEdges(topicId, resVars);
-  const merge = ({ edges = [], ...restState } = {}, data) => ({
+  const { client, topicId } = useCuser(restOpts);
+  const resolver = ({ topicId, ...resVars }) => client.getMessagesEdges(topicId, resVars);
+  const updateQuery = useCallback(({ edges = [], ...restState } = {}, { fetchMoreResult }) => ({
     ...restState,
-    ...data,
-    edges: [...edges, ...data.edges]
-  });
+    ...fetchMoreResult,
+    edges: [...edges, ...fetchMoreResult.edges]
+  }), []);
 
-  const [_, result] = usePromiseResolver(resolver, {
+  const result = usePromiseResolver(resolver, {
     ...restOpts,
-    lazy: false,
-    variables,
-    merge,
+    variables: {
+      topicId
+    }
   });
-
-  const { fetchMore, mergeData, data } = result;
 
   useEffect(() => {
     if (subscribe) {
-      return client.subscribe(variables.topicId, (evt) => {
-        mergeData((prev) => {
-          const first = prev.edges[0];
+      const subscription = result.subscribeToMore({
+        subscriber: ({ topicId }, listener) => client.subscribe(topicId, listener),
+        updateQuery: (prev, { subscriptionData: { topicId, value } }) => {
+          const first = prev && prev.edges[0];
           if (first) {
             return client.getMessagesEdges(topicId, {
-              rootId: evt.value.replace(/^\/ipfs\//, ''),
+              rootId: value.replace(/^\/ipfs\//, ''),
               // rootId: evt.value,
               limit: prev.edges.length
             });
           }
           return prev;
-        });
+        }
       });
+
+      return () => subscription.unsubcribe();
     }
-  }, [subscribe, topicId, data, mergeData]);
+  }, [subscribe, updateQuery]);
+
+  useEffect(() => {
+    if (result.data && result.data.length === 0) {
+      result.startPolling();
+      return () => result.stopPolling();
+    }
+  }, [result.data && result.data.length === 0])
 
   const wrappedFetchMore = useCallback(() => {
+    const data = result.data || { edges: []};
     const last = data.edges[data.edges.length - 1] || {};
-    result.fetchMore({ after: last.cursor });
-  }, [fetchMore, data]);
+    result.fetchMore({
+      variables: { after: last.cursor },
+      updateQuery
+    });
+  }, [result, updateQuery]);
 
-  return {
+  return useMemo(() => ({
     ...result,
     fetchMore: wrappedFetchMore
-  };
+  }), [result, wrappedFetchMore]);
 }
 
 export default useMessages;

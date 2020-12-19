@@ -7,15 +7,13 @@ exports["default"] = void 0;
 
 var _react = require("react");
 
-var _suspense = require("../utils/suspense");
+var _objectHash = _interopRequireDefault(require("object-hash"));
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+var _observableQuery = _interopRequireDefault(require("../utils/observableQuery"));
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+var _useCacheMemo = _interopRequireDefault(require("./useCacheMemo"));
 
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -35,82 +33,84 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+/**
+ * @typedef {Object} PromiseResolverOptions
+ * @prop {Boolean} [suspense=false]
+ * @prop {Boolean} [lazy=false]
+ */
+
+/** @typedef {PromiseResolverOptions & QueryOptions} PromiseResolverHookOptions */
+
+/**
+ *
+ * @param {(variables: Record<string, any>) => Promise<any>} resolver
+ * @param {PromiseResolverHookOptions} opts
+ */
 var usePromiseResolver = function usePromiseResolver(resolver) {
   var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-      _ref$lazy = _ref.lazy,
-      lazy = _ref$lazy === void 0 ? true : _ref$lazy,
       _ref$suspense = _ref.suspense,
       suspense = _ref$suspense === void 0 ? false : _ref$suspense,
+      _ref$lazy = _ref.lazy,
+      lazy = _ref$lazy === void 0 ? false : _ref$lazy,
       _ref$variables = _ref.variables,
       variables = _ref$variables === void 0 ? {} : _ref$variables,
-      data = _ref.data,
-      _ref$merge = _ref.merge,
-      merge = _ref$merge === void 0 ? function (_, data) {
-    return data;
-  } : _ref$merge;
+      restOpts = _objectWithoutProperties(_ref, ["suspense", "lazy", "variables"]);
 
-  var _useState = (0, _react.useState)({
-    data: data,
-    loading: !lazy
-  }),
+  var _useState = (0, _react.useState)(0),
       _useState2 = _slicedToArray(_useState, 2),
-      result = _useState2[0],
-      setResult = _useState2[1];
+      responseId = _useState2[0],
+      setResponseId = _useState2[1];
 
-  var doFetch = (0, _react.useCallback)(function (fetchVariables) {
-    setResult(_objectSpread(_objectSpread({}, result), {}, {
-      loading: true
+  var fetchObservable = (0, _useCacheMemo["default"])(function () {
+    return new _observableQuery["default"](resolver, _objectSpread(_objectSpread({}, restOpts), {}, {
+      variables: variables,
+      loading: !lazy
     }));
-    resolver(_objectSpread(_objectSpread({}, variables), fetchVariables)).then(function (data) {
-      setResult({
-        data: merge(result.data, data),
-        loading: false
-      });
-    }, function (error) {
-      setResult({
-        error: error,
-        loading: false
-      });
-    });
-  }, [resolver, result].concat(_toConsumableArray(Object.values(variables))));
+  }, [resolver]);
   (0, _react.useEffect)(function () {
-    if (!lazy) doFetch();
-  }, [lazy]);
+    var invalidateCurrentResult = function invalidateCurrentResult() {
+      setResponseId(function (x) {
+        return x + 1;
+      });
+    };
 
-  if (suspense && result.loading) {
-    (0, _suspense.suspendPromise)(new Promise(function (resolve) {
-      return !result.loading && resolve();
-    })).read();
+    var subscription = fetchObservable.subscribe(invalidateCurrentResult, invalidateCurrentResult);
+    return function () {
+      subscription.unsubscribe();
+    };
+  }, [fetchObservable]);
+  (0, _react.useEffect)(function () {
+    fetchObservable.setVariables(variables);
+
+    if (!lazy) {
+      process.nextTick(function () {
+        return fetchObservable.refetch();
+      });
+    }
+  }, [(0, _objectHash["default"])(variables)]);
+  var currentResult = (0, _react.useMemo)(function () {
+    /** @type {QueryResult} */
+    var result = fetchObservable.getCurrentResult();
+    var helpers = {
+      fetchMore: fetchObservable.fetchMore.bind(fetchObservable),
+      subscribeToMore: fetchObservable.subscribeToMore.bind(fetchObservable),
+      refetch: fetchObservable.refetch.bind(fetchObservable),
+      clean: fetchObservable.clean.bind(fetchObservable),
+      startPolling: fetchObservable.startPolling.bind(fetchObservable),
+      stopPolling: fetchObservable.stopPolling.bind(fetchObservable)
+    };
+    return _objectSpread(_objectSpread({}, helpers), result);
+  }, [fetchObservable, responseId]);
+
+  if (suspense && currentResult.loading) {
+    throw fetchObservable.result();
   }
-  /**
-   * Merges data
-   */
 
-
-  var mergeData = (0, _react.useCallback)(function (setData) {
-    Promise.resolve(setData(result.data)).then(function (data) {
-      return setResult(_objectSpread(_objectSpread({}, result), {}, {
-        data: data
-      }));
-    });
-  }, [result]);
-  var fetchMore = (0, _react.useCallback)(function (opts) {
-    return doFetch(opts);
-  }, [doFetch]);
-  var clean = (0, _react.useCallback)(function () {
-    return setResult(_objectSpread(_objectSpread({}, result), {}, {
-      data: undefined
-    }));
-  }, [result]);
-  var api = (0, _react.useMemo)(function () {
-    return _objectSpread(_objectSpread({}, result), {}, {
-      fetchMore: fetchMore,
-      mergeData: mergeData,
-      refetch: doFetch,
-      clean: clean
-    });
-  }, [result, fetchMore, mergeData]);
-  return [doFetch, api];
+  return currentResult;
 };
 
 var _default = usePromiseResolver;

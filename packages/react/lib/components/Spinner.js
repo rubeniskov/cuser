@@ -9,6 +9,8 @@ exports["default"] = void 0;
 
 var _jsxRuntime = require("react/jsx-runtime");
 
+var _react = require("react");
+
 var _styledComponents = _interopRequireWildcard(require("styled-components"));
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
@@ -37,9 +39,20 @@ function _templateObject() {
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-var Spinner = function Spinner(_ref) {
-  var className = _ref.className;
+/**
+ * @typedef {Object} SpinnerProps
+ * @prop {String} [className]
+ * @prop {ReactNode} [children]
+ */
+
+/**
+ * @param {import('react').PropsWithRef<SpinnerProps>} props
+ */
+var Spinner = /*#__PURE__*/(0, _react.forwardRef)(function (props, ref) {
+  /** @type {SpinnerProps} */
+  var className = props.className;
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
+    ref: ref,
     className: className,
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
       className: "rect1"
@@ -53,8 +66,7 @@ var Spinner = function Spinner(_ref) {
       className: "rect5"
     })]
   });
-};
-
+});
 var strechDelay = (0, _styledComponents.keyframes)(_templateObject());
 
 var _default = (0, _styledComponents["default"])(Spinner)(_templateObject2(), strechDelay);

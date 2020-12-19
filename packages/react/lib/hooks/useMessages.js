@@ -9,17 +9,9 @@ var _react = require("react");
 
 var _useCuser2 = _interopRequireDefault(require("./useCuser"));
 
-var _usePromiseResolver3 = _interopRequireDefault(require("./usePromiseResolver"));
+var _usePromiseResolver = _interopRequireDefault(require("./usePromiseResolver"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -43,73 +35,95 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-var useMessages = function useMessages(variables) {
-  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+var useMessages = function useMessages() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref$subscribe = _ref.subscribe,
       subscribe = _ref$subscribe === void 0 ? true : _ref$subscribe,
       restOpts = _objectWithoutProperties(_ref, ["subscribe"]);
 
-  var topicId = variables.topicId;
+  var _useCuser = (0, _useCuser2["default"])(restOpts),
+      client = _useCuser.client,
+      topicId = _useCuser.topicId;
 
-  var _useCuser = (0, _useCuser2["default"])(),
-      client = _useCuser.client;
+  var resolver = function resolver(_ref2) {
+    var topicId = _ref2.topicId,
+        resVars = _objectWithoutProperties(_ref2, ["topicId"]);
 
-  var resolver = function resolver(resVars) {
     return client.getMessagesEdges(topicId, resVars);
   };
 
-  var merge = function merge() {
-    var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        _ref2$edges = _ref2.edges,
-        edges = _ref2$edges === void 0 ? [] : _ref2$edges,
-        restState = _objectWithoutProperties(_ref2, ["edges"]);
+  var updateQuery = (0, _react.useCallback)(function () {
+    var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref3$edges = _ref3.edges,
+        edges = _ref3$edges === void 0 ? [] : _ref3$edges,
+        restState = _objectWithoutProperties(_ref3, ["edges"]);
 
-    var data = arguments.length > 1 ? arguments[1] : undefined;
-    return _objectSpread(_objectSpread(_objectSpread({}, restState), data), {}, {
-      edges: [].concat(_toConsumableArray(edges), _toConsumableArray(data.edges))
+    var _ref4 = arguments.length > 1 ? arguments[1] : undefined,
+        fetchMoreResult = _ref4.fetchMoreResult;
+
+    return _objectSpread(_objectSpread(_objectSpread({}, restState), fetchMoreResult), {}, {
+      edges: [].concat(_toConsumableArray(edges), _toConsumableArray(fetchMoreResult.edges))
     });
-  };
-
-  var _usePromiseResolver = (0, _usePromiseResolver3["default"])(resolver, _objectSpread(_objectSpread({}, restOpts), {}, {
-    lazy: false,
-    variables: variables,
-    merge: merge
-  })),
-      _usePromiseResolver2 = _slicedToArray(_usePromiseResolver, 2),
-      _ = _usePromiseResolver2[0],
-      result = _usePromiseResolver2[1];
-
-  var fetchMore = result.fetchMore,
-      mergeData = result.mergeData,
-      data = result.data;
+  }, []);
+  var result = (0, _usePromiseResolver["default"])(resolver, _objectSpread(_objectSpread({}, restOpts), {}, {
+    variables: {
+      topicId: topicId
+    }
+  }));
   (0, _react.useEffect)(function () {
     if (subscribe) {
-      return client.subscribe(variables.topicId, function (evt) {
-        mergeData(function (prev) {
-          var first = prev.edges[0];
+      var subscription = result.subscribeToMore({
+        subscriber: function subscriber(_ref5, listener) {
+          var topicId = _ref5.topicId;
+          return client.subscribe(topicId, listener);
+        },
+        updateQuery: function updateQuery(prev, _ref6) {
+          var _ref6$subscriptionDat = _ref6.subscriptionData,
+              topicId = _ref6$subscriptionDat.topicId,
+              value = _ref6$subscriptionDat.value;
+          var first = prev && prev.edges[0];
 
           if (first) {
             return client.getMessagesEdges(topicId, {
-              rootId: evt.value.replace(/^\/ipfs\//, ''),
+              rootId: value.replace(/^\/ipfs\//, ''),
               // rootId: evt.value,
               limit: prev.edges.length
             });
           }
 
           return prev;
-        });
+        }
       });
+      return function () {
+        return subscription.unsubcribe();
+      };
     }
-  }, [subscribe, topicId, data, mergeData]);
+  }, [subscribe, updateQuery]);
+  (0, _react.useEffect)(function () {
+    if (result.data && result.data.length === 0) {
+      result.startPolling();
+      return function () {
+        return result.stopPolling();
+      };
+    }
+  }, [result.data && result.data.length === 0]);
   var wrappedFetchMore = (0, _react.useCallback)(function () {
+    var data = result.data || {
+      edges: []
+    };
     var last = data.edges[data.edges.length - 1] || {};
     result.fetchMore({
-      after: last.cursor
+      variables: {
+        after: last.cursor
+      },
+      updateQuery: updateQuery
     });
-  }, [fetchMore, data]);
-  return _objectSpread(_objectSpread({}, result), {}, {
-    fetchMore: wrappedFetchMore
-  });
+  }, [result, updateQuery]);
+  return (0, _react.useMemo)(function () {
+    return _objectSpread(_objectSpread({}, result), {}, {
+      fetchMore: wrappedFetchMore
+    });
+  }, [result, wrappedFetchMore]);
 };
 
 var _default = useMessages;

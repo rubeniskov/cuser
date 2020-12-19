@@ -45,4 +45,5 @@ class CoreCryptoBearer {
 const createBearer = (secret, opts) => new CoreCryptoBearer(secret, opts);
 
 module.exports = createBearer;
+module.exports.decode = jwt.decode;
 module.exports.CoreCryptoBearer = CoreCryptoBearer;

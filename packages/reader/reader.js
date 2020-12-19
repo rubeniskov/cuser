@@ -1,8 +1,12 @@
 // @ts-check
+
 /** @typedef {import('@cuser/proto/graphs').GraphMessage} GraphMessage */
 /** @typedef {import('@cuser/proto/graphs').GraphTopic} GraphTopic */
+/** @typedef {import('@cuser/proto/graphs').GraphUser} GraphUser */
+
 const itAll = require('it-all');
 const { CuserCore } = require('@cuser/core');
+const { CuserAuthClient } = require('@cuser/auth/client');
 const createMessageIterator = require('./messageIterator');
 const createMessageMapper = require('./mapper');
 
@@ -33,12 +37,17 @@ const createMessageMapper = require('./mapper');
 class CuserReader {
   /**
    * @param {CuserCore} core
+   * @param {CuserAuthClient} auth
    * @param {String|Promise<String>} peerId
    * @param {CuserReaderOptions} [opts]
    */
-  constructor(core, peerId, opts = {}) {
+  constructor(core, auth, peerId, opts = {}) {
       if (!(core instanceof CuserCore)) {
-        throw new Error('CuserPublisher: core must be defined and be an instance of CuserCore')
+        throw new Error('CuserReader: core must be defined and be an instance of CuserCore')
+      }
+
+      if (!(auth instanceof CuserAuthClient)) {
+        throw new Error('CuserReader: auth must be defined and be an instance of CuserAuthClient')
       }
 
       if (!peerId) {
@@ -47,6 +56,9 @@ class CuserReader {
 
       /** @type {CuserCore} */
       this._core = core;
+      /** @type {CuserAuthClient} */
+      this._auth = auth;
+
       this._peerId = peerId;
       this._mapper = opts.mapper || createMessageMapper(this._core.get.bind(this._core));
       /** @type {(message: Object, cursor: String) => Promise<CuserReaderMessageIteratorResult>} */
@@ -134,6 +146,15 @@ class CuserReader {
   }
 
   /**
+   * Gets the user from bearer access token
+   * @param {String} accessToken
+   * @returns {Promise<GraphUser>}
+   */
+  async getUserByAccessToken(accessToken) {
+    return this._auth.decode(accessToken);
+  }
+
+  /**
    * Get the root message for a certain topicId
    * @private
    * @param {String} topicId
@@ -143,6 +164,10 @@ class CuserReader {
   async _resolveRootMessage(topicId, rootId) {
     rootId = await (rootId || this._core.resolve(this._peerId));
     const { topics } = await this._core.get(rootId)
+
+    if (!topics) {
+      return { type: 0, message: null, count: 0 };
+    }
 
     let topic = topics[topicId];
 
@@ -174,10 +199,11 @@ class CuserReader {
 
 /**
  * @param {CuserCore} core
+ * @param {CuserAuthClient} auth
  * @param {String|Promise<String>} peerId
  * @param {CuserReaderOptions} [opts]
  */
-const createReader = (core, peerId, opts) => new CuserReader(core, peerId, opts);
+const createReader = (core, auth, peerId, opts) => new CuserReader(core, auth, peerId, opts);
 
 module.exports = createReader;
 module.exports.CuserReader = CuserReader;

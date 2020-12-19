@@ -1,9 +1,7 @@
 // @ts-check
-/** @typedef {import('ipfs-core/src/components').IPFSAPI} Node */
-// /** @typedef {import('node-forge')} Forge */
-// /** @tyepe {Forge} */
-// const { pki } = require(['node','forge'].join('-'));
-const { pki } = require('node-forge');
+/** @typedef {import('@cuser/core').CuserCore} CuserCore */
+
+const { pki } = require(['node','forge'].join('-'));
 
 /**
  * @typedef {Object} CuserCryptoKeygenOptions
@@ -15,26 +13,24 @@ const { pki } = require('node-forge');
  */
 class CuserCryptoKeygen {
   /**
-   * @param {Node|Promise<Node>} node
+   * @param {CuserCore} core
    * @param {String} secret
    * @param {CuserCryptoKeygenOptions} opts
    */
-  constructor(node, secret, opts) {
+  constructor(core, secret, opts) {
     this._options = {
       key: 'self',
       ...opts
     }
-    this._node = node;
+    this._core = core;
     this._secret = secret;
   }
 
   /**
-   * @param {String} [key]
    */
-  async generateKeys(key) {
-    const node = await this._node;
+  async generateKeys(opts) {
     // https://github.com/ipfs-inactive/interface-js-ipfs-core/blob/master/SPEC/KEY.md#ipfskeyexportname-password
-    const privateKey = await node.key.export(key || this._options.key, this._secret);
+    const privateKey = await this._core.key(this._secret, opts);
     // https://github.com/digitalbazaar/forge#pkcs8
     const pk = pki.decryptRsaPrivateKey(privateKey, this._secret);
     const asnPk = pki.setRsaPublicKey(pk.n, pk.e);
@@ -47,12 +43,12 @@ class CuserCryptoKeygen {
 }
 
 /**
- * @param {Node|Promise<Node>} node
+ * @param {CuserCore} core
  * @param {String} secret
  * @param {CuserCryptoKeygenOptions} opts
  * @returns {CuserCryptoKeygen}
  */
-const createKeygen = (node, secret, opts) => new CuserCryptoKeygen(node, secret, opts);
+const createKeygen = (core, secret, opts) => new CuserCryptoKeygen(core, secret, opts);
 
 module.exports = createKeygen;
 module.exports.CuserCryptoKeygen = CuserCryptoKeygen;

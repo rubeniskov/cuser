@@ -17,12 +17,14 @@ var Provider = _context["default"].Provider;
 
 var CuserProvider = function CuserProvider(_ref) {
   var client = _ref.client,
+      topicId = _ref.topicId,
       children = _ref.children;
   var value = (0, _react.useMemo)(function () {
     return {
-      client: client
+      client: client,
+      topicId: topicId
     };
-  }, [client]);
+  }, [topicId, client]);
   return /*#__PURE__*/(0, _jsxRuntime.jsx)(Provider, {
     value: value,
     children: children

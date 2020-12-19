@@ -9,9 +9,9 @@ var _jsxRuntime = require("react/jsx-runtime");
 
 var _react = require("react");
 
-var _reactErrorBoundary = require("react-error-boundary");
-
 var _styledComponents = _interopRequireDefault(require("styled-components"));
+
+var _ErrorBoundary = _interopRequireDefault(require("./ErrorBoundary"));
 
 var _Messages = _interopRequireDefault(require("./Messages"));
 
@@ -41,36 +41,21 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-function ErrorFallback(_ref) {
-  var error = _ref.error,
-      resetErrorBoundary = _ref.resetErrorBoundary;
-  return /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
-    role: "alert",
-    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("p", {
-      children: "Something went wrong:"
-    }), /*#__PURE__*/(0, _jsxRuntime.jsx)("pre", {
-      children: error.message
-    }), /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
-      onClick: resetErrorBoundary,
-      children: "Try again"
-    })]
-  });
-}
-
-var Cuser = function Cuser(_ref2) {
-  var className = _ref2.className,
-      topicId = _ref2.topicId,
-      restProps = _objectWithoutProperties(_ref2, ["className", "topicId"]);
+var Cuser = function Cuser(_ref) {
+  var className = _ref.className,
+      style = _ref.style,
+      restProps = _objectWithoutProperties(_ref, ["className", "style"]);
 
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
     className: className,
-    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_MessageWriter["default"], {
-      topicId: topicId
-    }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_reactErrorBoundary.ErrorBoundary, {
-      FallbackComponent: ErrorFallback,
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Messages["default"], _objectSpread({
-        topicId: topicId
-      }, restProps))
+    style: style,
+    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_ErrorBoundary["default"], {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_MessageWriter["default"], _objectSpread({}, restProps))
+    }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_ErrorBoundary["default"], {
+      children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_react.Suspense, {
+        fallback: 'loading',
+        children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Messages["default"], _objectSpread({}, restProps))
+      })
     })]
   });
 };

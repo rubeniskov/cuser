@@ -1,8 +1,24 @@
+// @ts-check
+
+/** @typedef {import('react').ReactNode} ReactNode */
+
+import { forwardRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const Spinner = ({ className }) => {
+/**
+ * @typedef {Object} SpinnerProps
+ * @prop {String} [className]
+ * @prop {ReactNode} [children]
+ */
+
+/**
+ * @param {import('react').PropsWithRef<SpinnerProps>} props
+ */
+const Spinner = forwardRef((props, ref) => {
+  /** @type {SpinnerProps} */
+  const { className } = props;
   return (
-    <div className={className}>
+    <div ref={ref} className={className}>
       <div className="rect1"></div>
       <div className="rect2"></div>
       <div className="rect3"></div>
@@ -10,7 +26,7 @@ const Spinner = ({ className }) => {
       <div className="rect5"></div>
     </div>
   )
-}
+})
 
 const strechDelay = keyframes`
 0%, 40%, 100% {

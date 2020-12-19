@@ -71,8 +71,7 @@ const createRestMiddleware = (core, auth, opts) => {
   });
 
   router.use(function (err, _, res, __) {
-    console.log(err);
-    res.json({
+    res.status(400).json({
       ...err,
       message: err.message,
     });

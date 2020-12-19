@@ -5,6 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
+// @ts-check
+
+/**
+ * @typedef {Object} CacheStore
+ * @prop {(name: String) => any} get
+ * @prop {(name: String, value: any) => void} put
+ * @prop {(name: String) => void} remove
+ * @prop {() => void} clear
+ */
+
+/**
+ * @returns {CacheStore}
+ */
 var createCache = function createCache() {
   return {
     get: function get(name) {

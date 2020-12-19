@@ -114,7 +114,20 @@ class CuserCore {
   }
 
   /**
+   * Exports private key
+   * @param {String} secret
+   * @param {{key: string} & AbortOptions} [opts]
+   * @returns {Promise<String>}
+   */
+  async key(secret, opts) {
+    const { key = this._options.key } = { ...opts };
+    const node = await this._node;
+    return node.key.export(key, secret, opts);
+  }
+
+  /**
    * Gets the node peerId
+   * @returns {Promise<String>}
    */
   async peerId() {
     const node = await this._node;

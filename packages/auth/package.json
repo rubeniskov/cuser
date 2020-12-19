@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "auth core utility",
   "main": "auth.js",
+  "browser": "client.js",
   "scripts": {
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
@@ -41,6 +42,7 @@
     "typescript": "4.1.2"
   },
   "peerDependencies": {
-    "@cuser/proto": "^0.0.1"
+    "@cuser/proto": "^0.0.1",
+    "@cuser/core": "^0.0.1"
   }
 }

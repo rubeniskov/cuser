@@ -1,14 +1,37 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
 var _jsxRuntime = require("react/jsx-runtime");
 
 var _react = require("react");
+
+var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 var _AvatarUploader = _interopRequireDefault(require("./AvatarUploader"));
 
 var _ListItem = _interopRequireDefault(require("./ListItem"));
 
+var _LinkButton = _interopRequireDefault(require("./LinkButton"));
+
+var _TextField = _interopRequireDefault(require("./TextField"));
+
+var _PrivacyPolicyModal = _interopRequireDefault(require("./PrivacyPolicyModal"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\nposition: relative;\n\nbutton {\n  background: none;\n  border: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  line-height: 3rem;\n  padding: 0 1rem;\n  margin: 0.1rem;\n  cursor: pointer;\n  opacity: 0.5;\n  color: #0a9fff;\n  &:disabled {\n    opacity: 0.2;\n    color: #cecece;\n    cursor: not-allowed;\n  }\n  &:hover {\n    opacity: 1;\n  }\n  svg {\n    width: 1.5rem;\n    fill: currentColor;\n    display: inline-block;\n    vertical-align: middle;\n  }\n}\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -22,47 +45,119 @@ function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var Login = function Login(_ref) {
-  var className = _ref.className,
-      _ref$onLogin = _ref.onLogin,
-      onLogin = _ref$onLogin === void 0 ? function () {} : _ref$onLogin;
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\ninput {\n  width: 1rem;\n  height: 1rem;\n  vertical-align: text-top;\n  cursor: pointer;\n  margin: 0 0.5rem;\n}\n"]);
 
-  var _useState = (0, _react.useState)(''),
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+var PrivacyPolicy = (0, _styledComponents["default"])(function (_ref) {
+  var accepted = _ref.accepted,
+      onChange = _ref.onChange,
+      className = _ref.className;
+
+  var _useState = (0, _react.useState)(false),
       _useState2 = _slicedToArray(_useState, 2),
-      username = _useState2[0],
-      setUsername = _useState2[1];
+      modalPrivacyPolicy = _useState2[0],
+      setPrivacyPolicy = _useState2[1];
 
-  var _useState3 = (0, _react.useState)("https://www.w3schools.com/w3images/avatar".concat(~~(Math.random() * 3 + 1), ".png")),
+  return /*#__PURE__*/(0, _jsxRuntime.jsxs)("span", {
+    className: className,
+    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("input", {
+      type: "checkbox",
+      checked: accepted,
+      onChange: onChange
+    }), "Accept ", /*#__PURE__*/(0, _jsxRuntime.jsx)(_LinkButton["default"], {
+      onClick: function onClick() {
+        return setPrivacyPolicy(true);
+      },
+      children: "privacy policy"
+    }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_PrivacyPolicyModal["default"], {
+      open: modalPrivacyPolicy,
+      onClose: function onClose() {
+        return setPrivacyPolicy(false);
+      }
+    })]
+  });
+})(_templateObject());
+
+var Login = function Login(_ref2) {
+  var className = _ref2.className,
+      _ref2$onLogin = _ref2.onLogin,
+      onLogin = _ref2$onLogin === void 0 ? function () {} : _ref2$onLogin;
+
+  var _useState3 = (0, _react.useState)(''),
       _useState4 = _slicedToArray(_useState3, 2),
-      avatar = _useState4[0],
-      setAvatar = _useState4[1];
+      username = _useState4[0],
+      setUsername = _useState4[1];
+
+  var _useState5 = (0, _react.useState)(false),
+      _useState6 = _slicedToArray(_useState5, 2),
+      acceptedPolicy = _useState6[0],
+      setAcceptedPolicy = _useState6[1];
+
+  var _useState7 = (0, _react.useState)(),
+      _useState8 = _slicedToArray(_useState7, 2),
+      error = _useState8[0],
+      setError = _useState8[1];
+
+  var _useState9 = (0, _react.useState)(),
+      _useState10 = _slicedToArray(_useState9, 2),
+      avatar = _useState10[0],
+      setAvatar = _useState10[1];
 
   var handleUsernameChange = (0, _react.useCallback)(function (evt) {
     return setUsername(evt.target.value);
   }, []);
-  var handleClick = (0, _react.useCallback)(function (evt) {
-    return onLogin(evt, {
+  var handleAcceptedPolicy = (0, _react.useCallback)(function (evt) {
+    var checked = evt.target.checked;
+    if (checked) setError(null);
+    setAcceptedPolicy(checked);
+  }, []);
+  var handleLoginClick = (0, _react.useCallback)(function (evt) {
+    if (username.length < 3) {
+      return setError(new Error('Username must be at least 3 characteres of length'));
+    }
+
+    if (!acceptedPolicy) {
+      return setError(new Error('You have to accept the privacy policy to publish messages'));
+    }
+
+    onLogin(evt, {
       username: username,
       avatar: avatar
     });
-  }, [onLogin, username, avatar]);
+  }, [onLogin, username, avatar, acceptedPolicy]);
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_ListItem["default"], {
     className: className,
+    error: error,
     side: /*#__PURE__*/(0, _jsxRuntime.jsx)(_AvatarUploader["default"], {
       onLoad: function onLoad(_, value) {
         return setAvatar(value);
       }
     }),
-    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("input", {
-      type: "text",
+    actions: /*#__PURE__*/(0, _jsxRuntime.jsx)(PrivacyPolicy, {
+      accepted: acceptedPolicy,
+      onChange: handleAcceptedPolicy
+    }),
+    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_TextField["default"], {
       value: username,
       onChange: handleUsernameChange,
       placeholder: "username"
     }), /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
-      onClick: handleClick,
+      onClick: handleLoginClick,
       children: "Login"
     })]
   });
 };
 
-module.exports = Login;
+var _default = (0, _styledComponents["default"])(Login)(_templateObject2());
+
+exports["default"] = _default;
+;

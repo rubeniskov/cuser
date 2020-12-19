@@ -29,7 +29,7 @@ const createServer = (node, opts) => {
 
   const app = express();
   const core = createCore(node);
-  const auth = createAuth(node, secret);
+  const auth = createAuth(core, secret);
 
   // @ts-ignore
   app.use(mount, createMiddleware(core, auth, sopts));

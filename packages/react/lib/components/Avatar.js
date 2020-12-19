@@ -7,12 +7,14 @@ exports["default"] = exports.Avatar = void 0;
 
 var _jsxRuntime = require("react/jsx-runtime");
 
+var _isIpfs = _interopRequireDefault(require("is-ipfs"));
+
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  & > img {\n    width: 100%;\n    border-radius: 50%;\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  & > img {\n    width: 3rem;\n    border-radius: 50%;\n    border: solid #efefef 1px;\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -29,6 +31,11 @@ var Avatar = function Avatar(_ref) {
   var className = _ref.className,
       loading = _ref.loading,
       avatar = _ref.avatar;
+
+  if (_isIpfs["default"].cid(avatar)) {
+    avatar = "https://cloudflare-ipfs.com/ipfs/".concat(avatar);
+  }
+
   return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
     className: className,
     children: /*#__PURE__*/(0, _jsxRuntime.jsx)("img", {

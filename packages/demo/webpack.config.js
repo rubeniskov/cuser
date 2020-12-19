@@ -29,7 +29,11 @@ module.exports = () => startServer().then((cuserId) => ({
     path: path.resolve(__dirname, 'dist'),
   },
   resolve: {
-    fallback: { "stream": require.resolve("stream-browserify") }
+    fallback: {
+      "stream": require.resolve("stream-browserify"),
+      "crypto": require.resolve("crypto-browserify"),
+      "path": require.resolve("path-browserify")
+    }
   },
   module: {
     rules: [
@@ -44,24 +48,27 @@ module.exports = () => startServer().then((cuserId) => ({
       },
     ]
   },
-  // devServer: {
-  //   https: true,
-  //   before: function(app) {
-  //     app.get('/ssl', function(_, res) {
-  //       res.set('Content-Type', 'text/plain'),
-  //       res.set('Content-Disposition', 'attachment; filename="cuser.crt"');
-  //       res.send(fs.readFileSync('cuser.crt'));
-  //     });
-  //   },
-  //   key: fs.readFileSync('cuser.key'),
-  //   cert: fs.readFileSync('cuser.crt'),
-  //   proxy: {
-  //     '/p2p': {
-  //       target: 'ws://localhost:4004',
-  //       ws: true
-  //     },
-  //   },
-  // },
+  devServer: {
+    // https: true,
+    // before: function(app) {
+    //   app.get('/ssl', function(_, res) {
+    //     res.set('Content-Type', 'text/plain'),
+    //     res.set('Content-Disposition', 'attachment; filename="cuser.crt"');
+    //     res.send(fs.readFileSync('cuser.crt'));
+    //   });
+    // },
+    // key: fs.readFileSync('cuser.key'),
+    // cert: fs.readFileSync('cuser.crt'),
+    proxy: {
+      '/p2p': {
+        target: 'ws://127.0.0.1:4004',
+        ws: true
+      },
+      '/api': {
+        target: 'http://127.0.0.1:3000',
+      },
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Development',

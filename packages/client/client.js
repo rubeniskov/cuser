@@ -5,6 +5,7 @@
 /** @typedef {import('@cuser/core').CuserCoreOptions} CuserCoreOptions */
 const CuserReader = require('@cuser/reader').CuserReader;
 const createCore = require('@cuser/core');
+const createAuthClient = require('@cuser/auth/client');
 const fetch = require('./fetch');
 const { parseUrl, noPublisher } = require('./utils');
 
@@ -57,8 +58,11 @@ class CuserClient extends CuserReader {
    * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
    */
   constructor(node, cuserId, opts = {}) {
-    super(createCore(node, opts), cuserId, opts);
+    const core = createCore(node, opts);
+    const auth = createAuthClient(core, opts);
+    super(core, auth, cuserId, opts);
     this._cuserId = cuserId;
+    this._node = Promise.resolve(node);
     this._url = parseUrl(opts.url);
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
     this._pubsub = this._core.pubsub({
@@ -76,11 +80,16 @@ class CuserClient extends CuserReader {
    * Authenticates a user with the required fields of username and avatar,
    * this will epect to recieve an access_token to be used in publishing operations
    * @param {String} username
-   * @param {String} avatar data url scheme https://tools.ietf.org/html/rfc2397
+   * @param {String|Blob} avatar data url scheme https://tools.ietf.org/html/rfc2397
    */
   async authenticate(username, avatar) {
     const peerId = await this._core.peerId();
-
+    if (avatar instanceof Blob) {
+      const node = await this._node;
+      // @ts-ignore
+      const file = await node.add(avatar);
+      avatar = file.cid.toString();
+    }
     return this._fetch(this._url + this._routes.auth,{
       method: 'POST',
       body: JSON.stringify({ peerId, username, avatar }),
@@ -181,6 +190,10 @@ class CuserClient extends CuserReader {
         });
       }
     });
+  }
+
+  async peerId() {
+    return this._core.peerId();
   }
 }
 

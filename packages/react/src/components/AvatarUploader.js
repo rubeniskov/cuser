@@ -1,24 +1,66 @@
 import styled from 'styled-components';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import UploadIcon from '../icons/UploadIcon';
 
+const isUploadSupported = () => {
+  return !navigator.userAgent.match(/(Android (1.0|1.1|1.5|1.6|2.0|2.1))|(Windows Phone (OS 7|8.0))|(XBLWP)|(ZuneWP)|(w(eb)?OSBrowser)|(webOS)|(Kindle\/(1.0|2.0|2.5|3.0))/)
+}
+
+const resizeFitImage = (data, width, height, cb) => {
+  const image = new Image();
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = width;
+  canvas.height = height;
+  image.src = data;
+  image.onload = () => {
+    var scale = Math.max(canvas.width / image.width, canvas.height / image.height);
+    var x = (canvas.width / 2) - (image.width / 2) * scale;
+    var y = (canvas.height / 2) - (image.height / 2) * scale;
+    ctx.drawImage(image,
+        x, y,
+        image.width * scale, image.height * scale);
+    canvas.toBlob((blob) => {
+      cb(null, blob)
+    });
+  }
+
+  image.onerror = () => {
+    cb(new Error('Error resizing image'));
+  }
+}
+
+const defaultAvatarGenerator = () => `https://www.w3schools.com/w3images/avatar${~~(Math.random() * 3 + 1)}.png`;
 export const AvatarUploader = ({
   className,
+  avatarGenerator = defaultAvatarGenerator,
   onLoad = () => {},
   onError = () => {}
 }) => {
 
-  const [img, setImg] = useState();
+  const [avatar, setAvatar] = useState(avatarGenerator());
 
   const handleUpload = useCallback((evt) => {
     const file = evt.target.files[0];
     const reader = new FileReader();
 
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
 
     reader.onload = function(evt) {
-      const data = 'data:image/svg+xml;base64,' + global.btoa(reader.result);
-      onLoad(evt, data);
-      setImg(data);
+      const encoded = Buffer.from(reader.result).toString('base64');
+      const data = `data:${file.type};base64,${encoded}`;
+
+      resizeFitImage(data, 300, 300, (err, blob) => {
+        if (err) return onError(err);
+        onLoad(evt, blob);
+        const reader = new FileReader();
+        reader.onload = () => {
+          const ed = Buffer.from(reader.result).toString('base64');
+          const dt = `data:${blob.type};base64,${ed}`;
+          setAvatar(dt);
+        }
+        reader.readAsArrayBuffer(blob);
+      });
     };
 
     reader.onerror = function() {
@@ -27,42 +69,66 @@ export const AvatarUploader = ({
 
   }, []);
 
+  const handleChangeAvatar = useCallback((evt) => {
+    const avatar = avatarGenerator();
+    setAvatar(avatar);
+    onLoad(evt, avatar);
+  }, []);
+
+  useEffect(() => {
+    onLoad(null, avatar);
+  }, [])
+
+  const supported = isUploadSupported();
+
   return (
     <div className={className}>
-      {
-      img
-        ? <img src={img} />
-        : <>
-            <input type="file" onChange={handleUpload} />
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            {null/* Font Awesome Free 5.15.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) */}
-              <path d="M296 384h-80c-13.3 0-24-10.7-24-24V192h-87.7c-17.8 0-26.7-21.5-14.1-34.1L242.3 5.7c7.5-7.5 19.8-7.5 27.3 0l152.2 152.2c12.6 12.6 3.7 34.1-14.1 34.1H320v168c0 13.3-10.7 24-24 24zm216-8v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h136v8c0 30.9 25.1 56 56 56h80c30.9 0 56-25.1 56-56v-8h136c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/>
-            </svg>
-          </>
-      }
+      <img src={avatar} onClick={handleChangeAvatar} />
+      {supported && <>
+        <label htmlFor="avatar" aria-label="Upload an image" title="Upload an image">
+          <UploadIcon />
+        </label>
+        <input id="avatar" type="file" onChange={handleUpload} accept="image/*"/>
+      </>}
     </div>
   )
 };
 
 export default styled(AvatarUploader)`
-  background-color: #efefef;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
   position: relative;
-  cursor: pointer;
-  & > svg {
+  display: inline;
+  & img {
+    width: 3rem;
+    border-radius: 50%;
+    border: solid #efefef 1px;
+    cursor: alias;
+  }
+  & label {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-color: #fbfbfb;
+    display: block;
+    position: absolute;
+    right: -0.8rem;
+    bottom: 0;
+    cursor: pointer;
+    border: solid 1px #EFEFEF;
+  }
+  & label > svg {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.4;
+    width: 1rem;
+    height: 1rem;
   }
   & > input[type=file] {
     outline: none;
     border: none;
-    width: 100%;
-    height: 100%;
+    width: 0;
+    height: 0;
     opacity: 0;
     padding: 0;
     margin: 0;

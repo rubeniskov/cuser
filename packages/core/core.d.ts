@@ -102,7 +102,17 @@ declare class CuserCore {
      */
     resolve(cid?: string | Promise<string>): Promise<string>;
     /**
+     * Exports private key
+     * @param {String} secret
+     * @param {{key: string} & AbortOptions} [opts]
+     * @returns {Promise<String>}
+     */
+    key(secret: string, opts?: {
+        key: string;
+    } & import("ipfs-core/src/utils").AbortOptions): Promise<string>;
+    /**
      * Gets the node peerId
+     * @returns {Promise<String>}
      */
     peerId(): Promise<string>;
     /**

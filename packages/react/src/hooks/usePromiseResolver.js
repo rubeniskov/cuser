@@ -1,51 +1,85 @@
-import { useMemo, useEffect, useState, useCallback } from 'react';
-import { suspendPromise } from '../utils/suspense';
+// @ts-check
 
+/** @typedef {import('../utils/observableQuery').QueryResult} QueryResult */
+/** @typedef {import('../utils/observableQuery').QueryOptions} QueryOptions */
+
+import { useEffect, useState, useMemo } from 'react';
+import objectHash from 'object-hash';
+import ObservableQuery from '../utils/observableQuery';
+import useCacheMemo from './useCacheMemo';
+
+/**
+ * @typedef {Object} PromiseResolverOptions
+ * @prop {Boolean} [suspense=false]
+ * @prop {Boolean} [lazy=false]
+ */
+
+/** @typedef {PromiseResolverOptions & QueryOptions} PromiseResolverHookOptions */
+
+/**
+ *
+ * @param {(variables: Record<string, any>) => Promise<any>} resolver
+ * @param {PromiseResolverHookOptions} opts
+ */
 const usePromiseResolver = (resolver, {
-  lazy = true,
   suspense = false,
+  lazy = false,
   variables = {},
-  data,
-  merge = (_, data) => data
+  ...restOpts
 } = {}) => {
-  const [result, setResult] = useState({ data, loading: !lazy });
+  const [responseId, setResponseId] = useState(0);
 
-  const doFetch = useCallback((fetchVariables) => {
-    setResult({ ...result, loading: true });
-    resolver({ ...variables, ...fetchVariables })
-      .then((data) => {
-        setResult({ data: merge(result.data, data), loading: false });
-      }, (error) => {
-        setResult({ error, loading: false });
-      });
-  }, [resolver, result, ...Object.values(variables)]);
+  const fetchObservable = useCacheMemo(() => new ObservableQuery(resolver, {
+    ...restOpts,
+    variables,
+    loading: !lazy
+  }), [resolver]);
 
   useEffect(() => {
-    if (!lazy) doFetch();
-  }, [lazy]);
+    const invalidateCurrentResult = () => {
+      setResponseId(x => x + 1);
+    };
 
-  if (suspense && result.loading) {
-    suspendPromise(new Promise((resolve) => !result.loading && resolve())).read();
+    const subscription = fetchObservable.subscribe(
+      invalidateCurrentResult,
+      invalidateCurrentResult
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [fetchObservable]);
+
+  useEffect(() => {
+    fetchObservable.setVariables(variables);
+    if (!lazy) {
+      process.nextTick(() => fetchObservable.refetch());
+    }
+  }, [objectHash(variables)])
+
+  const currentResult = useMemo(() => {
+    /** @type {QueryResult} */
+    const result = fetchObservable.getCurrentResult();
+    const helpers = {
+      fetchMore: fetchObservable.fetchMore.bind(fetchObservable),
+      subscribeToMore: fetchObservable.subscribeToMore.bind(fetchObservable),
+      refetch: fetchObservable.refetch.bind(fetchObservable),
+      clean: fetchObservable.clean.bind(fetchObservable),
+      startPolling: fetchObservable.startPolling.bind(fetchObservable),
+      stopPolling: fetchObservable.stopPolling.bind(fetchObservable)
+    }
+
+    return {
+      ...helpers,
+      ...result
+    }
+  }, [fetchObservable, responseId]);
+
+  if (suspense && currentResult.loading) {
+    throw fetchObservable.result();
   }
 
-  /**
-   * Merges data
-   */
-  const mergeData = useCallback((setData) => {
-    Promise.resolve(setData(result.data)).then((data) => setResult({ ...result, data }));
-  }, [result]);
-  const fetchMore = useCallback((opts) => doFetch(opts), [doFetch]);
-  const clean = useCallback(() => setResult({ ...result, data: undefined }), [result]);
-
-  const api = useMemo(() => ({
-    ...result,
-    fetchMore,
-    mergeData,
-    refetch: doFetch,
-    clean
-  }), [result, fetchMore, mergeData])
-
-  return [doFetch, api];
+  return currentResult;
 };
 
 export default usePromiseResolver;

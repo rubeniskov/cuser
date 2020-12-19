@@ -42,6 +42,7 @@
   },
   "peerDependencies": {
     "@cuser/core": "v0.0.1",
+    "@cuser/auth": "v0.0.1",
     "@cuser/proto": "v0.0.1"
   },
   "nyc": {

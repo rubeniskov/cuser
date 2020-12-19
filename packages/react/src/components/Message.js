@@ -1,23 +1,69 @@
+// @ts-check
+
+import { useMemo } from 'react';
 import styled, { keyframes } from 'styled-components';
 import clsx from 'clsx';
 import moment from 'moment';
 import Avatar from './Avatar';
 import ListItem from './ListItem';
+import MessageActions from './MessageActions';
+import MarkdownPreview from './MarkdownPreview';
+import MessageUpdater from './MessageUpdater';
 
-export const Message = ({ id,
+export const Message = ({
+  editMode = false,
+  id,
   loading,
   className,
   content = {},
   user = {},
-  mdate
-}) => (
-  <ListItem className={clsx(className, { loading })} side={<Avatar className="user-avatar" loading={loading} avatar={user.avatar} />}>
-    <span className="user-username">{user.username}</span>
-    <br />
-    <small className="elapsed-time">{!loading && moment.duration(new Date().getTime() - mdate).humanize()}</small>
-    <p className="content-data">{content.data}</p>
-  </ListItem>
-);
+  peerId,
+  cdate,
+  mdate,
+  ...restProps
+}) => {
+
+  const elapsedTimeText = useMemo(() => {
+    let elapsed = moment.duration(new Date().getTime() - mdate).humanize();
+    if (mdate - cdate > 1000) {
+      elapsed = `edited ${elapsed}`;
+    }
+    return elapsed;
+  }, [
+    cdate,
+    mdate
+  ]);
+
+  return (
+    <ListItem
+      className={clsx(className, { loading })}
+      actions={
+        <MessageActions
+          {...restProps}
+          messageId={id}
+          disabled={editMode}
+          user={user}
+          peerId={peerId}
+        />
+      }
+      side={
+        <Avatar className="user-avatar"
+          loading={loading}
+          avatar={user.avatar}
+        />
+      }
+    >
+      <span className="user-username">{user.username}</span>
+      <br />
+      <small className="elapsed-time">{!loading && elapsedTimeText}</small>
+      {
+        editMode
+          ? <MessageUpdater {...restProps} data={content.data} messageId={id}/>
+          : <MarkdownPreview className="content-data">{content.data}</MarkdownPreview>
+      }
+    </ListItem>
+  )
+};
 
 
 const placeHolderShimmer = keyframes`
@@ -44,7 +90,8 @@ export default styled(Message)`
     opacity: 0.5;
   }
   .content{
-    flex-grow: 1;
+    border-bottom: solid 1px #efefef;
+    margin-bottom: 1rem;
   }
   .content-data {
     margin-top: 0.5rem;

@@ -10,6 +10,8 @@ const isReducer = require('./isReducer');
 
 const parseAliasReducer = (reducer) => Array.isArray(reducer) ? reducer : [reducer];
 
+const sanitize = value => typeof value === 'string' ? value.replace(/^@(.+)/, '\\@$1') : value
+
 /**
  * @typedef {Object} CuserStoreResolveReducerOptions
  * @prop {Record<string, Reducer>} [aliases={}]
@@ -51,8 +53,10 @@ const createResolveReducer = (rootReducer, opts) => {
             throw new Error(`CuserStore: resolve-reducer max recursion "${maxRecursion}" reached "${pointer}" for "${alias || reducer.toString()}"`);
           }
           reducer = createRecursiveResolveReducer(reducer, recursion.concat(reducer));
+          value = reducer(reducerState || tap(state, pointer), reducerAction);
+          console.log(sanitize(value));
           mutate({
-            value: reducer(reducerState || tap(state, pointer), reducerAction)
+            value: sanitize(value)
           });
         }
       }, {

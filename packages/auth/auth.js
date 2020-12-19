@@ -1,5 +1,5 @@
 // @ts-check
-/** @typedef {import("ipfs-core/src/components").IPFSAPI} Node */
+/** @typedef {import('@cuser/core').CuserCore} CuserCore */
 /** @typedef {import('@cuser/proto/types/payloads').PayloadUser} PayloadUser */
 /** @typedef {import('@cuser/crypto/bearer').CoreCryptoBearer} CuserCryptoBearer */
 /** @typedef {import('@cuser/crypto/keygen').CuserCryptoKeygenOptions} CuserCryptoKeygenOptions */
@@ -23,14 +23,16 @@ const validate = require('@cuser/validator')(userSchema);
  */
 class CuserAuth {
   /**
-   * @param {Node|Promise<Node>} node
+   * @param {CuserCore} core
    * @param {String} secret
    * @param {CuserAuthOptions} [opts]
    */
-  constructor(node, secret, opts) {
+  constructor(core, secret, opts) {
     const hash = createHash(secret, 'base64');
+    /** @type {CuserCore} */
+    this._core = core;
     /** @type {CuserCryptoKeygen} */
-    this._keygen = createKeygen(node, hash, opts);
+    this._keygen = createKeygen(core, hash, opts);
     /** @type {Promise<CuserCryptoBearer>} */
     this._bearer = this._keygen.generateKeys().then(({ privateKey, publicKey }) => createBearer(hash, {
       privateKey,
@@ -59,12 +61,12 @@ class CuserAuth {
 }
 
 /**
- * @param {Node|Promise<Node>} node
+ * @param {CuserCore} core
  * @param {String} secret
  * @param {CuserAuthOptions} [opts]
  * @returns {CuserAuth}
  */
-const createAuth = (node, secret, opts) => new CuserAuth(node, secret, opts);
+const createAuth = (core, secret, opts) => new CuserAuth(core, secret, opts);
 
 module.exports = createAuth;
 module.exports.CuserAuth = CuserAuth;

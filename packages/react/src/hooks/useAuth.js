@@ -1,33 +1,56 @@
+// @ts-check
+
+/** @typedef {import('./useCuser').CuserHookOptions} CuserHookOptions */
+
 import { useCallback, useMemo } from 'react' ;
 import useCuser from './useCuser';
 import usePromiseResolver from './usePromiseResolver';
 
+/** @typedef {CuserHookOptions} CuserAuthHookOptions */
 
-const useAuth = () => {
-  const { client, cache } = useCuser();
+/**
+ *
+ * @param {CuserAuthHookOptions} [opts]
+ */
+const useAuth = (opts) => {
+  const { client, cache } = useCuser(opts);
 
-  const resolver = useCallback(({ username, avatar }) => client.authenticate(username, avatar).then((authResult) => {
-    const result = { username, avatar, ...authResult };
-    cache.put('@cuser/auth', result);
-    return result;
-  }), [client, cache]);
+  const resolverAuth = useCallback(({ username, avatar }) => client.authenticate(username, avatar)
+    .then(({ accessToken }) => {
+      cache.put('@cuser/auth', accessToken);
+      return accessToken;
+  }), [
+    client,
+    cache
+  ]);
 
-  const [authenticate, auth] = usePromiseResolver(resolver, {
-    data: cache.get('@cuser/auth')
+  const auth = usePromiseResolver(resolverAuth, {
+    data: cache.get('@cuser/auth'),
+    lazy: true,
+  });
+
+  const resolverUser = useCallback(({ accessToken }) => client.getUserByAccessToken(accessToken), [
+    client
+  ]);
+
+  const user = usePromiseResolver(resolverUser, {
+    variables: { accessToken: auth.data },
+    lazy: !auth.data
   });
 
   const logout = useCallback(() => {
     cache.remove('@cuser/auth');
     auth.clean();
-  }, [cache, auth])
+  }, [cache, auth]);
 
-  return [
+  const authenticate = useCallback((variables) => auth.refetch({ variables }), [auth, auth.data && auth.data.accessToken]);
+
+  return useMemo(() => ({
+    logout,
     authenticate,
-    useMemo(() => ({
-      ...auth,
-      logout
-    }), [auth, logout]),
-  ];
+    auth,
+    user,
+  }), [user, auth, logout, authenticate])
 }
 
 export default useAuth;

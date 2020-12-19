@@ -11,21 +11,57 @@ var _useCuser2 = _interopRequireDefault(require("./useCuser"));
 
 var _usePromiseResolver = _interopRequireDefault(require("./usePromiseResolver"));
 
+var _useAuth2 = _interopRequireDefault(require("./useAuth"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var usePublishMessage = function usePublishMessage(variables) {
-  var _useCuser = (0, _useCuser2["default"])(),
-      client = _useCuser.client;
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+/** @typedef {CuserHookOptions} CuserPublishMessageHookOptions */
+
+/**
+ *
+ * @param {CuserPublishMessageHookOptions} [opts]
+ */
+var usePublishMessage = function usePublishMessage(opts) {
+  var _useCuser = (0, _useCuser2["default"])(opts),
+      client = _useCuser.client,
+      topicId = _useCuser.topicId;
+
+  var _useAuth = (0, _useAuth2["default"])(),
+      auth = _useAuth.auth;
+
+  var accessToken = auth.data;
   var resolver = (0, _react.useCallback)(function (_ref) {
     var topicId = _ref.topicId,
         accessToken = _ref.accessToken,
         content = _ref.content;
     return client.publishMessage(topicId, accessToken, content);
   }, [client]);
-  return (0, _usePromiseResolver["default"])(resolver, {
-    variables: variables
-  });
+  var result = (0, _usePromiseResolver["default"])(resolver, _objectSpread(_objectSpread({}, opts), {}, {
+    lazy: true,
+    variables: {
+      topicId: topicId,
+      accessToken: accessToken
+    }
+  }));
+  var publishMessage = (0, _react.useCallback)(function (content) {
+    return result.refetch({
+      variables: {
+        content: content
+      }
+    });
+  }, []);
+  return (0, _react.useMemo)(function () {
+    return {
+      result: result,
+      publishMessage: publishMessage
+    };
+  }, [result, publishMessage]);
 };
 
 var _default = usePublishMessage;

@@ -4,9 +4,10 @@ const Provider = context.Provider;
 
 const CuserProvider = ({
   client,
+  topicId,
   children,
 }) => {
-  const value = useMemo(() => ({ client }), [client])
+  const value = useMemo(() => ({ client, topicId }), [topicId, client])
   return <Provider value={value}>{children}</Provider>
 }
 

@@ -1,4 +1,4 @@
-export const suspendPromise = (promise) => {
+export default (promise) => {
   let status = "pending";
   let response;
 

@@ -3,9 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.suspendPromise = void 0;
+exports["default"] = void 0;
 
-var suspendPromise = function suspendPromise(promise) {
+var _default = function _default(promise) {
   var status = "pending";
   var response;
   var suspender = promise.then(function (res) {
@@ -35,4 +35,4 @@ var suspendPromise = function suspendPromise(promise) {
   return result;
 };
 
-exports.suspendPromise = suspendPromise;
+exports["default"] = _default;
