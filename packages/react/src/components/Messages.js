@@ -2,7 +2,6 @@
 import { useRef, useCallback, useMemo, useState, lazy } from 'react';
 // Hooks
 import useMessages from '../hooks/useMessages';
-import useCuser from '../hooks/useCuser';
 import useAuth from '../hooks/useAuth';
 // Components
 import Message from './Message';

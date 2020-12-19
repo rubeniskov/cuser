@@ -11,13 +11,15 @@ var _react = require("react");
 
 var _useDeleteMessage2 = _interopRequireDefault(require("../hooks/useDeleteMessage"));
 
-var _IconButton = _interopRequireDefault(require("./IconButton"));
+var _useReplayMessage2 = _interopRequireDefault(require("../hooks/useReplayMessage"));
 
 var _ReplayIcon = _interopRequireDefault(require("../icons/ReplayIcon"));
 
 var _PencilIcon = _interopRequireDefault(require("../icons/PencilIcon"));
 
 var _TrashIcon = _interopRequireDefault(require("../icons/TrashIcon"));
+
+var _IconButton = _interopRequireDefault(require("./IconButton"));
 
 var _Spinner = _interopRequireDefault(require("./Spinner"));
 
@@ -74,16 +76,25 @@ var MessagePublishActions = function MessagePublishActions(_ref) {
 exports.MessagePublishActions = MessagePublishActions;
 
 var MessageActions = function MessageActions(_ref2) {
-  var onReply = _ref2.onReply,
-      disabled = _ref2.disabled,
-      props = _objectWithoutProperties(_ref2, ["onReply", "disabled"]);
+  var disabled = _ref2.disabled,
+      user = _ref2.user,
+      props = _objectWithoutProperties(_ref2, ["disabled", "user"]);
+
+  var _useReplayMessage = (0, _useReplayMessage2["default"])({
+    attach: false
+  }),
+      replayTo = _useReplayMessage.replayTo;
 
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_IconButton["default"], {
-      onClick: onReply,
+      onClick: function onClick() {
+        replayTo(user.username);
+      },
       disabled: disabled,
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_TrashIcon["default"], {})
-    }), /*#__PURE__*/(0, _jsxRuntime.jsx)(MessagePublishActions, _objectSpread(_objectSpread({}, props), {}, {
+    }), /*#__PURE__*/(0, _jsxRuntime.jsx)(MessagePublishActions, _objectSpread(_objectSpread({
+      user: user
+    }, props), {}, {
       disabled: disabled
     }))]
   });

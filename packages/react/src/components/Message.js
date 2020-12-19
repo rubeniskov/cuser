@@ -41,9 +41,9 @@ export const Message = ({
         <MessageActions
           {...restProps}
           messageId={id}
-          disabled={editMode}
-          user={user}
           peerId={peerId}
+          disabled={!peerId || editMode}
+          user={user}
         />
       }
       side={

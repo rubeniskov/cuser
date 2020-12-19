@@ -9,7 +9,7 @@ const cuserId = process.env.CUSER_ID;
 const secured = /^https/.test(global.location.protocol);
 
 const addr = `/dns4/${global.location.hostname}/tcp/${global.location.port ? global.location.port : (secured ? 443 : 80)}/${secured ? 'wss' : 'ws'}/p2p/${cuserId}`
-
+console.log(addr);
 const node = ipfs.create({
   repo: "/tmp/rubeniskov",
   EXPERIMENTAL: {
@@ -19,6 +19,12 @@ const node = ipfs.create({
   n.swarm.connect(addr),
 ]).then(() => n));
 
+setInterval(() => node.then((n) => {
+  n.id().then(({ id }) => console.log(id));
+  n.swarm.peers().then((c) => console.log(JSON.stringify(c, null, 2)));
+  // n.config.getAll().then((c) => console.log(JSON.stringify(c, null, 2)));
+}), 5000);
+
 const client = createClient(node, cuserId, {
   url: `${global.location.protocol}//${global.location.host}`
 }, {
@@ -26,7 +32,7 @@ const client = createClient(node, cuserId, {
 });
 const App = () => {
   const [settings, setSettings] = useState({
-    auto: true
+    auto: false
   });
   const handleUpdate = useCallback((newData) => setSettings({...settings, ...newData}), [settings]);
   return (

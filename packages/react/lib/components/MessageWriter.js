@@ -9,9 +9,13 @@ var _jsxRuntime = require("react/jsx-runtime");
 
 var _react = require("react");
 
+var _hash = _interopRequireDefault(require("../utils/hash"));
+
 var _useAuth2 = _interopRequireDefault(require("../hooks/useAuth"));
 
 var _usePublishMessage2 = _interopRequireDefault(require("../hooks/usePublishMessage"));
+
+var _useReplayMessage = _interopRequireDefault(require("../hooks/useReplayMessage"));
 
 var _Avatar = _interopRequireDefault(require("./Avatar"));
 
@@ -41,6 +45,8 @@ var MessageWriter = function MessageWriter(_ref) {
   var className = _ref.className,
       restProps = _objectWithoutProperties(_ref, ["className"]);
 
+  var replayer = (0, _useReplayMessage["default"])();
+
   var _useAuth = (0, _useAuth2["default"])(restProps),
       auth = _useAuth.auth,
       user = _useAuth.user,
@@ -58,10 +64,18 @@ var MessageWriter = function MessageWriter(_ref) {
       username = _user$data.username;
   var _publisher$data = publisher.data;
   _publisher$data = _publisher$data === void 0 ? {} : _publisher$data;
-  var _publisher$data$value = _publisher$data.value,
-      hash = _publisher$data$value === void 0 ? '' : _publisher$data$value;
+  var publishPointer = _publisher$data.value;
   var error = user.error || auth.error || publisher.error;
   var loading = user.loading || auth.loading || publisher.loading;
+  var hash = (0, _react.useMemo)(function () {
+    return (0, _hash["default"])(publishPointer + replayer.value);
+  }, [publishPointer, replayer.value]);
+  var replayTo = (0, _react.useMemo)(function () {
+    return replayer.value ? "@".concat(replayer.value) : '';
+  }, [replayer.value]);
+  (0, _react.useEffect)(function () {
+    replayer.clear();
+  }, [publishPointer]);
   var handlePublish = (0, _react.useCallback)(function (_, value) {
     publishMessage(value);
   }, []);
@@ -83,10 +97,10 @@ var MessageWriter = function MessageWriter(_ref) {
         children: "Logout"
       }),
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_PublisherInput["default"], {
-        defaultValue: '@nice',
+        defaultValue: replayTo,
         loading: loading,
         onSend: handlePublish
-      }, hash.slice(-15))
+      }, hash)
     }) : /*#__PURE__*/(0, _jsxRuntime.jsx)(_Login["default"], {
       onLogin: handleLogin,
       className: className

@@ -95,9 +95,9 @@ var Message = function Message(_ref) {
     }),
     actions: /*#__PURE__*/(0, _jsxRuntime.jsx)(_MessageActions["default"], _objectSpread(_objectSpread({}, restProps), {}, {
       messageId: id,
-      disabled: editMode,
-      user: user,
-      peerId: peerId
+      peerId: peerId,
+      disabled: !peerId || editMode,
+      user: user
     })),
     side: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Avatar["default"], {
       className: "user-avatar",

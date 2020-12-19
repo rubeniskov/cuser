@@ -113,7 +113,7 @@ var Login = function Login(_ref2) {
       setAvatar = _useState10[1];
 
   var handleUsernameChange = (0, _react.useCallback)(function (evt) {
-    return setUsername(evt.target.value);
+    return setUsername(evt.target.value.replace(/\s+/, ''));
   }, []);
   var handleAcceptedPolicy = (0, _react.useCallback)(function (evt) {
     var checked = evt.target.checked;

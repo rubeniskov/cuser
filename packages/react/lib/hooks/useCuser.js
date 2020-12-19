@@ -9,8 +9,6 @@ var _react = require("react");
 
 var _context = _interopRequireDefault(require("../utils/context"));
 
-var _cache = _interopRequireDefault(require("../utils/cache"));
-
 var _usePromiseResolver = _interopRequireDefault(require("./usePromiseResolver"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -25,6 +23,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * @typedef {Object} CuserHookOptions
  * @prop {Boolean} [suspense=true]
  * @prop {CuserClient} [client] cuser client
+ * @prop {EventEmitter} [emitter] event emitter
  * @prop {CacheStore} [cache] cache to store internal state data
  * @prop {String} [topicId] topicId whereas the client will take the source of the data
  */
@@ -36,13 +35,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var useCuser = function useCuser(opts) {
   var _useContext = (0, _react.useContext)(_context["default"]),
       ctxClient = _useContext.client,
-      _useContext$cache = _useContext.cache,
-      ctxCache = _useContext$cache === void 0 ? (0, _cache["default"])() : _useContext$cache,
+      ctxEmitter = _useContext.emitter,
+      ctxCache = _useContext.cache,
       ctxTopicId = _useContext.topicId;
 
   var _opts = _objectSpread({}, opts),
       _opts$suspense = _opts.suspense,
       suspense = _opts$suspense === void 0 ? true : _opts$suspense,
+      _opts$emitter = _opts.emitter,
+      emitter = _opts$emitter === void 0 ? ctxEmitter : _opts$emitter,
       _opts$cache = _opts.cache,
       cache = _opts$cache === void 0 ? ctxCache : _opts$cache,
       _opts$topicId = _opts.topicId,
@@ -65,6 +66,9 @@ var useCuser = function useCuser(opts) {
 
       /** @type {CacheStore} */
       cache: cache,
+
+      /** @type {EventEmitter} */
+      emitter: emitter,
 
       /** @type {String} */
       get topicId() {

@@ -35,7 +35,7 @@ const Login = ({
   const [error, setError] = useState();
   const [avatar, setAvatar] = useState();
 
-  const handleUsernameChange = useCallback((evt) => setUsername(evt.target.value), []);
+  const handleUsernameChange = useCallback((evt) => setUsername(evt.target.value.replace(/\s+/, '')), []);
 
   const handleAcceptedPolicy = useCallback((evt) => {
     const { checked } = evt.target;

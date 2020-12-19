@@ -1,16 +1,17 @@
 // @ts-check
 /** @typedef {import('@cuser/client').CuserClient} CuserClient */
 /** @typedef {import('../utils/cache').CacheStore} CacheStore */
+/** @typedef {import('events/').EventEmitter} EventEmitter */
 
 import { useContext, useCallback, useMemo } from 'react';
 import cuserContext from '../utils/context';
-import createCache from '../utils/cache';
 import usePromiseResolver from './usePromiseResolver';
 
 /**
  * @typedef {Object} CuserHookOptions
  * @prop {Boolean} [suspense=true]
  * @prop {CuserClient} [client] cuser client
+ * @prop {EventEmitter} [emitter] event emitter
  * @prop {CacheStore} [cache] cache to store internal state data
  * @prop {String} [topicId] topicId whereas the client will take the source of the data
  */
@@ -22,12 +23,14 @@ import usePromiseResolver from './usePromiseResolver';
 const useCuser = (opts) => {
   const {
     client: ctxClient,
-    cache: ctxCache = createCache(),
+    emitter: ctxEmitter,
+    cache: ctxCache,
     topicId: ctxTopicId
   } = useContext(cuserContext);
 
   const {
     suspense = true,
+    emitter = ctxEmitter,
     cache = ctxCache,
     topicId = ctxTopicId,
     client = ctxClient,
@@ -46,6 +49,8 @@ const useCuser = (opts) => {
     client,
     /** @type {CacheStore} */
     cache,
+    /** @type {EventEmitter} */
+    emitter,
     /** @type {String} */
     get topicId() {
       return topicId;

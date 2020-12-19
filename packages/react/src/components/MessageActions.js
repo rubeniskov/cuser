@@ -1,9 +1,14 @@
+// Core
 import { useCallback } from 'react';
+// Hooks
 import useDeleteMessage from '../hooks/useDeleteMessage';
-import IconButton from './IconButton';
+import useReplayMessage from '../hooks/useReplayMessage';
+// Icons
 import ReplayIcon from '../icons/ReplayIcon';
 import PencilIcon from '../icons/PencilIcon';
 import TrashIcon from '../icons/TrashIcon';
+// Components
+import IconButton from './IconButton';
 import Spinner from './Spinner';
 
 export const MessagePublishActions = ({
@@ -38,13 +43,20 @@ export const MessagePublishActions = ({
   )
 }
 
-export const MessageActions = ({ onReply, disabled, ...props }) => {
+export const MessageActions = ({ disabled, user, ...props }) => {
+
+  const { replayTo } = useReplayMessage({
+    attach: false
+  });
+
   return (
     <>
-      <IconButton onClick={onReply} disabled={disabled}>
+      <IconButton onClick={() => {
+        replayTo(user.username);
+      }} disabled={disabled}>
         <TrashIcon />
       </IconButton>
-      <MessagePublishActions {...props} disabled={disabled}/>
+      <MessagePublishActions user={user} {...props} disabled={disabled}/>
     </>
   )
 }

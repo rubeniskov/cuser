@@ -7,7 +7,10 @@ const CuserProvider = ({
   topicId,
   children,
 }) => {
-  const value = useMemo(() => ({ client, topicId }), [topicId, client])
+  const value = useMemo(() => ({
+    ...context._currentValue, client, topicId
+  }), [topicId, client]);
+
   return <Provider value={value}>{children}</Provider>
 }
 
