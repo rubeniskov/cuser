@@ -3,7 +3,7 @@ on:
   release:
     types: [created]
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -12,7 +12,6 @@ jobs:
         node-version: '12.14'
         registry-url: 'https://registry.npmjs.org'
     - run: yarn install
-    - run: yarn test
-    - run: yarn publish
+    - run: ./node_modules/.bin/lerna publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
