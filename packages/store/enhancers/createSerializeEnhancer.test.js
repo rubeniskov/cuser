@@ -37,8 +37,8 @@ test('should return the serialized state and capable of deserialize it', async (
   await store.dispatch({ type: 'test' });
   const lastHashState = await store.dispatch({ type: 'test' });
 
-  t.is(cache[lastHashState].id, 5);
-  t.is(Object.keys(cache).length, 20);
+  t.is(cache[lastHashState].id, 4);
+  t.is(Object.keys(cache).length, 16);
   t.true(isCacheFlatten(cache));
 });
 
@@ -60,14 +60,14 @@ test('should accept a serialized preloadedState', async (t) => {
   await store.dispatch({ type: 'test' });
   const lastHashState = await store.dispatch({ type: 'test' });
 
-  t.is(cache[lastHashState].id, 5);
-  t.is(Object.keys(cache).length, 20);
+  t.is(cache[lastHashState].id, 4);
+  t.is(Object.keys(cache).length, 16);
 
   store = createStore(rootReducer, lastHashState, createSerializeEnhancer(patterns, storeOpts));
 
   const hashState = await store.dispatch({ type: 'test' });
 
-  t.is(cache[hashState].id, 7);
+  t.is(cache[hashState].id, 5);
   t.true(isCacheFlatten(cache));
 });
 
@@ -89,14 +89,14 @@ test('should accept a promesized serialized preloadedState', async (t) => {
   await store.dispatch({ type: 'test' });
   const lastHashState = await store.dispatch({ type: 'test' });
 
-  t.is(cache[lastHashState].id, 5);
-  t.is(Object.keys(cache).length, 20);
+  t.is(cache[lastHashState].id, 4);
+  t.is(Object.keys(cache).length, 16);
 
   store = createStore(rootReducer, Promise.resolve(lastHashState), createSerializeEnhancer(patterns, storeOpts));
 
   const hashState = await store.dispatch({ type: 'test' });
 
-  t.is(cache[hashState].id, 7);
+  t.is(cache[hashState].id, 5);
   t.true(isCacheFlatten(cache));
 });
 
@@ -118,14 +118,14 @@ test('should reset the state if reinstances the store without preloadedState', a
   await store.dispatch({ type: 'test' });
   const hashState1 = await store.dispatch({ type: 'test' });
 
-  t.is(cache[hashState1].id, 5);
-  t.is(Object.keys(cache).length, 20);
+  t.is(cache[hashState1].id, 4);
+  t.is(Object.keys(cache).length, 16);
 
   store = createStore(rootReducer, createSerializeEnhancer(patterns, storeOpts));
 
   const hashState2 = await store.dispatch({ type: 'test' });
 
-  t.is(cache[hashState2].id, 2);
-  t.is(Object.keys(cache).length, 28);
+  t.is(cache[hashState2].id, 1);
+  t.is(Object.keys(cache).length, 20);
   t.true(isCacheFlatten(cache));
 });

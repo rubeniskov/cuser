@@ -54,7 +54,6 @@ const createResolveReducer = (rootReducer, opts) => {
           }
           reducer = createRecursiveResolveReducer(reducer, recursion.concat(reducer));
           value = reducer(reducerState || tap(state, pointer), reducerAction);
-          console.log(sanitize(value));
           mutate({
             value: sanitize(value)
           });
