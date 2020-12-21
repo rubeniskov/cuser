@@ -9,3 +9,5 @@ echo "List of packages currently in existence for cuser"
 
 $SCRIPT_DIR/gentable
 
+cat FOOTER.md
+

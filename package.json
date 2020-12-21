@@ -13,7 +13,11 @@
     "docs": "./scripts/genreadme > README.md",
     "precoverage": "lerna run coverage",
     "coverage": "./scripts/gencoverage",
-    "postcoverage": "codecov --file coverage.json"
+    "postcoverage": "codecov --file coverage.json",
+    "predeploy": "lerna run build --scope @cuser/demo",
+    "deploy": "gh-pages -b demo -d packages/demo/dist",
+    "predocker": "./scripts/docker-build",
+    "docker": "docker run rubeniskov/cuser:latest"
   },
   "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
   "license": "MIT",
@@ -55,9 +59,7 @@
   "devDependencies": {
     "codecov": "^3.8.1",
     "lerna": "^3.22.1",
+    "gh-pages": "^3.1.0",
     "nyc": "^15.1.0"
-  },
-  "dependencies": {
-    "gh-pages": "^3.1.0"
   }
 }
