@@ -1,6 +1,6 @@
 {
   "name": "@cuser/reader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "messages reader from the ipfs transport layer",
   "main": "reader.js",
   "scripts": {
@@ -24,8 +24,8 @@
     "url": "git+https://github.com/rubeniskov/cuser.git"
   },
   "devDependencies": {
-    "@cuser/core": "v0.0.1",
-    "@cuser/proto": "v0.0.1",
+    "@cuser/core": "^0.0.2",
+    "@cuser/proto": "^0.0.2",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "jsdoc": "^3.6.6",
@@ -41,8 +41,8 @@
     "it-all": "^1.0.4"
   },
   "peerDependencies": {
-    "@cuser/core": "v0.0.1",
     "@cuser/auth": "v0.0.1",
+    "@cuser/core": "v0.0.1",
     "@cuser/proto": "v0.0.1"
   },
   "nyc": {

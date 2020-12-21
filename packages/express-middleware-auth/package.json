@@ -1,6 +1,6 @@
 {
   "name": "@cuser/express-middleware-auth",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "router": "^1.3.5",
-    "body-parser": "^1.19.0"
+    "body-parser": "^1.19.0",
+    "router": "^1.3.5"
   },
   "devDependencies": {
     "ava": "^3.13.0",
