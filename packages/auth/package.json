@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@cuser/proto": "^0.0.1",
+    "@cuser/core": "^0.0.1",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "ipfs": "^0.52.2",

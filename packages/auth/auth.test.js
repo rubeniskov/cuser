@@ -1,5 +1,6 @@
 const test = require('ava');
 const createAuth = require('./auth');
+const createCore = require('@cuser/core');
 const os = require('os');
 const path = require('path');
 const { CuserAuth } = createAuth;
@@ -17,20 +18,21 @@ const createNode = (name, port) => create({
 })
 
 test.before(async (t) => {
-  t.context.node = await createNode('testing_auth', 4001);
+  const node = createNode('testing_auth', 4001)
+  t.context.core = createCore(node);
 });
 
 test('should create an instance of CuserAuth', (t) => {
-  const { node } = t.context;
-  const auth = createAuth(node, 'secret_phrase');
+  const { core } = t.context;
+  const auth = createAuth(core, 'secret_phrase');
   t.true(auth instanceof CuserAuth);
 });
 
 test('should throws and error when payload has not the right format', async (t) => {
-  const { node } = t.context;
+  const { core } = t.context;
   const username = 'bob';
   const avatar = 'http://example.com/bob_avatar.png';
-  const auth = createAuth(node, 'secret_phrase');
+  const auth = createAuth(core, 'secret_phrase');
 
   await t.throwsAsync(() => auth.authenticate({
     username,
@@ -41,11 +43,11 @@ test('should throws and error when payload has not the right format', async (t) 
 });
 
 test('should return a valid accessToken', async (t) => {
-  const { node } = t.context;
+  const { core } = t.context;
   const peerId = 'custom_peer_id';
   const username = 'bob';
   const avatar = 'http://example.com/bob_avatar.png';
-  const auth = createAuth(node, 'secret_phrase');
+  const auth = createAuth(core, 'secret_phrase');
 
   const accessToken = await auth.authenticate({
     peerId,
@@ -57,11 +59,11 @@ test('should return a valid accessToken', async (t) => {
 });
 
 test('should return a decode the accessToken', async (t) => {
-  const { node } = t.context;
+  const { core } = t.context;
   const peerId = 'custom_peer_id';
   const username = 'bob';
   const avatar = 'http://example.com/bob_avatar.png';
-  const auth = createAuth(node, 'secret_phrase');
+  const auth = createAuth(core, 'secret_phrase');
 
   const accessToken = await auth.authenticate({
     peerId,
@@ -78,12 +80,12 @@ test('should return a decode the accessToken', async (t) => {
 });
 
 test('should multiple auth instances allowed to decode the accessToken with the same secret and same node', async (t) => {
-  const { node } = t.context;
+  const { core } = t.context;
   const peerId = 'custom_peer_id';
   const username = 'bob';
   const avatar = 'http://example.com/bob_avatar.png';
-  const auth1 = createAuth(node, 'secret_phrase');
-  const auth2 = createAuth(node, 'secret_phrase');
+  const auth1 = createAuth(core, 'secret_phrase');
+  const auth2 = createAuth(core, 'secret_phrase');
 
   const accessToken = await auth1.authenticate({
     peerId,
@@ -104,12 +106,12 @@ test('should multiple auth instances allowed to decode the accessToken with the 
 });
 
 test('should multiple auth instances allowed to decode the accessToken with different secrets and same node', async (t) => {
-  const { node } = t.context;
+  const { core } = t.context;
   const peerId = 'custom_peer_id';
   const username = 'bob';
   const avatar = 'http://example.com/bob_avatar.png';
-  const auth1 = createAuth(node, 'secret_phrase_1');
-  const auth2 = createAuth(node, 'secret_phrase_2');
+  const auth1 = createAuth(core, 'secret_phrase_1');
+  const auth2 = createAuth(core, 'secret_phrase_2');
 
   const accessToken = await auth1.authenticate({
     peerId,
@@ -131,14 +133,14 @@ test('should multiple auth instances allowed to decode the accessToken with diff
 });
 
 test('should multiple auth instances not allowed to decode the accessToken from different nodes', async (t) => {
-  const node1 = await createNode('testing_auth_node1', 4002);
-  const node2 = await createNode('testing_auth_node2', 4003);
+  const node1 = createNode('testing_auth_node1', 4002);
+  const node2 = createNode('testing_auth_node2', 4003);
 
   const peerId = 'custom_peer_id';
   const username = 'bob';
   const avatar = 'http://example.com/bob_avatar.png';
-  const auth1 = createAuth(node1, 'secret_phrase_1');
-  const auth2 = createAuth(node2, 'secret_phrase_1');
+  const auth1 = createAuth(createCore(node1), 'secret_phrase_1');
+  const auth2 = createAuth(createCore(node2), 'secret_phrase_1');
 
   const accessToken = await auth1.authenticate({
     peerId,
