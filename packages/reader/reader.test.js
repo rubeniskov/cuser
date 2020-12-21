@@ -2,6 +2,7 @@
 const test = require('ava');
 const sinon = require('sinon');
 const createCore = require('@cuser/core');
+const createAuthClient = require('@cuser/auth/client');
 const createReader = require('./reader');
 
 const {
@@ -40,6 +41,7 @@ test.beforeEach((t) => {
   };
 
   t.context.core = createCore(node, { parseCid });
+  t.context.auth = createAuthClient();
   id = node.dag.put({
     topics: {
       [topicId]: node.dag.put({
@@ -54,35 +56,44 @@ test('should raise an error when node not defined', (t) => {
   t.throws(() => {
     createReader(null)
   }, {
-    message: /CuserPublisher: core must be defined and be an instance of CuserCore/
+    message: /CuserReader: core must be defined and be an instance of CuserCore/
+  });
+});
+
+test('should raise an error when auth not defined', (t) => {
+  const { core } = t.context;
+  t.throws(() => {
+    createReader(core, null)
+  }, {
+    message: /CuserReader: auth must be defined and be an instance of CuserAuthClient/
   });
 });
 
 test('should raise an error when peerId not defined', (t) => {
-  const { core } = t.context;
+  const { core, auth } = t.context;
   t.throws(() => {
-    createReader(core, null)
+    createReader(core, auth, null)
   }, {
     message: /CuserReader: peerId must be defined in order to resolve the resources/
   });
 });
 
 test('should raise an error when topic has not the right format', async (t) => {
-  const { core, cache, topicId, opts } = t.context;
+  const { core, auth, cache, topicId, opts } = t.context;
   const peerId = 'custom_cuser_id';
   cache[peerId] = {
     topics: {
       [topicId]: {}
     }
   }
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
   await t.throwsAsync(() => client.getMessages(topicId), {
     message: /CuserReader: error bad topic signature "custom_topic_id"/
   });
 });
 
 test('should raise an error when topic has not the message property doesn\'t exists', async (t) => {
-  const { node, core, cache, topicId, opts } = t.context;
+  const { node, auth, core, cache, topicId, opts } = t.context;
   const peerId = 'custom_cuser_id';
   cache[peerId] = {
     topics: {
@@ -92,14 +103,14 @@ test('should raise an error when topic has not the message property doesn\'t exi
     }
   }
 
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
   await t.throwsAsync(() => client.getMessages(topicId), {
     message: /CuserReader: error message signature for topic "custom_topic_id", message is not detected/
   });
 });
 
 test('should raise an error when topic has not the message property with a right format', async (t) => {
-  const { node, core, cache, topicId, opts } = t.context;
+  const { node, core, auth, cache, topicId, opts } = t.context;
   const peerId = 'custom_cuser_id';
   cache[peerId] = {
     topics: {
@@ -109,14 +120,14 @@ test('should raise an error when topic has not the message property with a right
     }
   }
 
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
   await t.throwsAsync(() => client.getMessages(topicId), {
     message: /CuserReader: error message signature for topic "custom_topic_id", message has not the right format/
   });
 });
 
 test('should return an empty array when no messages available', async (t) => {
-  const { node, core, cache, topicId, opts } = t.context;
+  const { node, auth, core, cache, topicId, opts } = t.context;
   const peerId = 'custom_cuser_id';
   cache[peerId] = {
     topics: {
@@ -126,15 +137,15 @@ test('should return an empty array when no messages available', async (t) => {
     }
   }
 
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
   t.deepEqual(await client.getMessages(topicId), []);
 });
 
 test('should throws an error when topic doesn\'t exists', async (t) => {
-  const { core, opts } = t.context;
+  const { core, auth, opts } = t.context;
   const peerId = await core.peerId();
   const topicId = 'non_exist_topic_id';
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
 
 
   await t.throwsAsync(() => {
@@ -145,9 +156,9 @@ test('should throws an error when topic doesn\'t exists', async (t) => {
 });
 
 test('should resolve messages using array', async (t) => {
-  const { core, topicId, opts } = t.context;
+  const { core, auth, topicId, opts } = t.context;
   const peerId = await core.peerId();
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
 
   const messages = await client.getMessages(topicId);
 
@@ -157,12 +168,10 @@ test('should resolve messages using array', async (t) => {
 });
 
 test('should resolve messages using iterator', async (t) => {
-  const { core, topicId, opts } = t.context;
+  const { core, auth, topicId, opts } = t.context;
   const peerId = await core.peerId();
-  const client = createReader(core, peerId, opts);
-  const messages = client.getMessages(topicId, {
-    iterator: true,
-  });
+  const client = createReader(core, auth, peerId, opts);
+  const messages = client.createMessageIterator(topicId);
 
   t.plan(10);
   for await (let value of messages) {
@@ -171,9 +180,9 @@ test('should resolve messages using iterator', async (t) => {
 });
 
 test('should resolve messages after certain id', async (t) => {
-  const { core, topicId, opts } = t.context;
+  const { core, auth, topicId, opts } = t.context;
   const peerId = await core.peerId();
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
 
   const messages = await client.getMessages(topicId)
     .then((prev) => client.getMessages(topicId, {
@@ -187,10 +196,10 @@ test('should resolve messages after certain id', async (t) => {
 });
 
 test('should resolve messages first 12 messages after certain id', async (t) => {
-  const { core, cache, topicId, opts } = t.context;
+  const { core, auth, cache, topicId, opts } = t.context;
   const peerId = await core.peerId();
   const after = getMesageEntryFromCache(cache, 12)[0]
-  const client = createReader(core, peerId, opts);
+  const client = createReader(core, auth, peerId, opts);
 
   const messages = await client.getMessages(topicId, { after })
     .then((prev) => client.getMessages(topicId, {

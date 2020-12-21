@@ -8,7 +8,7 @@
 const createMessageMapper = (resolve) => async ({ content, user, ...restMessage }) => ({
   ...restMessage,
   content: await resolve(content).then((result) => {
-    return {
+    return !result ? result : {
       ...result,
       data: result.data.replace(/\\@/, '@')
     };
