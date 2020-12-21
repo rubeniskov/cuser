@@ -5,13 +5,6 @@ const crypto = require('crypto');
 const createClient = require('./client');
 const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
 
-const subscribeEvent = (client, topicId) => new Promise((resolve) => {
-  const unsubscribe = client.subscribe(topicId, (evt) => {
-    resolve(evt);
-    unsubscribe();
-  });
-});
-
 test.beforeEach((t) => {
   const parseCid = sinon.spy(a => a);
   const fetch = sinon.spy(() => Promise.resolve({
@@ -71,22 +64,13 @@ test('should send POST request when using publishMessage', async (t) => {
     url: 'http://example.com'
   });
 
-  const [evt] = await Promise.all([
-    subscribeEvent(client, topicId),
-    client.publishMessage(topicId, accessToken, 'this is a test message'),
-  ]);
-
-  t.deepEqual(evt, {
-    type: 'created',
-    topicId: 'custom_topic_id',
-    messageCid: 'custom_message_id'
-  });
+  await client.publishMessage(topicId, accessToken, 'this is a test message');
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/v1/message',{
+    'http://example.com/api/v0/rest/message',{
       method: 'POST',
       body: `{"topicId":"${topicId}","content":"${content}"}`,
-      headers: { Authentication: accessToken }
+      headers: { Authorization: accessToken }
     }
   ]);
 });
@@ -102,22 +86,13 @@ test('should send PATCH request when using updateMessage', async (t) => {
     url: 'http://example.com'
   });
 
-  const [evt] = await Promise.all([
-    subscribeEvent(client, topicId),
-    client.updateMessage(topicId, accessToken, messageId),
-  ]);
-
-  t.deepEqual(evt, {
-    type: 'updated',
-    topicId: 'custom_topic_id',
-    messageCid: 'custom_message_id'
-  });
+  await client.updateMessage(topicId, accessToken, messageId);
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/v1/message',{
+    'http://example.com/api/v0/rest/message',{
       method: 'PATCH',
       body: `{"topicId":"${topicId}","messageId":"${messageId}"}`,
-      headers: { Authentication: accessToken }
+      headers: { Authorization: accessToken }
     }
   ]);
 });
@@ -133,22 +108,13 @@ test('should send DELETE request when using deleteMessage', async (t) => {
     url: 'http://example.com'
   });
 
-  const [evt] = await Promise.all([
-    subscribeEvent(client, topicId),
-    client.deleteMessage(topicId, accessToken, messageId),
-  ]);
-
-  t.deepEqual(evt, {
-    type: 'deleted',
-    topicId: 'custom_topic_id',
-    messageCid: 'custom_message_id'
-  });
+  await client.deleteMessage(topicId, accessToken, messageId);
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/v1/message',{
+    'http://example.com/api/v0/rest/message',{
       method: 'DELETE',
       body: `{"topicId":"${topicId}","messageId":"${messageId}"}`,
-      headers: { Authentication: accessToken }
+      headers: { Authorization: accessToken }
     }
   ]);
 });
@@ -167,7 +133,7 @@ test('should send POST request when using authenticate', async (t) => {
   await client.authenticate(username, avatar)
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/auth',{
+    'http://example.com/api/v0/auth',{
       method: 'POST',
       body: `{"peerId":"${cuserId}","username":"${username}","avatar":"${avatar}"}`
     }

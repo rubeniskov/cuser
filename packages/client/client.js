@@ -4,6 +4,7 @@
 /** @typedef {import('@cuser/reader').CuserReaderOptions} CuserReaderOptions */
 /** @typedef {import('@cuser/core').CuserCoreOptions} CuserCoreOptions */
 const CuserReader = require('@cuser/reader').CuserReader;
+const Blob = require('blob-polyfill').Blob;
 const createCore = require('@cuser/core');
 const multiaddr = require('multiaddr');
 const createAuthClient = require('@cuser/auth/client');
@@ -55,13 +56,12 @@ const { parseUrl, noPublisher } = require('./utils');
 class CuserClient extends CuserReader {
   /**
    * @param {Node|Promise<Node>} node
-   * @param {String} address
+   * @param {String} cuserId
    * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
    */
-  constructor(node, address, opts = {}) {
+  constructor(node, cuserId, opts = {}) {
     const core = createCore(node, opts);
     const auth = createAuthClient(core, opts);
-    console.log(multiaddr(address));
     super(core, auth, cuserId, opts);
     this._cuserId = cuserId;
     this._node = Promise.resolve(node);

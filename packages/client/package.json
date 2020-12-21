@@ -32,6 +32,7 @@
     "@cuser/core": "^0.0.1",
     "@cuser/reader": "^0.0.1",
     "async-iterator-to-array": "^0.0.1",
+    "blob-polyfill": "^4.0.20200601",
     "cbor": "^5.1.0",
     "ipfs-pubsub-room": "^2.0.1",
     "multiaddr": "^8.1.1",
