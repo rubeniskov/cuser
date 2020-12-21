@@ -21,8 +21,8 @@ test.before(async (t) => {
     }
   });
   t.context.core = createCore(node);
-  t.context.reader = createReader(t.context.core, t.context.core.peerId());
-  t.context.auth = createAuth(node, 'secret_testing');
+  t.context.auth = createAuth(t.context.core, 'secret_testing');
+  t.context.reader = createReader(t.context.core, t.context.auth, t.context.core.peerId());
   t.context.topicId = 'custom_topic_id';
   t.context.accessToken = await t.context.auth.authenticate({
     peerId: 'custom_user_peerId',
@@ -80,9 +80,7 @@ test.serial('should publish a message', async (t) => {
     .set('Authorization', accessToken)
     .send({
       topicId,
-      content: {
-        data,
-      }
+      content: data
     });
 
   t.is(res.status, 200);
@@ -105,9 +103,7 @@ test.serial('should update a message', async (t) => {
     .send({
       topicId,
       messageId,
-      content: {
-        data,
-      }
+      content: data
     });
 
   t.is(res.status, 200);
