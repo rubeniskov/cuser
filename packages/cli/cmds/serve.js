@@ -1,6 +1,7 @@
 // @ts-check
-const os = require('os')
-const path = require('path')
+const os = require('os');
+const path = require('path');
+const debug = require('debug')('cuser:cli');
 
 const createNode = require('../createNode');
 const restMiddleware = require('@cuser/express-middleware-rest');
@@ -9,6 +10,29 @@ const createServer = require('@cuser/server');
 const parseOptions = require('../parseOptions');
 const createOptions = require('../createOptions');
 const addOptions = require('../addOptions');
+
+const terminate = (server, node, options = { coredump: false, timeout: 500 }) => {
+  // Exit function
+  const exit = code => {
+    options.coredump ? process.abort() : process.exit(code)
+  }
+
+  return (code, reason) => (err, promise) => {
+    if (err && err instanceof Error) {
+    // Log error information, use a proper logging library here :)
+    console.log(err.message, err.stack)
+    }
+
+    server.close((code) => {
+      debug('stopped server service');
+      Promise.resolve(node).then((n) => n.stop()).then(() => {
+        debug('stopped ipfs service');
+        setTimeout(exit, options.timeout).unref();
+      });
+    });
+  }
+}
+
 
 const ipfsDefaults = {
   repo: path.resolve(os.homedir(), 'cuser'),
@@ -107,16 +131,49 @@ module.exports = {
   },
   handler: (argv) => {
     const { ipfs, ...restOptions } = parseOptions({ ...argv, ipfs: true });
-    // require('libp2p-webrtc-star/src/sig-server').start({
-    //   host: '0.0.0.0',
-    //   port: 13579,
-    // });
+
     const node = createNode({
       EXPERIMENTAL: {
         ipnsPubsub: true,
       },
+      // libp2p: {
+      //   config: {
+      //     dht: {
+      //       enabled: true
+      //     }
+      //   }
+      // },
       ...ipfs
     });
-    createServer(node, restOptions);
+
+    const server = createServer(node, restOptions);
+    const exitHandler = terminate(server, node, {
+      coredump: false,
+      timeout: 500
+    })
+
+    process.on('uncaughtException', exitHandler(1, 'Unexpected Error'))
+    process.on('unhandledRejection', exitHandler(1, 'Unhandled Promise'))
+    process.on('SIGTERM', exitHandler(0, 'SIGTERM'));
+    process.on('SIGINT', exitHandler(0, 'SIGINT'));
+    process.on('SIGHUP', exitHandler(0, 'SIGINT'));
   }
 }
+
+
+// require('libp2p-webrtc-star/src/sig-server').start({
+//   host: '0.0.0.0',
+//   port: 13579,
+// });
+
+// const exitHandler = async (exitCode) => {
+//   const n = await node;
+//   debug('stopping ipfs service');
+//   await n.stop();
+//   debug('stopped ipfs service');
+//   if (typeof exitCode === 'string') {
+//     process.exit();
+//   }
+// }
+
+// ['uncaughtException', 'unhandledRejection'].forEach((n) => process.on(n, exitHandler));

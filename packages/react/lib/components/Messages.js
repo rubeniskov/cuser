@@ -107,14 +107,14 @@ var Messages = function Messages(_ref) {
     return setEditMessageId(null);
   }, []);
 
-  if (messages.length === 0) {
-    return /*#__PURE__*/(0, _jsxRuntime.jsx)(NoMessages, {});
-  }
-
   if (error) {
     return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
       children: error.message
     });
+  }
+
+  if (messages.length === 0) {
+    return /*#__PURE__*/(0, _jsxRuntime.jsx)(NoMessages, {});
   }
 
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {

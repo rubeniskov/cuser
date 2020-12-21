@@ -9,13 +9,15 @@ var _jsxRuntime = require("react/jsx-runtime");
 
 var _react = require("react");
 
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+
 var _hash = _interopRequireDefault(require("../utils/hash"));
 
 var _useAuth2 = _interopRequireDefault(require("../hooks/useAuth"));
 
 var _usePublishMessage2 = _interopRequireDefault(require("../hooks/usePublishMessage"));
 
-var _useReplayMessage = _interopRequireDefault(require("../hooks/useReplayMessage"));
+var _useReplyMessage = _interopRequireDefault(require("../hooks/useReplyMessage"));
 
 var _Avatar = _interopRequireDefault(require("./Avatar"));
 
@@ -23,11 +25,25 @@ var _ListItem = _interopRequireDefault(require("./ListItem"));
 
 var _Login = _interopRequireDefault(require("./Login"));
 
+var _Status = _interopRequireDefault(require("./Status"));
+
 var _PublisherInput = _interopRequireDefault(require("./PublisherInput"));
 
 var _LinkButton = _interopRequireDefault(require("./LinkButton"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n  .actions > * {\n    margin-right: 15px;\n  }\n  .title {\n    position: relative;\n  }\n  .status {\n    position: absolute;\n    right: 0.5rem;\n    top: 0.5rem;\n  }\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
@@ -45,7 +61,7 @@ var MessageWriter = function MessageWriter(_ref) {
   var className = _ref.className,
       restProps = _objectWithoutProperties(_ref, ["className"]);
 
-  var replayer = (0, _useReplayMessage["default"])();
+  var replayer = (0, _useReplyMessage["default"])();
 
   var _useAuth = (0, _useAuth2["default"])(restProps),
       auth = _useAuth.auth,
@@ -70,7 +86,7 @@ var MessageWriter = function MessageWriter(_ref) {
   var hash = (0, _react.useMemo)(function () {
     return (0, _hash["default"])(publishPointer + replayer.value);
   }, [publishPointer, replayer.value]);
-  var replayTo = (0, _react.useMemo)(function () {
+  var replyTo = (0, _react.useMemo)(function () {
     return replayer.value ? "@".concat(replayer.value) : '';
   }, [replayer.value]);
   (0, _react.useEffect)(function () {
@@ -84,8 +100,11 @@ var MessageWriter = function MessageWriter(_ref) {
   }, []);
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
     className: className,
-    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("h3", {
-      children: accessToken ? "Welcome ".concat(username) : "Please login to publish messages"
+    children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)("h3", {
+      className: "title",
+      children: [accessToken ? "Welcome ".concat(username) : "Please login to publish messages", " ", /*#__PURE__*/(0, _jsxRuntime.jsx)(_Status["default"], {
+        className: "status"
+      })]
     }), accessToken ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_ListItem["default"], {
       error: error,
       side: /*#__PURE__*/(0, _jsxRuntime.jsx)(_Avatar["default"], {
@@ -97,7 +116,7 @@ var MessageWriter = function MessageWriter(_ref) {
         children: "Logout"
       }),
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_PublisherInput["default"], {
-        defaultValue: replayTo,
+        defaultValue: replyTo,
         loading: loading,
         onSend: handlePublish
       }, hash)
@@ -109,5 +128,7 @@ var MessageWriter = function MessageWriter(_ref) {
 };
 
 exports.MessageWriter = MessageWriter;
-var _default = MessageWriter;
+
+var _default = (0, _styledComponents["default"])(MessageWriter)(_templateObject());
+
 exports["default"] = _default;

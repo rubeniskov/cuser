@@ -1,6 +1,6 @@
 // @ts-check
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import PublisherInput from './PublisherInput';
 import useUpdateMessage from '../hooks/useUpdateMessage';
 
@@ -17,22 +17,15 @@ const MessageUpdater = ({
     updateMessage(messageId, value);
   }, [messageId]);
 
-  useEffect(() => {
-    if (onAbort && publisherRef.current) {
-      const listener = (evt) => {
-        if (!evt.path.includes(publisherRef.current)) {
-          onAbort(evt)
-        }
-      };
-      document.body.addEventListener('click', listener);
-      return () => {
-        document.body.removeEventListener('click', listener);
-      }
+  const handleBlur = useCallback((evt) => {
+    if (onAbort) {
+      onAbort(evt);
     }
-  }, [publisherRef])
+  }, [onAbort]);
 
   return <PublisherInput
     ref={publisherRef}
+    onBlur={handleBlur}
     loading={result.loading}
     onSend={handleUpdate}
     defaultValue={data}

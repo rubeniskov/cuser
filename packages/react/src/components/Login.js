@@ -58,6 +58,12 @@ const Login = ({
     });
   }, [onLogin, username, avatar, acceptedPolicy]);
 
+  const handleKeyUp = useCallback((evt) => {
+    if (evt.which === 13) {
+      handleLoginClick(evt);
+    }
+  }, [handleLoginClick]);
+
   return (
     <ListItem className={className}
       error={error}
@@ -68,7 +74,7 @@ const Login = ({
         <PrivacyPolicy accepted={acceptedPolicy} onChange={handleAcceptedPolicy}/>
       }
       >
-      <TextField value={username} onChange={handleUsernameChange} placeholder="username" />
+      <TextField value={username} onChange={handleUsernameChange} onKeyUp={handleKeyUp} placeholder="username" />
       <button onClick={handleLoginClick}>Login</button>
     </ListItem>
   )
@@ -87,7 +93,6 @@ button {
   padding: 0 1rem;
   margin: 0.1rem;
   cursor: pointer;
-  opacity: 0.5;
   color: #0a9fff;
   &:disabled {
     opacity: 0.2;

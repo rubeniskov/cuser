@@ -11,7 +11,7 @@ var _react = require("react");
 
 var _useDeleteMessage2 = _interopRequireDefault(require("../hooks/useDeleteMessage"));
 
-var _useReplayMessage2 = _interopRequireDefault(require("../hooks/useReplayMessage"));
+var _useReplyMessage2 = _interopRequireDefault(require("../hooks/useReplyMessage"));
 
 var _ReplayIcon = _interopRequireDefault(require("../icons/ReplayIcon"));
 
@@ -62,10 +62,12 @@ var MessagePublishActions = function MessagePublishActions(_ref) {
 
   return user.peerId === peerId && /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_IconButton["default"], {
+      title: "Edit message",
       onClick: handleEdit,
       disabled: disabled,
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_ReplayIcon["default"], {})
     }), /*#__PURE__*/(0, _jsxRuntime.jsx)(_IconButton["default"], {
+      title: "Delete message",
       onClick: handleDelete,
       disabled: disabled,
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_PencilIcon["default"], {})
@@ -80,15 +82,16 @@ var MessageActions = function MessageActions(_ref2) {
       user = _ref2.user,
       props = _objectWithoutProperties(_ref2, ["disabled", "user"]);
 
-  var _useReplayMessage = (0, _useReplayMessage2["default"])({
+  var _useReplyMessage = (0, _useReplyMessage2["default"])({
     attach: false
   }),
-      replayTo = _useReplayMessage.replayTo;
+      replyTo = _useReplyMessage.replyTo;
 
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_jsxRuntime.Fragment, {
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_IconButton["default"], {
+      title: "Reply message",
       onClick: function onClick() {
-        replayTo(user.username);
+        replyTo(user.username);
       },
       disabled: disabled,
       children: /*#__PURE__*/(0, _jsxRuntime.jsx)(_TrashIcon["default"], {})

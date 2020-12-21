@@ -14,7 +14,7 @@ var _styledComponents = _interopRequireDefault(require("styled-components"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n * {\n  font-size: 1rem;\n }\n pre {\n  background: #efefef;\n  padding: 1rem;\n  border-radius: 0.2rem;\n }\n"]);
+  var data = _taggedTemplateLiteral(["\n img {\n   max-width: 100%;\n }\n * {\n  font-size: 1rem;\n }\n pre {\n  background: #efefef;\n  padding: 1rem;\n  border-radius: 0.2rem;\n }\n"]);
 
   _templateObject = function _templateObject() {
     return data;

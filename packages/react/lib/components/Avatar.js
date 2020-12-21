@@ -11,6 +11,8 @@ var _isIpfs = _interopRequireDefault(require("is-ipfs"));
 
 var _styledComponents = _interopRequireDefault(require("styled-components"));
 
+var _Spinner = _interopRequireDefault(require("./Spinner"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject() {
@@ -38,8 +40,8 @@ var Avatar = function Avatar(_ref) {
 
   return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
     className: className,
-    children: /*#__PURE__*/(0, _jsxRuntime.jsx)("img", {
-      src: loading ? dummyProfile : avatar
+    children: loading ? /*#__PURE__*/(0, _jsxRuntime.jsx)(_Spinner["default"], {}) : /*#__PURE__*/(0, _jsxRuntime.jsx)("img", {
+      src: avatar
     })
   });
 };

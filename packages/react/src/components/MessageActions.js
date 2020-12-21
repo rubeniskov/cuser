@@ -2,7 +2,7 @@
 import { useCallback } from 'react';
 // Hooks
 import useDeleteMessage from '../hooks/useDeleteMessage';
-import useReplayMessage from '../hooks/useReplayMessage';
+import useReplyMessage from '../hooks/useReplyMessage';
 // Icons
 import ReplayIcon from '../icons/ReplayIcon';
 import PencilIcon from '../icons/PencilIcon';
@@ -33,10 +33,10 @@ export const MessagePublishActions = ({
 
   return user.peerId === peerId && (
     <>
-      <IconButton onClick={handleEdit} disabled={disabled}>
+      <IconButton title="Edit message" onClick={handleEdit} disabled={disabled}>
         <ReplayIcon/>
       </IconButton>
-      <IconButton onClick={handleDelete} disabled={disabled}>
+      <IconButton title="Delete message" onClick={handleDelete} disabled={disabled}>
         <PencilIcon />
       </IconButton>
     </>
@@ -45,14 +45,14 @@ export const MessagePublishActions = ({
 
 export const MessageActions = ({ disabled, user, ...props }) => {
 
-  const { replayTo } = useReplayMessage({
+  const { replyTo } = useReplyMessage({
     attach: false
   });
 
   return (
     <>
-      <IconButton onClick={() => {
-        replayTo(user.username);
+      <IconButton title="Reply message" onClick={() => {
+        replyTo(user.username);
       }} disabled={disabled}>
         <TrashIcon />
       </IconButton>

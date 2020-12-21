@@ -78,10 +78,17 @@ var usePromiseResolver = function usePromiseResolver(resolver) {
       });
     };
 
-    var subscription = fetchObservable.subscribe(invalidateCurrentResult, invalidateCurrentResult);
-    return function () {
-      subscription.unsubscribe();
+    var subscribe = function subscribe() {
+      var subscription = fetchObservable.subscribe(invalidateCurrentResult, function () {
+        invalidateCurrentResult();
+        process.nextTick(subscribe);
+      });
+      return function () {
+        subscription.unsubscribe();
+      };
     };
+
+    return subscribe();
   }, [fetchObservable]);
   (0, _react.useEffect)(function () {
     fetchObservable.setVariables(variables);

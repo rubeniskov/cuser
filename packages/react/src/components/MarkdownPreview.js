@@ -10,6 +10,9 @@ const MarkdownPreview = ({ className, children }) => {
 }
 
 export default styled(MarkdownPreview)`
+ img {
+   max-width: 100%;
+ }
  * {
   font-size: 1rem;
  }

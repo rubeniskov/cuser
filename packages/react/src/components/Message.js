@@ -97,6 +97,7 @@ export default styled(Message)`
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
     opacity: 0.8;
+    overflow-wrap: break-word;
   }
   &.loading {
     .user-username, .elapsed-time, .content-data {

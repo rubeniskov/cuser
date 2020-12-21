@@ -27,10 +27,10 @@ export default styled(ListItem)`
   }
   .side {
     margin-right: 1rem;
-    width: 4rem;
+    width: 3.5rem;
   }
   .content {
-    flex-grow: 1;
+    width: calc(100% - 4rem);
   }
   .actions {
     text-align: right;

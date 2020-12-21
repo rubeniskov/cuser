@@ -1,5 +1,5 @@
 // Core
-import { useRef, useCallback, useMemo, useState, lazy } from 'react';
+import { useRef, useEffect, useCallback, useMemo, useState, lazy } from 'react';
 // Hooks
 import useMessages from '../hooks/useMessages';
 import useAuth from '../hooks/useAuth';
@@ -33,13 +33,14 @@ export const Messages = ({
   const handleAbortEdit = useCallback((_) => setEditMessageId(null), []);
   const handleCompleteEdit = useCallback((_) => setEditMessageId(null), []);
 
+  if (error) {
+    return <div>{error.message}</div>
+  }
+
   if (messages.length === 0) {
     return <NoMessages />;
   }
 
-  if (error) {
-    return <div>{error.message}</div>
-  }
 
   return (
     <div ref={wrapperRef}>

@@ -39,8 +39,12 @@ const createServer = (node, opts) => {
   }
 
   if (port && host) {
-    app.listen(Number(port), host, () => {
-      console.log('Server listening on /ip4/%s/tcp/%s', host, port);
+    process.nextTick(() => {
+      const server = app.listen(Number(port), host, () => {
+        // @ts-ignore
+        app.close = server.close.bind(server);
+        console.log('Server listening on /ip4/%s/tcp/%s', host, port);
+      });
     });
   }
 

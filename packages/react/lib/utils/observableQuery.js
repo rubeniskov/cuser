@@ -124,9 +124,9 @@ var ObservableQuery = /*#__PURE__*/function (_Observable) {
             data: data
           });
         }).then(function (result) {
-          _this._lastResult = _objectSpread(_objectSpread({
+          _this._lastResult = _objectSpread(_objectSpread(_objectSpread({}, _this._lastResult), result), {}, {
             error: undefined
-          }, _this._lastResult), result);
+          });
 
           var _iterator = _createForOfIteratorHelper(_this._observers),
               _step;
@@ -212,7 +212,7 @@ var ObservableQuery = /*#__PURE__*/function (_Observable) {
         loading: true
       });
 
-      this._fetch(this._variables).then(function (fetchMoreResult) {
+      return this._fetch(this._variables).then(function (fetchMoreResult) {
         var previousResult = _this3._lastResult.data;
         var updatedResult = updateQuery(previousResult, {
           fetchMoreResult: fetchMoreResult
@@ -239,15 +239,23 @@ var ObservableQuery = /*#__PURE__*/function (_Observable) {
       var _this4 = this;
 
       var interval = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 15000;
-      this.stopPolling();
-      this._interval = setInterval(function () {
-        _this4.refetch();
-      }, interval);
+      clearInterval(this._interval);
+
+      var tick = function tick() {
+        _this4.refetch().then(function () {
+          if (_this4._interval) {
+            _this4._interval = setTimeout(tick, interval);
+          }
+        });
+      };
+
+      this._interval = setTimeout(tick, interval);
     }
   }, {
     key: "stopPolling",
     value: function stopPolling() {
       clearInterval(this._interval);
+      this._interval = null;
     }
   }, {
     key: "fetchMore",
@@ -331,14 +339,13 @@ var ObservableQuery = /*#__PURE__*/function (_Observable) {
         return function () {};
       }
 
-      this._observers.add(observer); // Deliver most recent error or result.
+      this._observers.add(observer); // // Deliver most recent error or result.
+      // if (this._lastError) {
+      //   observer.error && observer.error(this._lastError);
+      // } else if (this._lastResult) {
+      //   observer.next && observer.next(this._lastResult);
+      // }
 
-
-      if (this._lastError) {
-        observer.error && observer.error(this._lastError);
-      } else if (this._lastResult) {
-        observer.next && observer.next(this._lastResult);
-      }
 
       return function () {
         _this6._observers["delete"](observer);

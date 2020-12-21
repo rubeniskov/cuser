@@ -39,7 +39,9 @@ var useMessages = function useMessages() {
   var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
       _ref$subscribe = _ref.subscribe,
       subscribe = _ref$subscribe === void 0 ? true : _ref$subscribe,
-      restOpts = _objectWithoutProperties(_ref, ["subscribe"]);
+      _ref$polling = _ref.polling,
+      polling = _ref$polling === void 0 ? 5000 : _ref$polling,
+      restOpts = _objectWithoutProperties(_ref, ["subscribe", "polling"]);
 
   var _useCuser = (0, _useCuser2["default"])(restOpts),
       client = _useCuser.client,
@@ -99,14 +101,15 @@ var useMessages = function useMessages() {
       };
     }
   }, [subscribe, updateQuery]);
+  var missingRecord = /record requested for .+ was not found in the network/.test(result.error);
   (0, _react.useEffect)(function () {
-    if (result.data && result.data.length === 0) {
-      result.startPolling();
+    if (missingRecord) {
+      result.startPolling(polling);
       return function () {
         return result.stopPolling();
       };
     }
-  }, [result.data && result.data.length === 0]);
+  }, [missingRecord]);
   var wrappedFetchMore = (0, _react.useCallback)(function () {
     var data = result.data || {
       edges: []
@@ -121,6 +124,7 @@ var useMessages = function useMessages() {
   }, [result, updateQuery]);
   return (0, _react.useMemo)(function () {
     return _objectSpread(_objectSpread({}, result), {}, {
+      error: missingRecord ? null : result.error,
       fetchMore: wrappedFetchMore
     });
   }, [result, wrappedFetchMore]);

@@ -57,9 +57,9 @@ class ObservableQuery extends Observable {
           .then((data) => data === undefined ? result : ({ ...result, data }))
           .then((result) => {
             this._lastResult = {
-              error: undefined,
               ...this._lastResult,
-              ...result
+              ...result,
+              error: undefined,
             }
             for (let observer of this._observers) {
               observer.next(this._lastResult);
@@ -106,7 +106,7 @@ class ObservableQuery extends Observable {
     this._observer.next({
       loading: true
     });
-    this._fetch(this._variables).then((fetchMoreResult) => {
+    return this._fetch(this._variables).then((fetchMoreResult) => {
       const previousResult = this._lastResult.data;
       const updatedResult = updateQuery(previousResult, { fetchMoreResult });
       this._observer.next({
@@ -123,15 +123,22 @@ class ObservableQuery extends Observable {
     return objectHash(this._variables);
   }
 
-  startPolling(interval = 15000){
-    this.stopPolling();
-    this._interval = setInterval(() => {
-      this.refetch();
-    }, interval);
+  startPolling(interval = 15000) {
+    clearInterval(this._interval);
+    const tick = () => {
+      this.refetch().then(() => {
+        if (this._interval) {
+          this._interval = setTimeout(tick, interval)
+        }
+      });
+    }
+
+    this._interval = setTimeout(tick, interval);
   }
 
   stopPolling() {
     clearInterval(this._interval);
+    this._interval = null;
   }
 
   fetchMore(opts) {
@@ -197,12 +204,12 @@ class ObservableQuery extends Observable {
 
     this._observers.add(observer);
 
-    // Deliver most recent error or result.
-    if (this._lastError) {
-      observer.error && observer.error(this._lastError);
-    } else if (this._lastResult) {
-      observer.next && observer.next(this._lastResult);
-    }
+    // // Deliver most recent error or result.
+    // if (this._lastError) {
+    //   observer.error && observer.error(this._lastError);
+    // } else if (this._lastResult) {
+    //   observer.next && observer.next(this._lastResult);
+    // }
 
     return () => {
       this._observers.delete(observer);

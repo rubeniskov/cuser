@@ -14,7 +14,7 @@ var _ErrorBanner = _interopRequireDefault(require("./ErrorBanner"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject() {
-  var data = _taggedTemplateLiteral(["\n  .content-box {\n    display: flex;\n    flex-flow: row;\n    margin-bottom: 0.5rem;\n    position: relative;\n  }\n  .side {\n    margin-right: 1rem;\n    width: 4rem;\n  }\n  .content {\n    flex-grow: 1;\n  }\n  .actions {\n    text-align: right;\n    margin-top: 0.5rem;\n    margin-bottom: 0.5rem;\n    margin-left: -0.5rem;\n    margin-right: -0.5rem;\n    > * {\n      margin: 0 0.5rem;\n    }\n  }\n"]);
+  var data = _taggedTemplateLiteral(["\n  .content-box {\n    display: flex;\n    flex-flow: row;\n    margin-bottom: 0.5rem;\n    position: relative;\n  }\n  .side {\n    margin-right: 1rem;\n    width: 3.5rem;\n  }\n  .content {\n    width: calc(100% - 4rem);\n  }\n  .actions {\n    text-align: right;\n    margin-top: 0.5rem;\n    margin-bottom: 0.5rem;\n    margin-left: -0.5rem;\n    margin-right: -0.5rem;\n    > * {\n      margin: 0 0.5rem;\n    }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;

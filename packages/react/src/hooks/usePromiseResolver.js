@@ -40,14 +40,20 @@ const usePromiseResolver = (resolver, {
       setResponseId(x => x + 1);
     };
 
-    const subscription = fetchObservable.subscribe(
-      invalidateCurrentResult,
-      invalidateCurrentResult
-    );
+    const subscribe = () => {
+      const subscription = fetchObservable.subscribe(
+        invalidateCurrentResult,
+        () => {
+          invalidateCurrentResult();
+          process.nextTick(subscribe);
+        },
+      );
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
 
-    return () => {
-      subscription.unsubscribe();
-    };
+    return subscribe();
   }, [fetchObservable]);
 
   useEffect(() => {
@@ -66,7 +72,7 @@ const usePromiseResolver = (resolver, {
       refetch: fetchObservable.refetch.bind(fetchObservable),
       clean: fetchObservable.clean.bind(fetchObservable),
       startPolling: fetchObservable.startPolling.bind(fetchObservable),
-      stopPolling: fetchObservable.stopPolling.bind(fetchObservable)
+      stopPolling: fetchObservable.stopPolling.bind(fetchObservable),
     }
 
     return {

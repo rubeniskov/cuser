@@ -4,6 +4,7 @@ import usePromiseResolver from './usePromiseResolver';
 
 const useMessages = ({
   subscribe = true,
+  polling = 5000,
   ...restOpts
 } = {}) => {
 
@@ -43,15 +44,17 @@ const useMessages = ({
     }
   }, [subscribe, updateQuery]);
 
+  const missingRecord = /record requested for .+ was not found in the network/.test(result.error)
+
   useEffect(() => {
-    if (result.data && result.data.length === 0) {
-      result.startPolling();
+    if (missingRecord) {
+      result.startPolling(polling);
       return () => result.stopPolling();
     }
-  }, [result.data && result.data.length === 0])
+  }, [missingRecord]);
 
   const wrappedFetchMore = useCallback(() => {
-    const data = result.data || { edges: []};
+    const data = result.data || { edges: [] };
     const last = data.edges[data.edges.length - 1] || {};
     result.fetchMore({
       variables: { after: last.cursor },
@@ -61,6 +64,7 @@ const useMessages = ({
 
   return useMemo(() => ({
     ...result,
+    error: missingRecord ? null : result.error,
     fetchMore: wrappedFetchMore
   }), [result, wrappedFetchMore]);
 }

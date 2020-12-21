@@ -34,22 +34,14 @@ var MessageUpdater = function MessageUpdater(_ref) {
   var handleUpdate = (0, _react.useCallback)(function (_, value) {
     updateMessage(messageId, value);
   }, [messageId]);
-  (0, _react.useEffect)(function () {
-    if (onAbort && publisherRef.current) {
-      var listener = function listener(evt) {
-        if (!evt.path.includes(publisherRef.current)) {
-          onAbort(evt);
-        }
-      };
-
-      document.body.addEventListener('click', listener);
-      return function () {
-        document.body.removeEventListener('click', listener);
-      };
+  var handleBlur = (0, _react.useCallback)(function (evt) {
+    if (onAbort) {
+      onAbort(evt);
     }
-  }, [publisherRef]);
+  }, [onAbort]);
   return /*#__PURE__*/(0, _jsxRuntime.jsx)(_PublisherInput["default"], {
     ref: publisherRef,
+    onBlur: handleBlur,
     loading: result.loading,
     onSend: handleUpdate,
     defaultValue: data

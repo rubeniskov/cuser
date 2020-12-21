@@ -1,5 +1,6 @@
 import isIPFS from 'is-ipfs';
 import styled from 'styled-components';
+import Spinner from './Spinner';
 
 const dummyProfile = 'https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-512.png';
 
@@ -12,7 +13,9 @@ export const Avatar = ({
     avatar = `https://cloudflare-ipfs.com/ipfs/${avatar}`;
   }
   return (
-    <div className={className}><img src={loading ? dummyProfile : avatar} /></div>
+    <div className={className}>
+      {loading ? <Spinner/> : <img src={avatar} />}
+    </div>
   )
 };
 

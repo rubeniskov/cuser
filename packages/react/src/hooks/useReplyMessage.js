@@ -15,8 +15,7 @@ const useReplayMessage = (opts) => {
 
   const [value, setValue] = useState(null);
 
-  const replayTo = (value) => {
-    console.log('????', value)
+  const replyTo = (value) => {
     emitter.emit(eventName, value);
   }
 
@@ -27,7 +26,6 @@ const useReplayMessage = (opts) => {
   useLayoutEffect(() => {
     if(!attach) return
     const listener = (value) => {
-      console.log('yeah', value)
       setValue(value);
     };
     emitter.addListener(eventName, listener);
@@ -37,7 +35,7 @@ const useReplayMessage = (opts) => {
   }, [emitter]);
 
   return {
-    replayTo,
+    replyTo,
     clear,
     value,
   }

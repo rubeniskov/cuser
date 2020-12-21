@@ -24,7 +24,7 @@ var _PrivacyPolicyModal = _interopRequireDefault(require("./PrivacyPolicyModal")
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _templateObject2() {
-  var data = _taggedTemplateLiteral(["\nposition: relative;\n\nbutton {\n  background: none;\n  border: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  line-height: 3rem;\n  padding: 0 1rem;\n  margin: 0.1rem;\n  cursor: pointer;\n  opacity: 0.5;\n  color: #0a9fff;\n  &:disabled {\n    opacity: 0.2;\n    color: #cecece;\n    cursor: not-allowed;\n  }\n  &:hover {\n    opacity: 1;\n  }\n  svg {\n    width: 1.5rem;\n    fill: currentColor;\n    display: inline-block;\n    vertical-align: middle;\n  }\n}\n"]);
+  var data = _taggedTemplateLiteral(["\nposition: relative;\n\nbutton {\n  background: none;\n  border: none;\n  position: absolute;\n  top: 0;\n  right: 0;\n  line-height: 3rem;\n  padding: 0 1rem;\n  margin: 0.1rem;\n  cursor: pointer;\n  color: #0a9fff;\n  &:disabled {\n    opacity: 0.2;\n    color: #cecece;\n    cursor: not-allowed;\n  }\n  &:hover {\n    opacity: 1;\n  }\n  svg {\n    width: 1.5rem;\n    fill: currentColor;\n    display: inline-block;\n    vertical-align: middle;\n  }\n}\n"]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -134,6 +134,11 @@ var Login = function Login(_ref2) {
       avatar: avatar
     });
   }, [onLogin, username, avatar, acceptedPolicy]);
+  var handleKeyUp = (0, _react.useCallback)(function (evt) {
+    if (evt.which === 13) {
+      handleLoginClick(evt);
+    }
+  }, [handleLoginClick]);
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)(_ListItem["default"], {
     className: className,
     error: error,
@@ -149,6 +154,7 @@ var Login = function Login(_ref2) {
     children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_TextField["default"], {
       value: username,
       onChange: handleUsernameChange,
+      onKeyUp: handleKeyUp,
       placeholder: "username"
     }), /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
       onClick: handleLoginClick,
