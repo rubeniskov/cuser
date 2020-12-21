@@ -65,7 +65,7 @@ test('should raise an error when auth not defined', (t) => {
   t.throws(() => {
     createReader(core, null)
   }, {
-    message: /CuserReader: auth must be defined and be an instance of CuserAuthClient/
+    message: /CuserReader: auth must be defined and be an instance of CuserAuth/
   });
 });
 

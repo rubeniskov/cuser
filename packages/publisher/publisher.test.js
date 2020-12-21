@@ -16,10 +16,10 @@ test.before(async (t) => {
       ipnsPubsub: true
     }
   });
-  const auth = t.context.auth = createAuth(node, secret);
   const core = t.context.core = createCore(node);
+  const auth = t.context.auth = createAuth(core, secret);
   const peerId = t.context.peerId = await core.peerId();
-  t.context.reader = createReader(core, peerId);
+  t.context.reader = createReader(core, auth, peerId);
   t.context.accessToken = await auth.authenticate({
     peerId: 'custom_peer_id',
     username: 'bob',

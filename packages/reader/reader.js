@@ -7,6 +7,7 @@
 const itAll = require('it-all');
 const { CuserCore } = require('@cuser/core');
 const { CuserAuthClient } = require('@cuser/auth/client');
+const { CuserAuth } = require('@cuser/auth');
 const createMessageIterator = require('./messageIterator');
 const createMessageMapper = require('./mapper');
 
@@ -46,8 +47,8 @@ class CuserReader {
         throw new Error('CuserReader: core must be defined and be an instance of CuserCore')
       }
 
-      if (!(auth instanceof CuserAuthClient)) {
-        throw new Error('CuserReader: auth must be defined and be an instance of CuserAuthClient')
+      if (!(auth instanceof CuserAuthClient || auth instanceof CuserAuth)) {
+        throw new Error('CuserReader: auth must be defined and be an instance of CuserAuth')
       }
 
       if (!peerId) {
