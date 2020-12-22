@@ -1,6 +1,6 @@
 {
   "name": "@cuser/store",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "store tree changes managment",
   "main": "./configureStore",
   "scripts": {
@@ -20,9 +20,9 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "@cuser/proto": "^0.0.24",
-    "@cuser/utils": "^0.0.24",
-    "@cuser/validator": "^0.0.24",
+    "@cuser/proto": "^0.0.25",
+    "@cuser/utils": "^0.0.25",
+    "@cuser/validator": "^0.0.25",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "faker": "^5.1.0",
