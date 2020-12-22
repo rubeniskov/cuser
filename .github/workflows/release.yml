@@ -61,5 +61,3 @@ jobs:
         platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
         build-args: |
           version=${{ env.CUSER_VERSION }}
-        cache-from: type=registry,ref=rubeniskov/cuser:latest
-        cache-to: type=inline
