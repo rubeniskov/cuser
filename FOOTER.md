@@ -10,5 +10,5 @@ yarn install
 ### Release
 
 ```shell
-GITHUB_ACCESS_TOKEN=<access_token> npm run release -- {version_number}
+GITHUB_ACCESS_TOKEN=<access_token> npm run release {version_number}
 ```

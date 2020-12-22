@@ -8,9 +8,8 @@
 <h3 align="center">Distributed messaging service 🌐, with no database, no config and using IPFS layer to distribute the storage all over the universe ♾️.</h3>
 
 ## Status
-[![unit-testing](https://github.com/rubeniskov/cuser/workflows/unit-testing/badge.svg)](https://github.com/rubeniskov/cuser/actions?query=workflow%3Aunit-testing)
-[![npm-publish](https://github.com/rubeniskov/cuser/workflows/npm-publish/badge.svg)](https://github.com/rubeniskov/cuser/actions?query=workflow%3Anpm-publish)
-[![npm-downloads](https://img.shields.io/npm/dw/cuser)](https://www.npmjs.com/package/cuser)
+[![testing](https://github.com/rubeniskov/cuser/workflows/testing/badge.svg)](https://github.com/rubeniskov/cuser/actions?query=workflow%3Atesting)
+[![release](https://github.com/rubeniskov/cuser/workflows/release/badge.svg)](https://github.com/rubeniskov/cuser/actions?query=workflow%3Arelease)
 [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?token=mI2c282XxH)](https://codecov.io/gh/rubeniskov/cuser)
 [![patreon-donate](https://img.shields.io/badge/patreon-donate-yellow.svg)](https://patreon.com/rubeniskov)
 [![github-sponsor](https://img.shields.io/badge/github-donate-yellow.svg)](https://github.com/sponsors/rubeniskov)
@@ -79,3 +78,17 @@ List of packages currently in existence for cuser
 | [`@cuser/express-middleware-graphql`](//github.com/rubeniskov/cuser/tree/master/packages/express-middleware-graphql) |  | [![npm-version](https://img.shields.io/npm/v/@cuser/express-middleware-graphql.svg)](https://www.npmjs.com/package/@cuser/express-middleware-graphql) | [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?flag=express-middleware-graphql)](https://codecov.io/gh/rubeniskov/cuser) | [![npm-downloads](https://img.shields.io/npm/dw/@cuser/express-middleware-graphql)](https://www.npmjs.com/package/@cuser/express-middleware-graphql) |
 | **Integrations** |
 | [`@cuser/react`](//github.com/rubeniskov/cuser/tree/master/packages/react) | react ui components for visualize cuser | [![npm-version](https://img.shields.io/npm/v/@cuser/react.svg)](https://www.npmjs.com/package/@cuser/react) | [![codecov](https://codecov.io/gh/rubeniskov/cuser/branch/master/graph/badge.svg?flag=react)](https://codecov.io/gh/rubeniskov/cuser) | [![npm-downloads](https://img.shields.io/npm/dw/@cuser/react)](https://www.npmjs.com/package/@cuser/react) |
+# Development
+
+Being a workspaced based mono repo project, yarn `>=1.5.0` is needed to allow local development
+
+### Installing dependencies
+```
+yarn install
+```
+
+### Release
+
+```shell
+GITHUB_ACCESS_TOKEN=<access_token> npm run release {version_number}
+```
