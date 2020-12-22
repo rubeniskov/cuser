@@ -16,12 +16,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@cuser/utils": "^0.0.25",
     "mutant-json": "0.6.3",
     "redux": "^4.0.5"
   },
   "devDependencies": {
     "@cuser/proto": "^0.0.25",
-    "@cuser/utils": "^0.0.25",
     "@cuser/validator": "^0.0.25",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
@@ -37,7 +37,6 @@
   },
   "peerDependencies": {
     "@cuser/proto": "^0.0.1",
-    "@cuser/utils": "^0.0.1",
     "@cuser/validator": "^0.0.1"
   },
   "nyc": {
