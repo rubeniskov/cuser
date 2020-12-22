@@ -48,7 +48,9 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: [ rubeniskov/cuser:latest, rubeniskov/cuser:$CUSER_VERSION]
+        tags: 
+          - rubeniskov/cuser:latest
+          - rubeniskov/cuser:$CUSER_VERSION
         build-args: |
           version=$CUSER_VERSION
       env:

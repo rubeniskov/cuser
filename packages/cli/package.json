@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "@cuser/client": "^0.0.2",
+    "@cuser/proto": "^0.0.2",
     "@cuser/express-middleware-auth": "^0.0.2",
     "@cuser/express-middleware-graphql": "^0.0.2",
     "@cuser/express-middleware-rest": "^0.0.2",

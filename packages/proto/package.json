@@ -14,7 +14,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "json-patch": "^0.7.0"
+    "protobufjs": "^6.10.2"
   },
   "devDependencies": {
     "ava": "^3.13.0",
