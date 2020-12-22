@@ -1,6 +1,6 @@
 {
   "name": "cuser",
-  "version": "0.0.2",
+  "version": "0.0.24",
   "description": "Distributed user messaging system",
   "private": true,
   "engines": {
@@ -18,8 +18,7 @@
     "deploy": "gh-pages -b demo -d packages/demo/dist",
     "predocker": "./scripts/docker-build",
     "docker": "docker run rubeniskov/cuser:latest",
-    "release": "./scripts/release",
-    "publish": "lerna publish from-package"
+    "release": "./scripts/release"
   },
   "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
   "license": "MIT",

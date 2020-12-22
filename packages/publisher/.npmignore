@@ -1,8 +1,9 @@
 .nyc_output
 coverage
 testing
-
+docs
 *.test.js
 test.js
 tsconfig.json
 docs
+*.md

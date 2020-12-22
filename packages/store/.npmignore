@@ -3,3 +3,5 @@ coverage
 testing
 *.test.js
 test.js
+docs
+*.md

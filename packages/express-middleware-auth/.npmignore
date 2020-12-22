@@ -1,6 +1,7 @@
 .nyc_output
 coverage
 testing
-
+docs
 *.test.js
 test.js
+*.md

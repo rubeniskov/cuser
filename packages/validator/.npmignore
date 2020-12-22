@@ -6,3 +6,4 @@ testing
 test.js
 tsconfig.json
 docs
+*.md

@@ -1,6 +1,8 @@
 .nyc_output
 coverage
 testing
-
+postman
 *.test.js
 test.js
+docs
+*.md
