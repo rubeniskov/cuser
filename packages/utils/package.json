@@ -1,6 +1,6 @@
 {
   "name": "@cuser/utils",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "common utils used by cuser",
   "main": "index.js",
   "scripts": {

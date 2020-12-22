@@ -1,6 +1,6 @@
 {
   "name": "@cuser/publisher",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "backend publisher logic",
   "main": "publisher.js",
   "scripts": {
@@ -16,12 +16,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cuser/auth": "^0.0.26",
-    "@cuser/core": "^0.0.26",
-    "@cuser/store": "^0.0.26"
+    "@cuser/auth": "^0.0.27",
+    "@cuser/core": "^0.0.27",
+    "@cuser/store": "^0.0.27"
   },
   "devDependencies": {
-    "@cuser/reader": "^0.0.26",
+    "@cuser/reader": "^0.0.27",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "npm-run-all": "^4.1.5",

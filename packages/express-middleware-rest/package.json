@@ -1,6 +1,6 @@
 {
   "name": "@cuser/express-middleware-rest",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "description": "",
   "main": "middleware.js",
   "scripts": {
@@ -22,10 +22,10 @@
     "swagger-ui-express": "^4.1.5"
   },
   "devDependencies": {
-    "@cuser/auth": "^0.0.26",
-    "@cuser/core": "^0.0.26",
-    "@cuser/publisher": "^0.0.26",
-    "@cuser/reader": "^0.0.26",
+    "@cuser/auth": "^0.0.27",
+    "@cuser/core": "^0.0.27",
+    "@cuser/publisher": "^0.0.27",
+    "@cuser/reader": "^0.0.27",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "express": "^4.17.1",
