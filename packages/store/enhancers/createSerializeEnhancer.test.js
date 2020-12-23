@@ -129,3 +129,36 @@ test('should reset the state if reinstances the store without preloadedState', a
   t.is(Object.keys(cache).length, 20);
   t.true(isCacheFlatten(cache));
 });
+
+test('should keep consistency when error ocurs', async (t) => {
+  const { rootReducer, serializer: { cache, ...storeOpts } } = t.context;
+
+  const patterns = [
+    '/**/user',
+    '/**/parent',
+    '/**/content',
+    '/**/content/data',
+    '/**/content/**/parent'
+  ];
+
+  let store = createStore(rootReducer, createSerializeEnhancer(patterns, storeOpts));
+
+  await store.dispatch({ type: 'test' });
+  await store.dispatch({ type: 'test' });
+  await store.dispatch({ type: 'test' });
+  await t.throwsAsync(() => store.dispatch({ type: 'error', payload: 'error_message' }), {
+    message: /error_message/
+  });
+  const hashState1 = await store.dispatch({ type: 'test' });
+
+  t.is(cache[hashState1].id, 4);
+  t.is(Object.keys(cache).length, 16);
+
+  store = createStore(rootReducer, createSerializeEnhancer(patterns, storeOpts));
+
+  const hashState2 = await store.dispatch({ type: 'test' });
+
+  t.is(cache[hashState2].id, 1);
+  t.is(Object.keys(cache).length, 20);
+  t.true(isCacheFlatten(cache));
+});

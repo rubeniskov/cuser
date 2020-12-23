@@ -13,10 +13,14 @@ const {
 } = require('../types/actions');
 
 
-const phases = {
-  IDLE: 0,
-  SEALING: 1,
-  REHYDRATING: 2
+class SerializeError extends Error {
+  constructor(ex, state) {
+    super(ex);
+    this._state = state;
+  }
+  getState() {
+    return this._state;
+  }
 }
 
 /**
@@ -141,14 +145,29 @@ const createSerializeEnhancer = (patterns, opts) => {
     });
 
     const enhancedSerializeReducer = async (state, action) => {
-      state = await state;
+      let prevState;
+      try {
+        prevState = state = await state;
+      } catch (err) {
+        if (err instanceof SerializeError) {
+          state = err.getState();
+          debug(`restoring previous state from errored on / %s`, state);
+        }
+      }
+
       if (!init && /@@redux\/INIT/.test(action.type)) {
         return state;
       }
       debug(`performing "${TYPE_ACTION_REHYDRATE}" on / %s`, state);
       state = await rehydrateReducer(state, { type: TYPE_ACTION_REHYDRATE });
       state = await deserializeReducer(state, { type: TYPE_ACTION_REHYDRATE });
-      state = await rootReducer(state, action);
+      try {
+        state = await rootReducer(state, action);
+      } catch (ex) {
+        debug(`error on "${action.type}" %s`, ex);
+        throw new SerializeError(ex, prevState);
+      }
+
       debug(`performing "${TYPE_ACTION_SEAL}" on / %s`, state);
       state = await serializeReducer(state, { type: TYPE_ACTION_SEAL });
       state = await sealReducer(state, { type: TYPE_ACTION_SEAL });

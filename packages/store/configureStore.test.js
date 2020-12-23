@@ -92,8 +92,8 @@ test('should delete a message', async (t) => {
 
   t.is(Object.entries(cache).length, 6);
   let message = getLastTopicMessageFromCache(cache, topicId, hash_state1);
-
   t.log('message stored!', message);
+
   const hash_state2 = await store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, {
     topicId,
     user: users[0],
@@ -104,3 +104,90 @@ test('should delete a message', async (t) => {
   t.log('message deleted!', message);
   t.is(message, null);
 });
+
+test('should keep consistency when error occurs', async (t) => {
+
+  const { serializer: { cache, ...storeOpts } } = t.context;
+
+  const store = configureStore(undefined, storeOpts);
+
+  const data = loremIpsum();
+  const topicId = 'CUSTOM_TOPIC_ID';
+
+  const hash_state1 = await store.dispatch(createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+    topicId,
+    user: users[0],
+    content: {
+      data
+    }
+  }));
+
+  t.is(Object.entries(cache).length, 6);
+  let message = getLastTopicMessageFromCache(cache, topicId, hash_state1);
+  t.log('message stored!', message);
+
+  await t.throwsAsync(() => store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, {
+    topicId,
+    user: users[0],
+    messageId: 'non_existing_message'
+  })));
+
+  const hash_state2 = await store.dispatch(createAction(TYPE_ACTION_DELETE_MESSAGE, {
+    topicId,
+    user: users[0],
+    messageId: message.id
+  }));
+
+  message = getLastTopicMessageFromCache(cache, topicId, hash_state2);
+  console.log(message);
+  t.log('message deleted!', message);
+  t.is(message, null);
+});
+
+// test('should keep consistency when error occurs', (t) => {
+//   const { store, topicId } = t.context;
+//   const publishActions = [
+//     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+//       user: users[0],
+//     }),
+//     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+//       user: users[1],
+//     }),
+//     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
+//       user: users[0],
+//     }),
+//   ].map(({ type, payload }, idx) => ({
+//     type,
+//     payload: {
+//       ...payload,
+//       topicId,
+//       content: { data: `message nº: ${idx}` },
+//     }
+//   }));
+
+//   dispatchActions(store, publishActions);
+
+//   const messageIds = getMessageIds(store);
+
+//   t.throws(() => {
+//     dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+//         topicId,
+//         messageId: 'non_existing_message_id',
+//         user: users[0],
+//       })
+//     ]);
+//   }, {
+//     message: format(TYPE_ERROR_MISSING_RESOURCE_ID, 'Message', 'non_existing_message_id'),
+//   });
+
+//   t.notThrows(() => {
+//     dispatchActions(store, [createAction(TYPE_ACTION_DELETE_MESSAGE, {
+//         topicId,
+//         messageId: messageIds[0],
+//         user: users[0],
+//       })
+//     ]);
+//   }, {
+//     message: format(TYPE_ERROR_INVALID_ACTION, TYPE_ACTION_DELETE_MESSAGE),
+//   });
+// });

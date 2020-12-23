@@ -285,7 +285,7 @@ test('should delete messages', (t) => {
 });
 
 
-test('should throws error when delete messages', (t) => {
+test('should throws error when delete messages non_existing_topic', (t) => {
   const { store, topicId } = t.context;
   const publishActions = [
     createAction(TYPE_ACTION_PUBLISH_MESSAGE, {
