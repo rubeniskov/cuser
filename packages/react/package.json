@@ -7,7 +7,8 @@
     "test": "nyc ava -v",
     "coverage": "nyc report --reporter=lcov",
     "postcoverage": "codecov -F react",
-    "build": "babel src --out-dir lib"
+    "build": "babel src --out-dir lib",
+    "prepare": "npm run build"
   },
   "author": "",
   "license": "ISC",

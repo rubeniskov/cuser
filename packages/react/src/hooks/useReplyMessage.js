@@ -11,7 +11,7 @@ const useReplayMessage = (opts) => {
   }
   const {
     emitter
-  } = useCuser();
+  } = useCuser(opts);
 
   const [value, setValue] = useState(null);
 
