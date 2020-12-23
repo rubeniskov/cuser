@@ -7,7 +7,7 @@ const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ?
 
 test.beforeEach((t) => {
   const domain = 'example.com';
-  const hostname = `http://${domain}`
+  const hostname = `https://${domain}`
   const parseCid = sinon.spy(a => a);
   const cuserId = 'QmZFZMK6wMDvWCTwq5S1Wz7fRtZJayebxAPGkRttTV1V1f';
   const fetch = sinon.spy(() => Promise.resolve({
@@ -40,7 +40,7 @@ test('should guess url when global.location defined', async (t) => {
 });
 
 test('should send POST request when using publishMessage', async (t) => {
-  const { node, address, topicId, opts } = t.context;
+  const { node, address, hostname, topicId, opts } = t.context;
   const { fetch } = opts;
   const accessToken = 'randomAccessToken';
   const content = 'this is a test message';
@@ -49,7 +49,7 @@ test('should send POST request when using publishMessage', async (t) => {
   await client.publishMessage(topicId, accessToken, 'this is a test message');
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/api/v0/rest/message',{
+    `${hostname}/api/v0/rest/message`,{
       method: 'POST',
       body: `{"topicId":"${topicId}","content":"${content}"}`,
       headers: { Authorization: accessToken }
@@ -58,7 +58,7 @@ test('should send POST request when using publishMessage', async (t) => {
 });
 
 test('should send PATCH request when using updateMessage', async (t) => {
-  const { node, address, topicId, opts } = t.context;
+  const { node, address, hostname, topicId, opts } = t.context;
   const { fetch } = opts;
   const accessToken = 'randomAccessToken';
   const messageId = 'message_id';
@@ -67,7 +67,7 @@ test('should send PATCH request when using updateMessage', async (t) => {
   await client.updateMessage(topicId, accessToken, messageId);
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/api/v0/rest/message',{
+    `${hostname}/api/v0/rest/message`,{
       method: 'PATCH',
       body: `{"topicId":"${topicId}","messageId":"${messageId}"}`,
       headers: { Authorization: accessToken }
@@ -76,7 +76,7 @@ test('should send PATCH request when using updateMessage', async (t) => {
 });
 
 test('should send DELETE request when using deleteMessage', async (t) => {
-  const { node, address, topicId, opts } = t.context;
+  const { node, address, hostname, topicId, opts } = t.context;
   const { fetch } = opts;
   const accessToken = 'randomAccessToken';
   const messageId = 'message_id';
@@ -85,7 +85,7 @@ test('should send DELETE request when using deleteMessage', async (t) => {
   await client.deleteMessage(topicId, accessToken, messageId);
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/api/v0/rest/message',{
+    `${hostname}/api/v0/rest/message`,{
       method: 'DELETE',
       body: `{"topicId":"${topicId}","messageId":"${messageId}"}`,
       headers: { Authorization: accessToken }
@@ -94,16 +94,16 @@ test('should send DELETE request when using deleteMessage', async (t) => {
 });
 
 test('should send POST request when using authenticate', async (t) => {
-  const { node, address, cuserId, opts } = t.context;
+  const { node, address, hostname, cuserId, opts } = t.context;
   const { fetch } = opts;
   const username = 'bob';
-  const avatar = 'http://example.com/avatar';
+  const avatar = '${hostname}/avatar';
   const client = createClient(node, address, opts);
 
   await client.authenticate(username, avatar)
 
   t.deepEqual(fetch.args[0], [
-    'http://example.com/api/v0/auth',{
+    `${hostname}/api/v0/auth`,{
       method: 'POST',
       body: `{"peerId":"${cuserId}","username":"${username}","avatar":"${avatar}"}`
     }
