@@ -4,8 +4,8 @@ import clsx from 'clsx';
 
 import useCuser from '../hooks/useCuser';
 
-const Status = ({ className }) => {
-  const { client } = useCuser();
+const Status = ({ className, ...restProps }) => {
+  const { client } = useCuser(restProps);
   const [ status, setStatus ] = useState(0);
 
   useEffect(() => {

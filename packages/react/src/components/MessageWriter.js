@@ -31,7 +31,7 @@ export const MessageWriter = ({
   className,
   ...restProps
 }) => {
-  const replayer = useReplyMessage();
+  const replayer = useReplyMessage(restProps);
   const { auth, user, authenticate, logout } = useAuth(restProps);
   const { result: publisher, publishMessage } = usePublishMessage(restProps);
   const { data: accessToken } = auth;
@@ -56,7 +56,7 @@ export const MessageWriter = ({
 
   return (
     <div className={className}>
-      <h3 className='title'>{accessToken ? `Welcome ${username}` : `Please login to publish messages`} <Status className='status'/></h3>
+      <h3 className='title'>{accessToken ? `Welcome ${username}` : `Please login to publish messages`} <Status className='status' {...restProps}/></h3>
       {accessToken ?
       <ListItem
         error={error}
