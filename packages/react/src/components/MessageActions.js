@@ -44,7 +44,8 @@ export const MessagePublishActions = ({
 export const MessageActions = ({ disabled, user, ...props }) => {
 
   const { replyTo } = useReplyMessage({
-    attach: false
+    ...props,
+    attach: false,
   });
 
   return (
