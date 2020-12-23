@@ -27,7 +27,7 @@ export const Messages = ({
   const messages = edges.map(({ node }) => node);
 
   const loadMore = useCallback(() => fetchMore(), [fetchMore, edges.length]);
-  const loadingMessages = useMemo(() => new Array(limit).fill(null).map((_, id) => (<Message key={id} loading={true}/>)), [limit]);
+  const loadingMessages = useMemo(() => new Array(limit).fill(null).map((_, id) => (<Message key={id} loading={true} {...restProps}/>)), [limit]);
 
   const handleEdit = useCallback((_, messageId) => setEditMessageId(messageId), []);
   const handleAbortEdit = useCallback((_) => setEditMessageId(null), []);
