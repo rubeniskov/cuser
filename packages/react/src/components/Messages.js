@@ -51,6 +51,7 @@ export const Messages = ({
         onAbort={handleAbortEdit}
         onComplete={handleCompleteEdit}
         editMode={editMessageId === message.id}
+        {...restProps}
         {...message}
       />)}
       {loading && loadingMessages}
