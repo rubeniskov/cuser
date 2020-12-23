@@ -1,6 +1,6 @@
 {
   "name": "@cuser/proto",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "typing, schemas and services based in protocol buffers",
   "main": "index.js",
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "cuser",
-  "version": "0.0.30",
+  "version": "0.0.31",
   "description": "Distributed user messaging system",
   "private": true,
   "engines": {
