@@ -6,16 +6,22 @@ const createClient = require('./client');
 const md5 = (data) => crypto.createHash('md5').update(typeof data === 'string' ? data : JSON.stringify(data)).digest("hex");
 
 test.beforeEach((t) => {
+  const domain = 'example.com';
+  const hostname = `http://${domain}`
   const parseCid = sinon.spy(a => a);
+  const cuserId = 'QmZFZMK6wMDvWCTwq5S1Wz7fRtZJayebxAPGkRttTV1V1f';
   const fetch = sinon.spy(() => Promise.resolve({
     messageCid: 'custom_message_id'
   }));
   t.context.opts = { parseCid, fetch };
 
   t.context.cache = {};
+  t.context.cuserId = cuserId
+  t.context.hostname = hostname;
+  t.context.address = `/dns4/${domain}/tcp/4004/ws/p2p/${cuserId}`;
   t.context.topicId = 'custom_topic_id';
   t.context.node = {
-    id: () => Promise.resolve({ id: 'custom_peer_id' }),
+    id: () => Promise.resolve({ id: cuserId }),
     dag: {
       get: (hash) => Promise.resolve({ value: cache[hash], remainderPath: '/' }),
       put: (data) => {
@@ -28,41 +34,17 @@ test.beforeEach((t) => {
 });
 
 test('should guess url when global.location defined', async (t) => {
-  const { node } = t.context;
-  const { id: cuserId } = await node.id();
-  const hostname = 'http://localhost:8080'
-  global.location = new URL(`${hostname}/testing?query=test`);
-  const client = createClient(node, cuserId);
-  t.is(client._url, 'http://localhost:8080');
-  delete global.location;
-});
-
-test('should raise an error when url can be resolved and is not provided at options when publishMessage', async (t) => {
-  const { node, topicId, opts } = t.context;
-  const { fetch } = opts;
-  const { id: cuserId } = await node.id();
-  const accessToken = 'randomAccessToken'
-  const client = createClient(node, cuserId, opts);
-
-  await t.throwsAsync(() => {
-    return client.publishMessage(topicId, accessToken, 'this is a test message');
-  }, {
-    message: /CuserClient: options.url must be defined to enable publisher capabilities/
-  });
-
-  t.true(fetch.notCalled);
+  const { node, hostname, address } = t.context;
+  const client = createClient(node, address);
+  t.is(client._url, hostname);
 });
 
 test('should send POST request when using publishMessage', async (t) => {
-  const { node, topicId, opts } = t.context;
+  const { node, address, topicId, opts } = t.context;
   const { fetch } = opts;
-  const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken';
   const content = 'this is a test message';
-  const client = createClient(node, cuserId, {
-    ...opts,
-    url: 'http://example.com'
-  });
+  const client = createClient(node, address, opts);
 
   await client.publishMessage(topicId, accessToken, 'this is a test message');
 
@@ -76,15 +58,11 @@ test('should send POST request when using publishMessage', async (t) => {
 });
 
 test('should send PATCH request when using updateMessage', async (t) => {
-  const { node, topicId, opts } = t.context;
+  const { node, address, topicId, opts } = t.context;
   const { fetch } = opts;
-  const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken';
   const messageId = 'message_id';
-  const client = createClient(node, cuserId, {
-    ...opts,
-    url: 'http://example.com'
-  });
+  const client = createClient(node, address, opts);
 
   await client.updateMessage(topicId, accessToken, messageId);
 
@@ -98,15 +76,11 @@ test('should send PATCH request when using updateMessage', async (t) => {
 });
 
 test('should send DELETE request when using deleteMessage', async (t) => {
-  const { node, topicId, opts } = t.context;
+  const { node, address, topicId, opts } = t.context;
   const { fetch } = opts;
-  const { id: cuserId } = await node.id();
   const accessToken = 'randomAccessToken';
   const messageId = 'message_id';
-  const client = createClient(node, cuserId, {
-    ...opts,
-    url: 'http://example.com'
-  });
+  const client = createClient(node, address, opts);
 
   await client.deleteMessage(topicId, accessToken, messageId);
 
@@ -120,15 +94,11 @@ test('should send DELETE request when using deleteMessage', async (t) => {
 });
 
 test('should send POST request when using authenticate', async (t) => {
-  const { node, opts } = t.context;
+  const { node, address, cuserId, opts } = t.context;
   const { fetch } = opts;
-  const { id: cuserId } = await node.id();
   const username = 'bob';
   const avatar = 'http://example.com/avatar';
-  const client = createClient(node, cuserId, {
-    ...opts,
-    url: 'http://example.com'
-  });
+  const client = createClient(node, address, opts);
 
   await client.authenticate(username, avatar)
 
@@ -141,10 +111,10 @@ test('should send POST request when using authenticate', async (t) => {
 });
 
 test.cb('should subscribe to events', (t) => {
-  const { node, opts } = t.context;
+  const { node, address, opts } = t.context;
   const topicId = 'custom_topic_id';
   const payload = { topicId, type: 'updated', foo: 'bar' };
-  const client = createClient(node, 'custom_cuser_id', opts);
+  const client = createClient(node, address, opts);
 
   t.plan(3);
   const unsubcribe = client.subscribe(topicId, (evt) => {
