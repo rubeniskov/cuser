@@ -1,6 +1,6 @@
 {
   "name": "@cuser/cli",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "description": "command line interface",
   "bin": {
     "cuser": "index.js"
@@ -13,13 +13,13 @@
   "author": "rubeniskov <me@rubeniskov.com> (http://rubeniskov.com)",
   "license": "MIT",
   "dependencies": {
-    "@cuser/client": "^0.0.32",
-    "@cuser/express-middleware-auth": "^0.0.32",
-    "@cuser/express-middleware-graphql": "^0.0.32",
-    "@cuser/express-middleware-rest": "^0.0.32",
-    "@cuser/proto": "^0.0.32",
-    "@cuser/publisher": "^0.0.32",
-    "@cuser/server": "^0.0.32",
+    "@cuser/client": "^0.0.33",
+    "@cuser/express-middleware-auth": "^0.0.33",
+    "@cuser/express-middleware-graphql": "^0.0.33",
+    "@cuser/express-middleware-rest": "^0.0.33",
+    "@cuser/proto": "^0.0.33",
+    "@cuser/publisher": "^0.0.33",
+    "@cuser/server": "^0.0.33",
     "ipfs": "^0.52.2",
     "wrtc": "^0.4.6",
     "yargs": "^16.1.1"
