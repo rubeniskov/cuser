@@ -2,7 +2,7 @@ import React, { useCallback, useState, useMemo } from 'react';
 import CuserProvider from '@cuser/react/Provider';
 import Cuser from '@cuser/react/Cuser';
 import Gui from './Gui';
-const createClient = require('@cuser/client');
+import createClient from '@cuser/client';
 
 const ipfs = require('ipfs');
 
