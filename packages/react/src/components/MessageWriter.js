@@ -56,7 +56,7 @@ export const MessageWriter = ({
 
   return (
     <div className={className}>
-      <h3 className='title'>{accessToken ? `Welcome ${username}` : `Please login to publish messages`} <Status className='status' {...restProps}/></h3>
+      <h4 className='title'>{accessToken ? `Welcome ${username}` : `Please login to publish messages`} <Status className='status' {...restProps}/></h4>
       {accessToken ?
       <ListItem
         error={error}
@@ -85,6 +85,6 @@ export default styled(MessageWriter)`
   .status {
     position: absolute;
     right: 0.5rem;
-    top: 0.5rem;
+    top: 50%;
   }
 `;
