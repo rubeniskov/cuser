@@ -67,7 +67,7 @@ class CuserClient extends CuserReader {
     super(core, auth, cuserId, opts);
     this._cuserId = cuserId;
     this._node = Promise.resolve(node);
-    this._url = parseUrl(maddr.nodeAddress());
+    this._url = parseUrl(maddr.nodeAddress()).replace('http:', 'https:');
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
     this._pubsub = this._core.pubsub({
       channel: cuserId

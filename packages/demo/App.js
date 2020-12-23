@@ -24,7 +24,7 @@ const node = ipfs.create({
   }
 });
 
-const addr = '/dns4/gateway.rubeniskov.com/tcp/4004/ws/p2p/QmZFZMK6wMDvWCTwq5S1Wz7fRtZJayebxAPGkRttTV1V1f';
+const addr = '/dns4/gateway.rubeniskov.com/tcp/4004/wss/p2p/QmctQUkPYJi15UVTnHywMEfR7FbDkZE4KkAiCLwPCYgJF2';
 
 Promise.resolve(node).then((n) => n.swarm.connect(addr));
 

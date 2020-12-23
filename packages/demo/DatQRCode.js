@@ -1,7 +1,8 @@
 import React, { Component, createRef } from 'react';
+import styled from 'styled-components';
 import QRCode from 'qrcode';
 
-export default class DatQRCode extends Component {
+class DatQRCode extends Component {
 
   constructor() {
     super();
@@ -20,9 +21,18 @@ export default class DatQRCode extends Component {
 
   render() {
     return (
-      <div>
+      <div className={this.props.className}>
         <canvas ref={this.canvasRef} />
       </div>
     );
   }
 }
+
+export default styled(DatQRCode)`
+  background-color: #1a1a1a;
+  text-align: center;
+  canvas {
+    width: 300px !important;
+    height: 300px !important;
+  }
+`

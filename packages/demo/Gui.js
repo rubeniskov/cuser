@@ -23,4 +23,6 @@ export default styled(Gui)`
   bottom: 0;
   right: 0;
   top: inherit;
+  width: 100%;
+  opacity: 0.8;
 `;
