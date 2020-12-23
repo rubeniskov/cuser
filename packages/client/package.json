@@ -1,6 +1,6 @@
 {
   "name": "@cuser/client",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "client logic for reading and publishing message using restfull transport",
   "main": "client.js",
   "scripts": {
@@ -29,8 +29,8 @@
     "typescript": "4.1.2"
   },
   "dependencies": {
-    "@cuser/core": "^0.0.27",
-    "@cuser/reader": "^0.0.27",
+    "@cuser/core": "^0.0.28",
+    "@cuser/reader": "^0.0.28",
     "async-iterator-to-array": "^0.0.1",
     "blob-polyfill": "^4.0.20200601",
     "cbor": "^5.1.0",
