@@ -41,9 +41,9 @@
     "it-all": "^1.0.4"
   },
   "peerDependencies": {
-    "@cuser/auth": "v0.0.1",
-    "@cuser/core": "v0.0.1",
-    "@cuser/proto": "v0.0.1"
+    "@cuser/auth": "^v0.0.30",
+    "@cuser/core": "^v0.0.30",
+    "@cuser/proto": "^v0.0.30"
   },
   "nyc": {
     "exclude": [
