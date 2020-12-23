@@ -22,7 +22,7 @@ export const Messages = ({
     limit,
   });
 
-  const { user } = useAuth();
+  const { user } = useAuth(restProps);
   const { edges = [], pageInfo: { hasNextPage } = {} } = data;
   const messages = edges.map(({ node }) => node);
 
