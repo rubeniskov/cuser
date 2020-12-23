@@ -1,6 +1,6 @@
 {
   "name": "@cuser/validator",
-  "version": "0.0.35",
+  "version": "0.0.36",
   "description": "json schema validator",
   "main": "validator.js",
   "scripts": {
