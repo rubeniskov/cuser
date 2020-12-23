@@ -1,6 +1,6 @@
 {
   "name": "@cuser/core",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "Core ipfs wrapper",
   "main": "core.js",
   "scripts": {

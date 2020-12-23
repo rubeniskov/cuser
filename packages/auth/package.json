@@ -1,6 +1,6 @@
 {
   "name": "@cuser/auth",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "auth core utility",
   "main": "auth.js",
   "browser": "client.js",
@@ -25,12 +25,12 @@
     "url": "git+https://github.com/rubeniskov/cuser.git"
   },
   "dependencies": {
-    "@cuser/crypto": "^0.0.31",
-    "@cuser/validator": "^0.0.31"
+    "@cuser/crypto": "^0.0.32",
+    "@cuser/validator": "^0.0.32"
   },
   "devDependencies": {
-    "@cuser/core": "^0.0.31",
-    "@cuser/proto": "^0.0.31",
+    "@cuser/core": "^0.0.32",
+    "@cuser/proto": "^0.0.32",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "ipfs": "^0.52.2",

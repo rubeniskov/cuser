@@ -1,6 +1,6 @@
 {
   "name": "@cuser/client-apollo",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "client logic for reading and publishing using apollo transport",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@cuser/client": "^0.0.31"
+    "@cuser/client": "^0.0.32"
   },
   "devDependencies": {
     "ava": "^3.13.0",

@@ -1,6 +1,6 @@
 {
   "name": "@cuser/server",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "description": "http server with express",
   "main": "server.js",
   "scripts": {
@@ -17,9 +17,9 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@cuser/express-middleware-auth": "^0.0.31",
-    "@cuser/express-middleware-graphql": "^0.0.31",
-    "@cuser/express-middleware-rest": "^0.0.31",
+    "@cuser/express-middleware-auth": "^0.0.32",
+    "@cuser/express-middleware-graphql": "^0.0.32",
+    "@cuser/express-middleware-rest": "^0.0.32",
     "ava": "^3.13.0",
     "codecov": "^3.8.1",
     "nodemon": "^2.0.6",
