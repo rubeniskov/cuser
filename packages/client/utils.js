@@ -2,13 +2,15 @@
 
 /**
  * if url guess url from global.location
- * @param {String|null} url
+ * @param {{ address: String, port: Number }|null} url
  */
 const parseUrl = (url) => {
-  if (!url && global.location) {
-    return global.location.protocol + '//' + global.location.host
-  }
-  return url;
+  const { address, port } = url || {
+    address: global.location.host,
+    port: global.location.protocol === 'https:' ? 443 : 80
+  };
+
+  return `http${port === 443 ? 's' : ''}://${address}`;
 }
 
 /**

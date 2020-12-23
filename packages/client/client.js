@@ -56,16 +56,18 @@ const { parseUrl, noPublisher } = require('./utils');
 class CuserClient extends CuserReader {
   /**
    * @param {Node|Promise<Node>} node
-   * @param {String} cuserId
+   * @param {String} address
    * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
    */
-  constructor(node, cuserId, opts = {}) {
+  constructor(node, address, opts = {}) {
     const core = createCore(node, opts);
     const auth = createAuthClient(core, opts);
+    const maddr = multiaddr(address);
+    const cuserId = maddr.getPeerId();
     super(core, auth, cuserId, opts);
     this._cuserId = cuserId;
     this._node = Promise.resolve(node);
-    this._url = parseUrl(opts.url);
+    this._url = parseUrl(maddr.nodeAddress());
     this._fetch = this._url ? (opts.fetch || fetch) : noPublisher;
     this._pubsub = this._core.pubsub({
       channel: cuserId
@@ -201,11 +203,11 @@ class CuserClient extends CuserReader {
 
 /**
  * @param {Node|Promise<Node>} node
- * @param {String} cuserId
+ * @param {String} address
  * @param {CuserClientOptions & CuserReaderOptions & CuserCoreOptions} [opts]
  */
-const createClient = (node, cuserId, opts) => {
-  return new CuserClient(node, cuserId, opts);
+const createClient = (node, address, opts) => {
+  return new CuserClient(node, address, opts);
 }
 
 module.exports = createClient;

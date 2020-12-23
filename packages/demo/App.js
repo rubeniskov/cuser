@@ -1,14 +1,10 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import CuserProvider from '@cuser/react/Provider';
 import Cuser from '@cuser/react/Cuser';
 import Gui from './Gui';
 const createClient = require('@cuser/client');
 
 const ipfs = require('ipfs');
-const cuserId = process.env.CUSER_ID;
-const secured = /^https/.test(global.location.protocol);
-
-const addr = `/dns4/${global.location.hostname}/tcp/${global.location.port ? global.location.port : (secured ? 443 : 80)}/${secured ? 'wss' : 'ws'}/p2p/${cuserId}`
 
 const node = ipfs.create({
   repo: "/tmp/rubeniskov",
@@ -28,17 +24,20 @@ const node = ipfs.create({
   }
 });
 
-fetch('/cuser', {
-  method: 'POST'
-});
+const addr = '/dns4/gateway.rubeniskov.com/tcp/4004/ws/p2p/QmZFZMK6wMDvWCTwq5S1Wz7fRtZJayebxAPGkRttTV1V1f';
 
-const client = createClient(node, addr);
+Promise.resolve(node).then((n) => n.swarm.connect(addr));
 
 const App = () => {
   const [settings, setSettings] = useState({
-    auto: false
+    auto: false,
+    address: addr,
   });
+
+  const client = useMemo(() => createClient(node, settings.address), [settings.address]);
+
   const handleUpdate = useCallback((newData) => setSettings({...settings, ...newData}), [settings]);
+
   return (
     <div>
       <Gui onUpdate={handleUpdate} data={settings} />
