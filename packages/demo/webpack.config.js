@@ -91,7 +91,7 @@ module.exports = () => ({
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-      // 'process.env.CUSER_ID': JSON.stringify(cuserId),
+      'process.env.LOCAL': JSON.stringify(true),
     })
   ]
 })
