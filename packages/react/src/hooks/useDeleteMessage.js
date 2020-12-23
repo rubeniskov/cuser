@@ -5,7 +5,7 @@ import useAuth from './useAuth';
 
 const useDeleteMessage = (opts) => {
   const { client, topicId } = useCuser(opts);
-  const { auth } = useAuth();
+  const { auth } = useAuth(opts);
   const { data: accessToken } = auth;
   const resolver = useCallback(({
     topicId,

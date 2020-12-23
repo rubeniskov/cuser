@@ -14,15 +14,13 @@ import Spinner from './Spinner';
 export const MessagePublishActions = ({
   disabled,
   peerId,
-  topicId,
   messageId,
   user,
   onEdit,
+  ...restPpts
 }) => {
 
-  const { result, deleteMessage } = useDeleteMessage({
-    topicId
-  });
+  const { result, deleteMessage } = useDeleteMessage(restPpts);
 
   const handleDelete = useCallback(() => deleteMessage(messageId), [messageId]);
   const handleEdit = useCallback((evt) => onEdit(evt, messageId), [messageId]);

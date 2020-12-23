@@ -15,7 +15,7 @@ import useAuth from './useAuth';
  */
 const usePublishMessage = (opts) => {
   const { client, topicId } = useCuser(opts);
-  const { auth } = useAuth();
+  const { auth } = useAuth(opts);
   const { data: accessToken } = auth;
   const resolver = useCallback(({ topicId, accessToken, content }) => client.publishMessage(topicId, accessToken, content), [client]);
   const result = usePromiseResolver(resolver, {
